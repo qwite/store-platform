@@ -1,16 +1,17 @@
 import UIKit
 
-protocol Factory {
+protocol Factory: AnyObject {
     func buildTabBarModule(coordinator: TabCoordinator) -> UITabBarController
     func buildFeedModule(coordinator: FeedCoordinator) -> UIViewController
     func buildCreateAdModule(coordinator: CreateAdCoordinator) -> UIViewController
     func buildCreateSizeModule(coordinator: CreateAdCoordinator, with item: Size?) -> UIViewController
     func buildImagePickerModule(coordinator: ImagePickerCoordinator) -> UIImagePickerController
     func buildDetailedImageModule(image: Data) -> UIViewController
-    func buildLoginModule() -> UIViewController
+    func buildLoginModule(coordinator: GuestCoordinator) -> UIViewController
     func buildRegisterModule(coordinator: GuestCoordinator) -> UIViewController
     func buildGuestModule(coordinator: GuestCoordinator) -> UIViewController
     func buildFavoritesModule() -> UIViewController
+    func buildProfileModule() -> UIViewController
 }
 
 class DependencyFactory: Factory {
@@ -60,9 +61,9 @@ class DependencyFactory: Factory {
         return view
     }
     
-    func buildLoginModule() -> UIViewController {
+    func buildLoginModule(coordinator: GuestCoordinator) -> UIViewController {
         let view = LoginViewController()
-        let presenter = LoginPresenter(view: view)
+        let presenter = LoginPresenter(view: view, coordinator: coordinator)
         view.presenter = presenter
         return view
     }
@@ -86,5 +87,16 @@ class DependencyFactory: Factory {
         let presenter = FavoritesPresenter(view: view)
         view.presenter = presenter
         return view
+    }
+    
+    func buildProfileModule() -> UIViewController {
+        let view = ProfileViewController()
+        let presenter = ProfilePresenter(view: view)
+        view.presenter = presenter
+        return view
+    }
+    
+    deinit {
+        debugPrint("factory deinit")
     }
 }

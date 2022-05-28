@@ -1,34 +1,41 @@
 import UIKit
+import SwiftUI
 
-class TabCoordinator: Coordinator {
+// MARK: - TabCoordinator Delegate Protocol
+protocol TabCoordinatorDelegate: AnyObject {
+    func updatePages()
+}
+
+// MARK: - TabCoordinator
+class TabCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory
+    var factory: Factory?
     var tabController: UITabBarController?
-    var childCoordinator = [Coordinator]()
-    var isSignIn = false
-    var guestCoordinator: GuestCoordinator?
     
     required init(_ navigationController: UINavigationController) {
-        self.navigationController = navigationController
         self.factory = DependencyFactory()
+        self.navigationController = navigationController
     }
     
     func start() {
-        tabController = factory.buildTabBarModule(coordinator: self)
+        // Building a controller
+        tabController = factory?.buildTabBarModule(coordinator: self)
+        setTabBarAppearance()
+        // preparing pages
+        preparePages()
 
-        // TODO: improve this line
+        self.navigationController.pushViewController(tabController!, animated: true)
+    }
+    
+    func preparePages() {
         let pages: [TabElements] = TabElements.allCases.sorted(by: {$0.pageNumber < $1.pageNumber})
-        let navigations: [UINavigationController] = pages.map { element in
-            if element.isDisabled {
-                return pageForGuest(element)
-            } else {
-                return pageForUser(element)
-            }
+        let isAuth = SettingsService.sharedInstance.isAuthorized
+        let navigations: [UINavigationController] = pages.map { page in
+            page.isDisabled && !isAuth ? pageForGuest(page) : pageForUser(page)
         }
         
         tabController?.viewControllers = navigations
-        setTabBarAppearance()
-        self.navigationController.pushViewController(tabController!, animated: true)
+        tabController?.selectedIndex = 0
     }
     
     func setTabBarAppearance() {
@@ -36,7 +43,6 @@ class TabCoordinator: Coordinator {
         tabController?.tabBar.backgroundColor = .white
         tabController?.tabBar.isTranslucent = false
         tabController?.tabBar.tintColor = .black
-
     }
     
     func pageForUser(_ page: TabElements) -> UINavigationController {
@@ -45,18 +51,24 @@ class TabCoordinator: Coordinator {
         switch page {
         case .feed:
             let coordinator = FeedCoordinator(navigation)
+            addDependency(coordinator)
             coordinator.start()
-            childCoordinator.append(coordinator)
         case .favs:
             let coordinator = FavoritesCoordinator(navigation)
+            addDependency(coordinator)
             coordinator.start()
-            childCoordinator.append(coordinator)
         case .createAd:
             let coordinator = CreateAdCoordinator(navigation)
+            addDependency(coordinator)
             coordinator.start()
-            childCoordinator.append(coordinator)
         case .settings:
-            let test = "s"
+            let coordinator = CreateAdCoordinator(navigation)
+            addDependency(coordinator)
+            coordinator.start()
+        case .profile:
+            let coordinator = ProfileCoordinator(navigation)
+            addDependency(coordinator)
+            coordinator.start()
         }
         
         navigation.navigationBar.topItem?.title = page.title
@@ -67,37 +79,25 @@ class TabCoordinator: Coordinator {
     func pageForGuest(_ page: TabElements) -> UINavigationController {
         let tabImage = UIImage(systemName: page.icon)
         let navigation = UINavigationController()
+        let coordinator = GuestCoordinator(navigation)
+
+        self.addDependency(coordinator)
+        coordinator.delegate = self
+        coordinator.finish = { [weak self] in
+            self?.removeAllGuest()
+            debugPrint("child -> guest removed")
+        }
+        
+        coordinator.start()
         navigation.tabBarItem.image = tabImage
         navigation.navigationBar.topItem?.title = page.title
         return navigation
     }
-    
-    func selectTabPage(index: Int) {
-        guard let item = TabElements(index: index) else {
-            return
-        }
-        
-        let isAuth = SettingsService.sharedInstance.isAuthorized
-        if item.isDisabled && !isAuth {
-            pushGuestModule(index: item.pageNumber)
-        }
-    }
-    
-    func pushGuestModule(index: Int) {
-        guard let tabController = tabController else {
-            return
-        }
-            
-        let navigation = UINavigationController()
-        
-        tabController.viewControllers?.remove(at: index)
-        guestCoordinator = GuestCoordinator(navigation)
-        guestCoordinator?.start()
-        
-        tabController.viewControllers?.insert(navigation, at: index)
-        let image = UIImage(systemName: TabElements.init(index: index)!.icon)
-        navigation.tabBarItem.image = image
-        tabController.selectedIndex = index
+}
+
+extension TabCoordinator: TabCoordinatorDelegate {
+    func updatePages() {
+        self.preparePages()
     }
 }
 
@@ -107,6 +107,7 @@ extension TabCoordinator {
         case createAd
         case favs
         case settings
+        case profile
         
         init?(index: Int) {
             switch index {
@@ -118,6 +119,8 @@ extension TabCoordinator {
                 self = .settings
             case 3:
                 self = .createAd
+            case 4:
+                self = .profile
             default:
                 return nil
             }
@@ -133,6 +136,8 @@ extension TabCoordinator {
                 return "Избранное"
             case .settings:
                 return "Настройки"
+            case .profile:
+                return "Профиль"
             }
         }
         
@@ -146,6 +151,8 @@ extension TabCoordinator {
                 return 2
             case .createAd:
                 return 3
+            case .profile:
+                return 4
             }
         }
         
@@ -159,6 +166,8 @@ extension TabCoordinator {
                 return "eye"
             case .createAd:
                 return "plus"
+            case .profile:
+                return "person"
             }
         }
         
@@ -171,7 +180,9 @@ extension TabCoordinator {
             case .settings:
                 return true
             case .createAd:
-                return false
+                return true
+            case .profile:
+                return true
             }
         }
     }

@@ -22,6 +22,10 @@ class FeedViewController: UIViewController {
         super.viewDidLoad()
         presenter.viewDidLoad()
     }
+    
+    deinit {
+        debugPrint("feed vc deinit")
+    }
 }
 
 extension FeedViewController: FeedViewProtocol {
@@ -94,7 +98,8 @@ extension FeedViewController: AdCellDelegate {
               let item = dataSource?.itemIdentifier(for: indexPath) else {
             return
         }
-        debugPrint(item.id)
+        
+        presenter.addFavorite(itemId: item.id)
     }
     
     func didUntappedLikeButton(_ adCell: AdCell) {
@@ -102,8 +107,8 @@ extension FeedViewController: AdCellDelegate {
               let item = dataSource?.itemIdentifier(for: indexPath) else {
             return
         }
-        debugPrint(item.id)
-    }
     
+        presenter.removeFavorite(itemId: item.id)
+    }
 }
   

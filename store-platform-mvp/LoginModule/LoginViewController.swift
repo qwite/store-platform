@@ -1,9 +1,11 @@
 import UIKit
+import SPAlert
 
 // MARK: - LoginView Protocol
 protocol LoginViewProtocol: AnyObject {
     func configureLoginButton()
     func didTappedLoginButton()
+    func showSuccessLogin()
 }
 
 class LoginViewController: UIViewController {
@@ -43,6 +45,10 @@ extension LoginViewController: LoginViewProtocol {
     
     func configureLoginButton() {
         loginView.loginButton.addTarget(self, action: #selector(didTappedLoginButton), for: .touchUpInside)
+    }
+    
+    func showSuccessLogin() {
+        SPAlert.present(message: "Успешная авторизация!", haptic: .success)
     }
 }
 

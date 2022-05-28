@@ -37,7 +37,7 @@ class RegisterPresenter: RegisterPresenterProtocol {
             switch result {
             case .success(_):
                 self.view?.showSuccessRegister()
-                self.coordinator?.hideModal()
+                self.coordinator?.hideRegisterModal()
             case .failure(let error):
                 debugPrint("\(error)")
             }

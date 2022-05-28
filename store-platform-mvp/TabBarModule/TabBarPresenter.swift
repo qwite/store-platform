@@ -14,6 +14,6 @@ class TabBarPresenter: TabBarPresenterProtocol {
     }
     
     func select(_ index: Int) {
-        coordinator.selectTabPage(index: index)
+//        coordinator.selectTabPage(index: index)
     }
 }

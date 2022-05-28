@@ -19,6 +19,7 @@
 		1F227DA02836682D00F736F1 /* ImagePickerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F227D9F2836682D00F736F1 /* ImagePickerCoordinator.swift */; };
 		1F227DA72836822100F736F1 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F227DA62836822100F736F1 /* ImagePickerController.swift */; };
 		1F227DA92836824200F736F1 /* ImagePickerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F227DA82836824200F736F1 /* ImagePickerPresenter.swift */; };
+		1F29DE152842A57C00811F48 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F29DE142842A57C00811F48 /* BaseCoordinator.swift */; };
 		1F5D7FCE282E47BA00255E71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FCD282E47BA00255E71 /* AppDelegate.swift */; };
 		1F5D7FD0282E47BA00255E71 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FCF282E47BA00255E71 /* SceneDelegate.swift */; };
 		1F5D7FD7282E47BB00255E71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F5D7FD6282E47BB00255E71 /* Assets.xcassets */; };
@@ -33,6 +34,10 @@
 		1F6986D6283818D100D953D2 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6986D5283818D100D953D2 /* RegisterViewController.swift */; };
 		1F6986D8283818F400D953D2 /* RegisterPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6986D7283818F400D953D2 /* RegisterPresenter.swift */; };
 		1F6986DB2838199A00D953D2 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6986DA2838199A00D953D2 /* RegisterView.swift */; };
+		1F69B6AB2842556D00C75668 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F69B6AA2842556D00C75668 /* ProfileViewController.swift */; };
+		1F69B6AD2842557300C75668 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F69B6AC2842557300C75668 /* ProfilePresenter.swift */; };
+		1F69B6B02842561300C75668 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F69B6AF2842561300C75668 /* ProfileView.swift */; };
+		1F69B6B22842572900C75668 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F69B6B12842572900C75668 /* ProfileCoordinator.swift */; };
 		1F766B9128412273001F2E7E /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F766B9028412273001F2E7E /* SettingsService.swift */; };
 		1F816C17283770D300F48CA0 /* DetailedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F816C16283770D300F48CA0 /* DetailedImageViewController.swift */; };
 		1F816C19283770F000F48CA0 /* DetailedImagePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F816C18283770F000F48CA0 /* DetailedImagePresenter.swift */; };
@@ -106,6 +111,7 @@
 		1F227D9F2836682D00F736F1 /* ImagePickerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerCoordinator.swift; sourceTree = "<group>"; };
 		1F227DA62836822100F736F1 /* ImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerController.swift; sourceTree = "<group>"; };
 		1F227DA82836824200F736F1 /* ImagePickerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerPresenter.swift; sourceTree = "<group>"; };
+		1F29DE142842A57C00811F48 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
 		1F5D7FCA282E47BA00255E71 /* store-platform-mvp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "store-platform-mvp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F5D7FCD282E47BA00255E71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F5D7FCF282E47BA00255E71 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +130,10 @@
 		1F6986D5283818D100D953D2 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		1F6986D7283818F400D953D2 /* RegisterPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPresenter.swift; sourceTree = "<group>"; };
 		1F6986DA2838199A00D953D2 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		1F69B6AA2842556D00C75668 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		1F69B6AC2842557300C75668 /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
+		1F69B6AF2842561300C75668 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		1F69B6B12842572900C75668 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		1F766B9028412273001F2E7E /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
 		1F816C16283770D300F48CA0 /* DetailedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedImageViewController.swift; sourceTree = "<group>"; };
 		1F816C18283770F000F48CA0 /* DetailedImagePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedImagePresenter.swift; sourceTree = "<group>"; };
@@ -336,6 +346,7 @@
 				1F227DA12836732700F736F1 /* ImagePickerModule */,
 				1F816C15283770B700F48CA0 /* DetailedImageModule */,
 				1FB3509B284004EB007200BB /* FavoritesModule */,
+				1F69B6A92842556200C75668 /* ProfileModule */,
 				1F128C0D282E6A4000B16BD8 /* Extensions */,
 				1F03A5A9282E75AB00A6A299 /* Supporting files */,
 			);
@@ -413,6 +424,24 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		1F69B6A92842556200C75668 /* ProfileModule */ = {
+			isa = PBXGroup;
+			children = (
+				1F69B6AE2842560E00C75668 /* View */,
+				1F69B6AA2842556D00C75668 /* ProfileViewController.swift */,
+				1F69B6AC2842557300C75668 /* ProfilePresenter.swift */,
+			);
+			path = ProfileModule;
+			sourceTree = "<group>";
+		};
+		1F69B6AE2842560E00C75668 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1F69B6AF2842561300C75668 /* ProfileView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		1F766B8F28411D5E001F2E7E /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -472,6 +501,7 @@
 			isa = PBXGroup;
 			children = (
 				1FCEC09728315F58000D78AD /* Protocols */,
+				1F29DE142842A57C00811F48 /* BaseCoordinator.swift */,
 				1FCEC09C28315FB9000D78AD /* AppCoordinator.swift */,
 				1FCEC09E28315FF6000D78AD /* TabCoordinator.swift */,
 				1FCEC0A0283161DC000D78AD /* FeedCoordinator.swift */,
@@ -479,6 +509,7 @@
 				1F227D9F2836682D00F736F1 /* ImagePickerCoordinator.swift */,
 				1FF68410283A53FB00E92481 /* GuestCoordinator.swift */,
 				1FB350A0284006F4007200BB /* FavoritesCoordinator.swift */,
+				1F69B6B12842572900C75668 /* ProfileCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -800,6 +831,7 @@
 				1F96F5A5282E7B8900C0F460 /* UIImageView + Extension.swift in Sources */,
 				1FCEC0A1283161DC000D78AD /* FeedCoordinator.swift in Sources */,
 				1F5D7FCE282E47BA00255E71 /* AppDelegate.swift in Sources */,
+				1F69B6AB2842556D00C75668 /* ProfileViewController.swift in Sources */,
 				1FCEC09D28315FB9000D78AD /* AppCoordinator.swift in Sources */,
 				1F227DA92836824200F736F1 /* ImagePickerPresenter.swift in Sources */,
 				1F6986D6283818D100D953D2 /* RegisterViewController.swift in Sources */,
@@ -807,6 +839,7 @@
 				1FF6841F283AB77E00E92481 /* AdCell.swift in Sources */,
 				1F96F5A2282E7B8900C0F460 /* UIButton + Extension.swift in Sources */,
 				1F1E4D9E28383C1E00C9AC05 /* FirestoreService.swift in Sources */,
+				1F69B6B02842561300C75668 /* ProfileView.swift in Sources */,
 				1F96F5A0282E7B8900C0F460 /* UIStackView + Extension.swift in Sources */,
 				1FFFFB3D2835996D00E967E7 /* Item.swift in Sources */,
 				1F766B9128412273001F2E7E /* SettingsService.swift in Sources */,
@@ -824,11 +857,14 @@
 				1F03A5A7282E74F700A6A299 /* CreateAdPresenter.swift in Sources */,
 				1F1E4DA028383D9800C9AC05 /* AuthService.swift in Sources */,
 				1F96F5B3282EDE6D00C0F460 /* CreateSizeViewController.swift in Sources */,
+				1F69B6AD2842557300C75668 /* ProfilePresenter.swift in Sources */,
+				1F69B6B22842572900C75668 /* ProfileCoordinator.swift in Sources */,
 				1F6986D8283818F400D953D2 /* RegisterPresenter.swift in Sources */,
 				1F6986CE28380EDF00D953D2 /* LoginViewController.swift in Sources */,
 				1F96F5B8282EDF4B00C0F460 /* CreateSizeView.swift in Sources */,
 				1F128C0C282E666400B16BD8 /* FeedPresenter.swift in Sources */,
 				1FB3509D28400524007200BB /* FavoritesViewController.swift in Sources */,
+				1F29DE152842A57C00811F48 /* BaseCoordinator.swift in Sources */,
 				1FF6841A283AB6DD00E92481 /* FeedView.swift in Sources */,
 				1FF6840C283A526400E92481 /* GuestPresenter.swift in Sources */,
 				1F5D8003282E5A6D00255E71 /* DependencyFactory.swift in Sources */,

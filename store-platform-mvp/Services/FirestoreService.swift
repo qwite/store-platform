@@ -41,7 +41,7 @@ class FirestoreService {
     /// Creating new ad returns clothing name
     func createNewAd(item: Item, completion: @escaping (Result<String, Error>) -> ()) {
         do {
-            let document = try itemsReference.addDocument(from: item)
+            let _ = try itemsReference.addDocument(from: item)
             completion(.success(item.clothingName))
         } catch {
             completion(.failure(error))
@@ -66,25 +66,44 @@ class FirestoreService {
 
     /// Adding user info for user and returns this
     func saveUserInfo(customUser: CustomUser, completion: @escaping (Result<CustomUser, Error>) -> ()) {
-        guard let userInfo = try? usersReference.addDocument(from: customUser) else {
+        guard let _ = try? usersReference.addDocument(from: customUser) else {
             return completion(.failure(FirestoreServiceError.userEncodingError))
         }
+        
         completion(.success(customUser))
     }
     
-    func addFavoriteItem(to uid: String, item: Item?, completion: @escaping (Result<String, Error>) -> ()) {
-//        usersReference.whereField("uid", isEqualTo: uid).getDocuments { querySnapshot, error in
-//            guard let snapshot = querySnapshot else {
-//                return completion(.failure(error!))
-//            }
-//            
-//            let documents = snapshot.documents
-//            for document in documents {
-//                document.reference.setData(["favorites": ["1", "2"]], merge: true)
-//            }
-//            
-//            completion(.success("huy suc"))
-//        }
+    func addFavoriteItem(itemId: String?, completion: @escaping (Result<String, Error>) -> ()) {
+        guard let userId = SettingsService.sharedInstance.userId,
+              let itemId = itemId else {
+            return
+        }
+        usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
+            guard let snapshot = querySnapshot else {
+                return completion(.failure(error!))
+            }
+            
+            let documents = snapshot.documents
+            documents.last?.reference.setData(["favorites": FieldValue.arrayUnion([itemId])], merge: true)
+            completion(.success("added"))
+        }
+    }
+    
+    func removeFavoriteItem(itemId: String?, completion: @escaping (Result<String, Error>) -> ()) {
+        guard let userId = SettingsService.sharedInstance.userId,
+              let itemId = itemId else {
+            return
+        }
+        
+        usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
+            guard let snapshot = querySnapshot else {
+                return completion(.failure(error!))
+            }
+            
+            let documents = snapshot.documents
+            documents.last?.reference.updateData(["favorites": FieldValue.arrayRemove([itemId])])
+            completion(.success("deleted"))
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 import Foundation
 
 protocol LoginPresenterProtocol: AnyObject {
-    init(view: LoginViewProtocol)
+    init(view: LoginViewProtocol, coordinator: GuestCoordinator)
     func viewDidLoad()
     func login(email: String, password: String)
     func getUserInfo(id: String)
@@ -10,8 +10,11 @@ protocol LoginPresenterProtocol: AnyObject {
 
 class LoginPresenter: LoginPresenterProtocol {
     weak var view: LoginViewProtocol?
-    required init(view: LoginViewProtocol) {
+    weak var coordinator: GuestCoordinator?
+    
+    required init(view: LoginViewProtocol, coordinator: GuestCoordinator) {
         self.view = view
+        self.coordinator = coordinator
     }
     
     func viewDidLoad() {
@@ -34,6 +37,8 @@ class LoginPresenter: LoginPresenterProtocol {
             switch result {
             case .success(let user):
                 self?.saveUser(user)
+                self?.view?.showSuccessLogin()
+                self?.coordinator?.hideLoginModal()
             case .failure(let error):
                 debugPrint(error)
             }

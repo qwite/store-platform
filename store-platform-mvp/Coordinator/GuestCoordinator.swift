@@ -3,6 +3,7 @@ import UIKit
 class GuestCoordinator: Coordinator {
     var navigationController: UINavigationController
     var factory: Factory
+    weak var delegate: TabCoordinatorDelegate?
     
     var childCoordinator = [Coordinator]()
     
@@ -11,8 +12,10 @@ class GuestCoordinator: Coordinator {
         self.navigationController.pushViewController(module, animated: true)
     }
     
+    var finish: (() -> ())?
+    
     func openLogin() {
-        let module = factory.buildLoginModule()
+        let module = factory.buildLoginModule(coordinator: self)
         self.navigationController.present(module, animated: true)
     }
     
@@ -21,7 +24,16 @@ class GuestCoordinator: Coordinator {
         self.navigationController.present(module, animated: true)
     }
     
-    func hideModal() {
+    func hideLoginModal() {
+        self.navigationController.dismiss(animated: true) {
+            self.delegate?.updatePages()
+        }
+        
+        self.finish?()
+        self.navigationController.popViewController(animated: false)
+    }
+    
+    func hideRegisterModal() {
         self.navigationController.dismiss(animated: true)
     }
     
