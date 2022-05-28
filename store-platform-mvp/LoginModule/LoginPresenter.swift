@@ -5,16 +5,17 @@ protocol LoginPresenterProtocol: AnyObject {
     func viewDidLoad()
     func login(email: String, password: String)
     func getUserInfo(id: String)
+    func saveUser(_ user: CustomUser)
 }
 
 class LoginPresenter: LoginPresenterProtocol {
-    var view: LoginViewProtocol
+    weak var view: LoginViewProtocol?
     required init(view: LoginViewProtocol) {
         self.view = view
     }
     
     func viewDidLoad() {
-        view.configureLoginButton()
+        view?.configureLoginButton()
     }
     
     func login(email: String, password: String) {
@@ -29,13 +30,19 @@ class LoginPresenter: LoginPresenterProtocol {
     }
     
     func getUserInfo(id: String) {
-        FirestoreService.sharedInstance.getUserInfo(by: id) { result in
+        FirestoreService.sharedInstance.getUserInfo(by: id) { [weak self] result in
             switch result {
-            case .success(let data):
-                debugPrint(data)
+            case .success(let user):
+                self?.saveUser(user)
             case .failure(let error):
                 debugPrint(error)
             }
         }
+    }
+    
+    func saveUser(_ user: CustomUser) {
+        debugPrint("\(user) saved")
+        SettingsService.sharedInstance.isAuthorized = true
+        SettingsService.sharedInstance.userId = user.id
     }
 }

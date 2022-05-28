@@ -16,12 +16,13 @@ class TabCoordinator: Coordinator {
     func start() {
         tabController = factory.buildTabBarModule(coordinator: self)
 
-        let pages: [TabElements] = TabElements.allCases
+        // TODO: improve this line
+        let pages: [TabElements] = TabElements.allCases.sorted(by: {$0.pageNumber < $1.pageNumber})
         let navigations: [UINavigationController] = pages.map { element in
-            if element.isDisabled() {
-                return setForGuest(element)
+            if element.isDisabled {
+                return pageForGuest(element)
             } else {
-                return setForUser(element)
+                return pageForUser(element)
             }
         }
         
@@ -38,12 +39,16 @@ class TabCoordinator: Coordinator {
 
     }
     
-    func setForUser(_ page: TabElements) -> UINavigationController {
-        let tabImage = UIImage(systemName: page.getIcon())
+    func pageForUser(_ page: TabElements) -> UINavigationController {
+        let tabImage = UIImage(systemName: page.icon)
         let navigation = UINavigationController()
         switch page {
         case .feed:
             let coordinator = FeedCoordinator(navigation)
+            coordinator.start()
+            childCoordinator.append(coordinator)
+        case .favs:
+            let coordinator = FavoritesCoordinator(navigation)
             coordinator.start()
             childCoordinator.append(coordinator)
         case .createAd:
@@ -53,21 +58,28 @@ class TabCoordinator: Coordinator {
         case .settings:
             let test = "s"
         }
+        
+        navigation.navigationBar.topItem?.title = page.title
         navigation.tabBarItem.image = tabImage
         return navigation
     }
     
-    func setForGuest(_ page: TabElements) -> UINavigationController {
-        let tabImage = UIImage(systemName: page.getIcon())
+    func pageForGuest(_ page: TabElements) -> UINavigationController {
+        let tabImage = UIImage(systemName: page.icon)
         let navigation = UINavigationController()
-        navigation.setNavigationBarHidden(true, animated: false)
         navigation.tabBarItem.image = tabImage
+        navigation.navigationBar.topItem?.title = page.title
         return navigation
     }
     
     func selectTabPage(index: Int) {
-        if TabElements.allCases[index].isDisabled() {
-            pushGuestModule(index: index)
+        guard let item = TabElements(index: index) else {
+            return
+        }
+        
+        let isAuth = SettingsService.sharedInstance.isAuthorized
+        if item.isDisabled && !isAuth {
+            pushGuestModule(index: item.pageNumber)
         }
     }
     
@@ -83,7 +95,7 @@ class TabCoordinator: Coordinator {
         guestCoordinator?.start()
         
         tabController.viewControllers?.insert(navigation, at: index)
-        let image = UIImage(systemName: TabElements.allCases[index].getIcon())
+        let image = UIImage(systemName: TabElements.init(index: index)!.icon)
         navigation.tabBarItem.image = image
         tabController.selectedIndex = index
     }
@@ -93,27 +105,73 @@ extension TabCoordinator {
     enum TabElements: CaseIterable {
         case feed
         case createAd
+        case favs
         case settings
         
-        func getIcon() -> String {
-            switch self {
-            case .feed:
-                return "square.and.pencil"
-            case .createAd:
-                return "plus"
-            case .settings:
-                return "eye"
+        init?(index: Int) {
+            switch index {
+            case 0:
+                self = .feed
+            case 1:
+                self = .favs
+            case 2:
+                self = .settings
+            case 3:
+                self = .createAd
+            default:
+                return nil
             }
         }
         
-        func isDisabled() -> Bool {
+        var title: String {
+            switch self {
+            case .feed:
+                return "Лента"
+            case .createAd:
+                return "Создание"
+            case .favs:
+                return "Избранное"
+            case .settings:
+                return "Настройки"
+            }
+        }
+        
+        var pageNumber: Int {
+            switch self {
+            case .feed:
+                return 0
+            case .favs:
+                return 1
+            case .settings:
+                return 2
+            case .createAd:
+                return 3
+            }
+        }
+        
+        var icon: String {
+            switch self {
+            case .feed:
+                return "magnifyingglass"
+            case .favs:
+                return "heart"
+            case .settings:
+                return "eye"
+            case .createAd:
+                return "plus"
+            }
+        }
+        
+        var isDisabled: Bool {
             switch self {
             case .feed:
                 return false
-            case .createAd:
+            case .favs:
                 return false
             case .settings:
                 return true
+            case .createAd:
+                return false
             }
         }
     }

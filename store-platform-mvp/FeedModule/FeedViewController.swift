@@ -41,7 +41,7 @@ extension FeedViewController: FeedViewProtocol {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCell.reuseId, for: indexPath) as? AdCell else {
                     fatalError("dequeueReusableCell error with AdCell")
                 }
-                
+                cell.delegate = self
                 cell.configure(with: itemIdentifier)
                 return cell
             }
@@ -87,3 +87,23 @@ extension FeedViewController: FeedViewProtocol {
 extension FeedViewController: UICollectionViewDelegate {
     
 }
+
+extension FeedViewController: AdCellDelegate {
+    func didTappedLikeButton(_ adCell: AdCell) {
+        guard let indexPath = collectionView.indexPath(for: adCell),
+              let item = dataSource?.itemIdentifier(for: indexPath) else {
+            return
+        }
+        debugPrint(item.id)
+    }
+    
+    func didUntappedLikeButton(_ adCell: AdCell) {
+        guard let indexPath = collectionView.indexPath(for: adCell),
+              let item = dataSource?.itemIdentifier(for: indexPath) else {
+            return
+        }
+        debugPrint(item.id)
+    }
+    
+}
+  

@@ -17,8 +17,12 @@ class GuestCoordinator: Coordinator {
     }
     
     func openRegister() {
-        let module = factory.buildRegisterModule()
+        let module = factory.buildRegisterModule(coordinator: self)
         self.navigationController.present(module, animated: true)
+    }
+    
+    func hideModal() {
+        self.navigationController.dismiss(animated: true)
     }
     
     func remove() {

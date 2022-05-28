@@ -8,8 +8,9 @@ protocol Factory {
     func buildImagePickerModule(coordinator: ImagePickerCoordinator) -> UIImagePickerController
     func buildDetailedImageModule(image: Data) -> UIViewController
     func buildLoginModule() -> UIViewController
-    func buildRegisterModule() -> UIViewController
-    func buildGuestModule(coordinator: GuestCoordinator) -> UIViewController 
+    func buildRegisterModule(coordinator: GuestCoordinator) -> UIViewController
+    func buildGuestModule(coordinator: GuestCoordinator) -> UIViewController
+    func buildFavoritesModule() -> UIViewController
 }
 
 class DependencyFactory: Factory {
@@ -66,9 +67,9 @@ class DependencyFactory: Factory {
         return view
     }
     
-    func buildRegisterModule() -> UIViewController {
+    func buildRegisterModule(coordinator: GuestCoordinator) -> UIViewController {
         let view = RegisterViewController()
-        let presenter = RegisterPresenter(view: view)
+        let presenter = RegisterPresenter(view: view, coordinator: coordinator)
         view.presenter = presenter
         return view
     }
@@ -76,6 +77,13 @@ class DependencyFactory: Factory {
     func buildGuestModule(coordinator: GuestCoordinator) -> UIViewController {
         let view = GuestViewController()
         let presenter = GuestPresenter(view: view, coordinator: coordinator)
+        view.presenter = presenter
+        return view
+    }
+    
+    func buildFavoritesModule() -> UIViewController {
+        let view = FavoritesViewController()
+        let presenter = FavoritesPresenter(view: view)
         view.presenter = presenter
         return view
     }

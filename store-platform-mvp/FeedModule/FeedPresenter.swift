@@ -7,8 +7,8 @@ protocol FeedPresenterProtocol: AnyObject {
 }
 
 class FeedPresenter: FeedPresenterProtocol {
-    var view: FeedViewProtocol
-    var coordinator: FeedCoordinator
+    weak var view: FeedViewProtocol?
+    weak var coordinator: FeedCoordinator?
     
     required init(view: FeedViewProtocol, coordinator: FeedCoordinator) {
         self.view = view
@@ -16,21 +16,25 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     func viewDidLoad() {
-        view.configureCollectionView()
-        view.configureDataSource()
-        view.configureViews()
+        view?.configureCollectionView()
+        view?.configureDataSource()
+        view?.configureViews()
         getAds()
+        checkLogin()
     }
     
     func getAds() {
-        FirestoreService.sharedInstance.getAllItems { result in
+        FirestoreService.sharedInstance.getAllItems { [weak self] result in
             switch result {
             case .success(let items):
-//                debugPrint(items)
-                self.view.insertAds(items: items)
+                self?.view?.insertAds(items: items)
             case .failure(let error):
                 debugPrint(error)
             }
         }
+    }
+    
+    func checkLogin() {
+        debugPrint(SettingsService.sharedInstance.isAuthorized)
     }
 }

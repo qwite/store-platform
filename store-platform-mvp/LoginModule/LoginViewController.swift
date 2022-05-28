@@ -1,7 +1,7 @@
 import UIKit
 
 // MARK: - LoginView Protocol
-protocol LoginViewProtocol {
+protocol LoginViewProtocol: AnyObject {
     func configureLoginButton()
     func didTappedLoginButton()
 }
@@ -21,6 +21,10 @@ class LoginViewController: UIViewController {
         title = "test"
         loginView.setupViews()
         presenter.viewDidLoad()
+    }
+    
+    deinit {
+        debugPrint("login vc deinit")
     }
 }
 

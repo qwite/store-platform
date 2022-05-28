@@ -1,20 +1,23 @@
 import Foundation
 
 protocol RegisterPresenterProtocol {
-    init(view: RegisterViewProtocol)
+    init(view: RegisterViewProtocol, coordinator: GuestCoordinator)
+
     func viewDidLoad()
     func createUser(email: String, password: String, firstName: String, lastName: String)
 }
 
 class RegisterPresenter: RegisterPresenterProtocol {
-    var view: RegisterViewProtocol
+    weak var view: RegisterViewProtocol?
+    weak var coordinator: GuestCoordinator?
     
-    required init(view: RegisterViewProtocol) {
+    required init(view: RegisterViewProtocol, coordinator: GuestCoordinator) {
         self.view = view
+        self.coordinator = coordinator
     }
     
     func viewDidLoad() {
-        view.configureRegisterButton()
+        view?.configureRegisterButton()
     }
     
     func createUser(email: String, password: String, firstName: String, lastName: String) {
@@ -33,7 +36,8 @@ class RegisterPresenter: RegisterPresenterProtocol {
         FirestoreService.sharedInstance.saveUserInfo(customUser: customUser) { result in
             switch result {
             case .success(_):
-                self.view.showSuccessRegister()
+                self.view?.showSuccessRegister()
+                self.coordinator?.hideModal()
             case .failure(let error):
                 debugPrint("\(error)")
             }

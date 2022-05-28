@@ -12,7 +12,6 @@ class FeedCoordinator: Coordinator {
 
     func start() {
         let module = factory.buildFeedModule(coordinator: self)
-        module.title = "Лента"
         self.navigationController.pushViewController(module, animated: false)
     }
 }

@@ -1,7 +1,7 @@
 import UIKit
 import SPAlert
 
-protocol RegisterViewProtocol {
+protocol RegisterViewProtocol: AnyObject {
     func configureRegisterButton()
     func didTappedRegisterButton()
     func showSuccessRegister()
@@ -19,6 +19,10 @@ class RegisterViewController: UIViewController {
         super.viewDidLoad()
         registerView.setupViews()
         presenter.viewDidLoad()
+    }
+    
+    deinit {
+        debugPrint("Register vc deinit")
     }
 }
 
