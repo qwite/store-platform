@@ -64,24 +64,6 @@ class FirestoreService {
         }
     }        
     
-    func getFavoritesIds(completion: @escaping (Result<[String], Error>) -> ()) {
-        guard let userId = SettingsService.sharedInstance.userId else {
-            return debugPrint("user id not found in settings")
-        }
-        
-        usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
-            guard let querySnapshot = querySnapshot else {
-                return debugPrint("user id not found in documents")
-            }
-            
-            guard let userDocument = querySnapshot.documents.last?.get("favorites") as? [String] else {
-                return debugPrint("favorite field not found in user document")
-            }
-            
-            completion(.success(userDocument))
-        }
-    }
-    
     func getItemByDocumentId(documentId: String, completion: @escaping (Result<Item, Error>) -> ()) {
         itemsReference.document(documentId).getDocument { documentSnapshot, error in
             guard let documentSnapshot = documentSnapshot else {
@@ -104,37 +86,58 @@ class FirestoreService {
         
         completion(.success(customUser))
     }
-    
-    func addFavoriteItem(item: Item, completion: @escaping (Result<Item, Error>) -> ()) {
-        guard let userId = SettingsService.sharedInstance.userId,
-              let itemId = item.id else {
-            return
-        }
+
+    func addFavoriteItem(userId: String, itemId: String, completion: @escaping (Result<String, Error>) -> ()) {
         usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
             guard let snapshot = querySnapshot else {
                 return completion(.failure(error!))
             }
             
-            let documents = snapshot.documents
-            documents.last?.reference.setData(["favorites": FieldValue.arrayUnion([itemId])], merge: true)
-            completion(.success(item))
+            guard let documentReference = snapshot.documents.first?.reference else {
+                return debugPrint("reference not found")
+            }
+            
+            // check if itemid already exist
+            documentReference.collection("favorites").whereField("item_id", isEqualTo: itemId).getDocuments { snapshot, error in
+                guard let snapshot = snapshot else {
+                    return debugPrint("some error")
+                }
+                
+                guard snapshot.documents.first == nil else {
+                    return completion(.failure(FirestoreServiceError.itemAlreadyExist))
+                }
+                
+                documentReference.collection("favorites").addDocument(data: ["item_id": itemId])
+                completion(.success(""))
+            }
         }
     }
     
-    func removeFavoriteItem(item: Item, completion: @escaping (Result<Item, Error>) -> ()) {
-        guard let userId = SettingsService.sharedInstance.userId,
-              let itemId = item.id else {
-            return
-        }
-        
-        usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
-            guard let snapshot = querySnapshot else {
-                return completion(.failure(error!))
+    func removeFavoriteItem(userId: String, itemId: String, completion: @escaping (Result<String, Error>) -> ()) {        
+        usersReference.whereField("id", isEqualTo: userId).getDocuments { snapshot, error in
+            guard let snapshot = snapshot else {
+                return debugPrint("\(error!)")
             }
             
-            let documents = snapshot.documents
-            documents.last?.reference.updateData(["favorites": FieldValue.arrayRemove([itemId])])
-            completion(.success(item))
+            guard let documentReference = snapshot.documents.first?.reference else {
+                return debugPrint("reference not found")
+            }
+            
+            
+            debugPrint(itemId)
+            documentReference.collection("favorites").whereField("item_id", isEqualTo: itemId).getDocuments { snapshot, error in
+                guard let snapshot = snapshot else {
+                    return debugPrint("\(error!)")
+                }
+                
+                debugPrint(snapshot.documents)
+                guard let document = snapshot.documents.first else {
+                    fatalError("document does not exist")
+                }
+                
+                documentReference.collection("favorites").document(document.documentID).delete()
+                completion(.success(""))
+            }
         }
     }
     
@@ -159,6 +162,42 @@ class FirestoreService {
             completion(.success("added"))
         }
     }
+    
+    func getFavoritesIds(by userid: String, completion: @escaping (Result<[String], Error>) -> ()) {        
+        usersReference.whereField("id", isEqualTo: userid).getDocuments { snapshot, error in
+            guard let snapshot = snapshot else {
+                return print(error!)
+            }
+            
+            guard let document = snapshot.documents.last else {
+                return print("document not found")
+            }
+            
+            let documentReference = document.reference
+            
+            // go to subcollection
+            let favorites = documentReference.collection("favorites")
+            
+            favorites.getDocuments { snap, error in
+                var ids: [String] = []
+                guard let snap = snap else {
+                    return print(error!)
+                }
+                
+                let documents = snap.documents
+                for document in documents {
+                    guard let value = document.get("item_id") as? String else {
+                        return debugPrint("document string decoding error")
+                    }
+                    
+                    ids.append(value)
+                    if ids.count == documents.count {
+                        completion(.success(ids))
+                    }
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Firestore Service Errors
@@ -169,6 +208,7 @@ extension FirestoreService {
         case itemAddError
         case itemEncodingError
         case itemDecodingError
+        case itemAlreadyExist
         case userIdNotExist
         case userEncodingError
         case userDecodingError

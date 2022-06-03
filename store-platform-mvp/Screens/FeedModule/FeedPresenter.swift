@@ -1,19 +1,23 @@
 import Foundation
 
 protocol FeedPresenterProtocol: AnyObject {
-    init(view: FeedViewProtocol, coordinator: FeedCoordinator)
+    init(view: FeedViewProtocol, coordinator: FeedCoordinator, service: UserServiceProtocol)
     func viewDidLoad()
     func getAds()
-    func openDetailed(item: Item) 
+    func openDetailed(item: Item)
+    func addFavorite(item: Item)
+    func removeFavorite(item: Item)
 }
 
 class FeedPresenter: FeedPresenterProtocol {
     weak var view: FeedViewProtocol?
     weak var coordinator: FeedCoordinator?
+    var service: UserServiceProtocol?
     
-    required init(view: FeedViewProtocol, coordinator: FeedCoordinator) {
+    required init(view: FeedViewProtocol, coordinator: FeedCoordinator, service: UserServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
+        self.service = service
     }
     
     func viewDidLoad() {
@@ -46,27 +50,29 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     func addFavorite(item: Item) {
-        FirestoreService.sharedInstance.addFavoriteItem(item: item) { [weak self] result in
+        service?.addFavoriteItem(item: item, completion: { [weak self] result in
             switch result {
-            case .success(_):
+            case .success(let item):
                 self?.postNotificationAddFavoriteItem(item)
-                debugPrint("added")
             case .failure(let error):
                 debugPrint(error)
             }
-        }
+        })
     }
     
     func removeFavorite(item: Item) {
-        FirestoreService.sharedInstance.removeFavoriteItem(item: item) { [weak self] result in
+        service?.removeFavoriteItem(item: item, completion: { [weak self] result in
             switch result {
             case .success(_):
                 self?.postNotificationRemoveFavoriteItem(item)
-                debugPrint("removed")
             case .failure(let error):
                 debugPrint(error)
             }
-        }
+        })
+    }
+    
+    func test() {
+        print("removed action...")
     }
     
     func openDetailed(item: Item) {
@@ -79,6 +85,7 @@ class FeedPresenter: FeedPresenterProtocol {
         debugPrint("Авторизован?: \(SettingsService.sharedInstance.isAuthorized)")
     }
     #endif
+
     
     func resetLogin() {
         SettingsService.sharedInstance.isAuthorized = false

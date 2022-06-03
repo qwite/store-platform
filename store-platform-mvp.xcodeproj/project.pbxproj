@@ -12,6 +12,8 @@
 		1F03A5A7282E74F700A6A299 /* CreateAdPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F03A5A6282E74F700A6A299 /* CreateAdPresenter.swift */; };
 		1F03A5AC282E760700A6A299 /* CreateAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F03A5AB282E760700A6A299 /* CreateAdView.swift */; };
 		1F03A5AF282E7A3200A6A299 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F03A5AE282E7A3200A6A299 /* PhotoCell.swift */; };
+		1F08921D284A184B002A2411 /* CartItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F08921C284A184B002A2411 /* CartItem.swift */; };
+		1F08921F284A3EEB002A2411 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F08921E284A3EEB002A2411 /* UserService.swift */; };
 		1F128C0C282E666400B16BD8 /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F128C0B282E666400B16BD8 /* FeedPresenter.swift */; };
 		1F1E4D9E28383C1E00C9AC05 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1E4D9D28383C1E00C9AC05 /* FirestoreService.swift */; };
 		1F1E4DA028383D9800C9AC05 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1E4D9F28383D9800C9AC05 /* AuthService.swift */; };
@@ -79,7 +81,6 @@
 		1FCEC0A1283161DC000D78AD /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCEC0A0283161DC000D78AD /* FeedCoordinator.swift */; };
 		1FCEC0A3283163F3000D78AD /* CreateAdCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCEC0A2283163F3000D78AD /* CreateAdCoordinator.swift */; };
 		1FCEC0A828316C2F000D78AD /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FCEC0A728316C2F000D78AD /* Launch Screen.storyboard */; };
-		1FDFC8702844DCD2006F2F02 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDFC86F2844DCD2006F2F02 /* FeedService.swift */; };
 		1FF6840A283A524B00E92481 /* GuestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF68409283A524B00E92481 /* GuestViewController.swift */; };
 		1FF6840C283A526400E92481 /* GuestPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF6840B283A526400E92481 /* GuestPresenter.swift */; };
 		1FF6840F283A535D00E92481 /* GuestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF6840E283A535D00E92481 /* GuestView.swift */; };
@@ -118,6 +119,8 @@
 		1F03A5A6282E74F700A6A299 /* CreateAdPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAdPresenter.swift; sourceTree = "<group>"; };
 		1F03A5AB282E760700A6A299 /* CreateAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAdView.swift; sourceTree = "<group>"; };
 		1F03A5AE282E7A3200A6A299 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
+		1F08921C284A184B002A2411 /* CartItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItem.swift; sourceTree = "<group>"; };
+		1F08921E284A3EEB002A2411 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		1F128C0B282E666400B16BD8 /* FeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenter.swift; sourceTree = "<group>"; };
 		1F1E4D9D28383C1E00C9AC05 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		1F1E4D9F28383D9800C9AC05 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -189,7 +192,6 @@
 		1FCEC0A0283161DC000D78AD /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
 		1FCEC0A2283163F3000D78AD /* CreateAdCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAdCoordinator.swift; sourceTree = "<group>"; };
 		1FCEC0A728316C2F000D78AD /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		1FDFC86F2844DCD2006F2F02 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
 		1FF68409283A524B00E92481 /* GuestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestViewController.swift; sourceTree = "<group>"; };
 		1FF6840B283A526400E92481 /* GuestPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestPresenter.swift; sourceTree = "<group>"; };
 		1FF6840E283A535D00E92481 /* GuestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestView.swift; sourceTree = "<group>"; };
@@ -267,7 +269,7 @@
 				1FF68423283AE63A00E92481 /* StorageService.swift */,
 				1FFFFB3E283599C800E967E7 /* ItemBuilder.swift */,
 				1F766B9028412273001F2E7E /* SettingsService.swift */,
-				1FDFC86F2844DCD2006F2F02 /* FeedService.swift */,
+				1F08921E284A3EEB002A2411 /* UserService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -303,6 +305,14 @@
 				1F96F5AC282E904C00C0F460 /* SizeCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		1F08921B284A1841002A2411 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1F08921C284A184B002A2411 /* CartItem.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		1F128C0D282E6A4000B16BD8 /* Extensions */ = {
@@ -555,6 +565,7 @@
 		1F8E6135284631A40040DAE0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				1F08921B284A1841002A2411 /* Cell */,
 				1F8E6136284631AA0040DAE0 /* CartView.swift */,
 			);
 			path = View;
@@ -958,6 +969,7 @@
 				1FF6841F283AB77E00E92481 /* AdCell.swift in Sources */,
 				1F96F5A2282E7B8900C0F460 /* UIButton + Extension.swift in Sources */,
 				1F1E4D9E28383C1E00C9AC05 /* FirestoreService.swift in Sources */,
+				1F08921D284A184B002A2411 /* CartItem.swift in Sources */,
 				1F69B6B02842561300C75668 /* ProfileView.swift in Sources */,
 				1F3F382B2847673800228983 /* PickSizePresenter.swift in Sources */,
 				1F96F5A0282E7B8900C0F460 /* UIStackView + Extension.swift in Sources */,
@@ -982,9 +994,9 @@
 				1F8CE1392843FD7400AA9398 /* DetailedAdPresenter.swift in Sources */,
 				1F69B6B22842572900C75668 /* ProfileCoordinator.swift in Sources */,
 				1F6986D8283818F400D953D2 /* RegisterPresenter.swift in Sources */,
-				1FDFC8702844DCD2006F2F02 /* FeedService.swift in Sources */,
 				1F6986CE28380EDF00D953D2 /* LoginViewController.swift in Sources */,
 				1F96F5B8282EDF4B00C0F460 /* CreateSizeView.swift in Sources */,
+				1F08921F284A3EEB002A2411 /* UserService.swift in Sources */,
 				1F3F38292847673100228983 /* PickSizeViewController.swift in Sources */,
 				1F128C0C282E666400B16BD8 /* FeedPresenter.swift in Sources */,
 				1FB3509D28400524007200BB /* FavoritesViewController.swift in Sources */,

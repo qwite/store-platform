@@ -9,7 +9,7 @@ extension FeedView {
         case ads
     }
     
-    func setupLayout() -> UICollectionViewLayout {
+    func configureLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)

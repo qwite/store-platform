@@ -2,6 +2,7 @@ import Foundation
 
 protocol CartPresenterProtocol {
     init(view: CartViewProtocol)
+    func viewDidLoad()
 }
 
 class CartPresenter: CartPresenterProtocol {
@@ -9,5 +10,11 @@ class CartPresenter: CartPresenterProtocol {
     
     required init(view: CartViewProtocol) {
         self.view = view
+    }
+    
+    func viewDidLoad() {
+        view?.configureCollectionView()
+        view?.configureDataSource()
+        view?.configureViews()
     }
 }

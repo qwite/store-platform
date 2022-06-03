@@ -27,7 +27,8 @@ class DependencyFactory: Factory {
 
     func buildFeedModule(coordinator: FeedCoordinator) -> UIViewController {
         let view = FeedViewController()
-        let presenter = FeedPresenter(view: view, coordinator: coordinator)
+        let service = UserService()
+        let presenter = FeedPresenter(view: view, coordinator: coordinator, service: service)
         view.presenter = presenter
         return view
     }
@@ -87,7 +88,8 @@ class DependencyFactory: Factory {
     
     func buildFavoritesModule(coordinator: FavoritesCoordinator) -> UIViewController {
         let view = FavoritesViewController()
-        let presenter = FavoritesPresenter(view: view, coordinator: coordinator)
+        let service = UserService()
+        let presenter = FavoritesPresenter(view: view, coordinator: coordinator, service: service)
         view.presenter = presenter
         return view
     }

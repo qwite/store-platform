@@ -1,12 +1,13 @@
 import Foundation
 
 protocol FavoritesPresenterProtocol {
-    init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator)
+    init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator, service: UserServiceProtocol)
     func viewDidLoad()
     func addFavoriteItemsObserver ()
     func insertFavoriteItems()
     func insertFavoriteItem(_ item: Item)
     func removeFavoriteItem(_ item: Item)
+    func removeFavoriteItemFromView(_ item: Item)
     func openDetailed(with item: Item)
     func openSizePicker(item: Item)
     func didSelectSize(selectedSize: Size, item: Item)
@@ -15,10 +16,12 @@ protocol FavoritesPresenterProtocol {
 class FavoritesPresenter: FavoritesPresenterProtocol {
     weak var view: FavoritesViewProtocol?
     weak var coordinator: FavoritesCoordinator?
+    var service: UserServiceProtocol?
     
-    required init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator) {
+    required init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator, service: UserServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
+        self.service = service
     }
     
     deinit {
@@ -52,7 +55,7 @@ class FavoritesPresenter: FavoritesPresenterProtocol {
                 return
             }
             
-            self?.removeFavoriteItem(object)
+            self?.removeFavoriteItemFromView(object)
         }
     }
     
@@ -66,27 +69,30 @@ class FavoritesPresenter: FavoritesPresenterProtocol {
         view?.insertFavorites(items: [item])
     }
     
+    func removeFavoriteItemFromView(_ item: Item) {
+        view?.removeFavoriteItem(item)
+    }
+
     func removeFavoriteItem(_ item: Item) {
-        FirestoreService.sharedInstance.removeFavoriteItem(item: item) { [weak self] result in
+        service?.removeFavoriteItem(item: item, completion: { [weak self] result in
             switch result {
             case .success(let item):
                 self?.view?.removeFavoriteItem(item)
             case .failure(let error):
                 debugPrint(error)
             }
-        }
+        })
     }
      
-    
     func insertFavoriteItems() {
-        FeedService.sharedInstance.getFavoriteItems { result in
+        service?.getFavoriteItems(completion: { [weak self] result in
             switch result {
             case .success(let items):
-                self.view?.insertFavorites(items: items)
+                self?.view?.insertFavorites(items: items)
             case .failure(let error):
-                debugPrint("error! : \(error)")
+                debugPrint(error)
             }
-        }
+        })
     }
     
     func openDetailed(with item: Item) {

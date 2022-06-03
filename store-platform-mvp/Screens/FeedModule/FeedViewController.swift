@@ -30,7 +30,7 @@ class FeedViewController: UIViewController {
 
 extension FeedViewController: FeedViewProtocol {
     func configureCollectionView() {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: feedView.setupLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: feedView.configureLayout())
         collectionView.backgroundColor = .white
         collectionView.delegate = self
         collectionView.register(AdCell.self, forCellWithReuseIdentifier: AdCell.reuseId)
@@ -38,7 +38,7 @@ extension FeedViewController: FeedViewProtocol {
     }
     
     func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<FeedView.Section, Item>(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+        dataSource = DataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             let section = FeedView.Section.allCases[indexPath.section]
             switch section {
             case .ads:
