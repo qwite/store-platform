@@ -1,9 +1,5 @@
 import Foundation
 
-protocol DetailedImageViewProtocol: AnyObject {
-    func setImage(_ image: Data)
-}
-
 protocol DetailedImagePresenterProtocol {
     init(view: DetailedImageViewProtocol, with image: Data)
     func viewDidLoad()

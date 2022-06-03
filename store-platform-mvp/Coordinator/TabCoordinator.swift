@@ -41,28 +41,33 @@ class TabCoordinator: BaseCoordinator, Coordinator {
     func setTabBarAppearance() {
         self.navigationController.setNavigationBarHidden(true, animated: true)
         tabController?.tabBar.backgroundColor = .white
+//        tabController?.tabBarItem.appe
         tabController?.tabBar.isTranslucent = false
         tabController?.tabBar.tintColor = .black
     }
     
     func pageForUser(_ page: TabElements) -> UINavigationController {
-        let tabImage = UIImage(systemName: page.icon)
+        let tabImage = UIImage(named: page.icon)
         let navigation = UINavigationController()
         switch page {
         case .feed:
             let coordinator = FeedCoordinator(navigation)
+            coordinator.finish = { [weak self] in
+                self?.removeDependency(coordinator)
+            }
+            
             addDependency(coordinator)
             coordinator.start()
         case .favs:
             let coordinator = FavoritesCoordinator(navigation)
             addDependency(coordinator)
             coordinator.start()
-        case .createAd:
+        case .seller:
             let coordinator = CreateAdCoordinator(navigation)
             addDependency(coordinator)
             coordinator.start()
-        case .settings:
-            let coordinator = CreateAdCoordinator(navigation)
+        case .bag:
+            let coordinator = CartCoordinator(navigation)
             addDependency(coordinator)
             coordinator.start()
         case .profile:
@@ -76,8 +81,12 @@ class TabCoordinator: BaseCoordinator, Coordinator {
         return navigation
     }
     
+    func resetTabController() {
+        tabController?.viewControllers = []
+    }
+    
     func pageForGuest(_ page: TabElements) -> UINavigationController {
-        let tabImage = UIImage(systemName: page.icon)
+        let tabImage = UIImage(named: page.icon)
         let navigation = UINavigationController()
         let coordinator = GuestCoordinator(navigation)
 
@@ -97,6 +106,7 @@ class TabCoordinator: BaseCoordinator, Coordinator {
 
 extension TabCoordinator: TabCoordinatorDelegate {
     func updatePages() {
+        self.resetTabController()
         self.preparePages()
     }
 }
@@ -104,9 +114,9 @@ extension TabCoordinator: TabCoordinatorDelegate {
 extension TabCoordinator {
     enum TabElements: CaseIterable {
         case feed
-        case createAd
+        case seller
         case favs
-        case settings
+        case bag
         case profile
         
         init?(index: Int) {
@@ -116,9 +126,9 @@ extension TabCoordinator {
             case 1:
                 self = .favs
             case 2:
-                self = .settings
+                self = .seller
             case 3:
-                self = .createAd
+                self = .bag
             case 4:
                 self = .profile
             default:
@@ -130,12 +140,12 @@ extension TabCoordinator {
             switch self {
             case .feed:
                 return "Лента"
-            case .createAd:
+            case .seller:
                 return "Создание"
             case .favs:
                 return "Избранное"
-            case .settings:
-                return "Настройки"
+            case .bag:
+                return "Корзина"
             case .profile:
                 return "Профиль"
             }
@@ -147,9 +157,9 @@ extension TabCoordinator {
                 return 0
             case .favs:
                 return 1
-            case .settings:
+            case .seller:
                 return 2
-            case .createAd:
+            case .bag:
                 return 3
             case .profile:
                 return 4
@@ -159,15 +169,15 @@ extension TabCoordinator {
         var icon: String {
             switch self {
             case .feed:
-                return "magnifyingglass"
+                return "feed"
             case .favs:
-                return "heart"
-            case .settings:
-                return "eye"
-            case .createAd:
-                return "plus"
+                return "favorites"
+            case .seller:
+                return "seller"
+            case .bag:
+                return "bag"
             case .profile:
-                return "person"
+                return "profile"
             }
         }
         
@@ -177,10 +187,10 @@ extension TabCoordinator {
                 return false
             case .favs:
                 return false
-            case .settings:
+            case .seller:
                 return true
-            case .createAd:
-                return true
+            case .bag:
+                return false
             case .profile:
                 return true
             }

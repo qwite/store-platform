@@ -32,6 +32,8 @@ class CreateAdViewController: UIViewController {
         super.viewDidLoad()
         presenter.viewDidLoad()
     }
+    
+    
 }
 
 extension CreateAdViewController: CreateAdViewProtocol {

@@ -6,7 +6,7 @@ class RegisterView: UIView {
     lazy var emailField = UITextField(placeholder: "Электронная почта", withUnderline: true, keyboardType: .emailAddress)
     lazy var passwordField = UITextField(placeholder: "Пароль", withUnderline: true, keyboardType: .default,
                                 isSecureTextEntry: true)
-    lazy var registerButton = UIButton(text: "Зарегистрироваться", preset: .custom)
+    lazy var registerButton = UIButton(text: "Зарегистрироваться", preset: .customLarge)
     
     lazy var conditionsLabel = UILabel(text: "Регистрируясь, вы принимаете следующие условия Политики конфиденциальности и условия Пользования",
                                        font: UIFont.systemFont(ofSize: 14, weight: .regular),

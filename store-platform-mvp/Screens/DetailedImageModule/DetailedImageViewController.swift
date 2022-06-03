@@ -1,5 +1,9 @@
 import UIKit
 
+protocol DetailedImageViewProtocol: AnyObject {
+    func setImage(_ image: Data)
+}
+
 class DetailedImageViewController: UIViewController {
     var presenter: DetailedImagePresenter!
     lazy var imageView = UIImageView(image: nil, contentMode: .scaleAspectFit, clipToBounds: true)

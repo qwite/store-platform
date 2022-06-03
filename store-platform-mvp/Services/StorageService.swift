@@ -69,6 +69,15 @@ class StorageService {
             }
         }
     }
+    
+    // TODO:
+//    func fetchImagesFromUrls(urls: [String]) {
+//        for (index, url) in urls.enumerated() {
+//            let source = url
+//            storageReference.
+//        }
+//    }
+    
 }
 
 // MARK: - Storage Service Errors

@@ -56,14 +56,11 @@ extension AdCell {
     func configureScrollView(photos: [String], size: CGSize) {
         addSubview(scrollView)
         scrollView.isPagingEnabled = true
-        scrollView.layer.borderWidth = 1.0
-        scrollView.layer.cornerRadius = 20
         scrollView.showsHorizontalScrollIndicator = false
         
         StorageService.sharedInstance.getImagesFromUrls(images: photos, size: size) { [weak self] result in
             switch result {
             case .success(let imageView):
-
                 self?.scrollView.addSubview(imageView)
             case .failure(let error):
                 fatalError("\(error)")

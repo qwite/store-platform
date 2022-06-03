@@ -11,20 +11,19 @@ class BaseCoordinator {
         debugPrint("appended: \(coordinator)")
     }
     
-    func removeDependency(_ coordinator: GuestCoordinator) {
+    func removeDependency(_ coordinator: Coordinator) {
         guard childCoordinators.isEmpty == false else {
             return
         }
        
         for (index, element) in childCoordinators.enumerated() {
-            if element is GuestCoordinator {
+            if element === coordinator {
                 childCoordinators.remove(at: index)
-                debugPrint("removed: \(coordinator)")
             }
         }
     }
     
     func removeAllGuest() {
-        childCoordinators.removeAll(where: {$0 is GuestCoordinator})
+        childCoordinators.removeAll()
     }
 }

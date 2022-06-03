@@ -10,8 +10,11 @@ protocol Factory: AnyObject {
     func buildLoginModule(coordinator: GuestCoordinator) -> UIViewController
     func buildRegisterModule(coordinator: GuestCoordinator) -> UIViewController
     func buildGuestModule(coordinator: GuestCoordinator) -> UIViewController
-    func buildFavoritesModule() -> UIViewController
+    func buildFavoritesModule(coordinator: FavoritesCoordinator) -> UIViewController
+    func buildCartModule() -> UIViewController
+    func buildSizePickerModule(coordinator: PickSizeCoordinatorProtocol, sizes: [Size]) -> UIViewController
     func buildProfileModule() -> UIViewController
+    func buildDetailedAdModule(coordinator: PickSizeCoordinatorProtocol, with item: Item) -> UIViewController
 }
 
 class DependencyFactory: Factory {
@@ -82,9 +85,9 @@ class DependencyFactory: Factory {
         return view
     }
     
-    func buildFavoritesModule() -> UIViewController {
+    func buildFavoritesModule(coordinator: FavoritesCoordinator) -> UIViewController {
         let view = FavoritesViewController()
-        let presenter = FavoritesPresenter(view: view)
+        let presenter = FavoritesPresenter(view: view, coordinator: coordinator)
         view.presenter = presenter
         return view
     }
@@ -92,6 +95,27 @@ class DependencyFactory: Factory {
     func buildProfileModule() -> UIViewController {
         let view = ProfileViewController()
         let presenter = ProfilePresenter(view: view)
+        view.presenter = presenter
+        return view
+    }
+    
+    func buildCartModule() -> UIViewController {
+        let view = CartViewController()
+        let presenter = CartPresenter(view: view)
+        view.presenter = presenter
+        return view
+    }
+    
+    func buildSizePickerModule(coordinator: PickSizeCoordinatorProtocol, sizes: [Size]) -> UIViewController {
+        let view = PickSizeViewController()
+        let presenter = PickSizePresenter(view: view, sizes: sizes, coordinator: coordinator)
+        view.presenter = presenter
+        return view
+    }
+    
+    func buildDetailedAdModule(coordinator: PickSizeCoordinatorProtocol, with item: Item) -> UIViewController {
+        let view = DetailedAdViewController()
+        let presenter = DetailedAdPresenter(view: view, coordinator: coordinator, item: item)
         view.presenter = presenter
         return view
     }

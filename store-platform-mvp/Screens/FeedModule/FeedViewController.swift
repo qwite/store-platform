@@ -89,7 +89,12 @@ extension FeedViewController: FeedViewProtocol {
 }
 
 extension FeedViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = dataSource?.itemIdentifier(for: indexPath) else {
+            fatalError("item not found in datasource")
+        }
+        presenter.openDetailed(item: item)
+    }
 }
 
 extension FeedViewController: AdCellDelegate {
@@ -99,7 +104,7 @@ extension FeedViewController: AdCellDelegate {
             return
         }
         
-        presenter.addFavorite(itemId: item.id)
+        presenter.addFavorite(item: item)
     }
     
     func didUntappedLikeButton(_ adCell: AdCell) {
@@ -108,7 +113,7 @@ extension FeedViewController: AdCellDelegate {
             return
         }
     
-        presenter.removeFavorite(itemId: item.id)
+        presenter.removeFavorite(item: item)
     }
 }
   

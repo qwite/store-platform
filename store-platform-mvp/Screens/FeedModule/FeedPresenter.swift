@@ -4,6 +4,7 @@ protocol FeedPresenterProtocol: AnyObject {
     init(view: FeedViewProtocol, coordinator: FeedCoordinator)
     func viewDidLoad()
     func getAds()
+    func openDetailed(item: Item) 
 }
 
 class FeedPresenter: FeedPresenterProtocol {
@@ -20,8 +21,17 @@ class FeedPresenter: FeedPresenterProtocol {
         view?.configureDataSource()
         view?.configureViews()
         getAds()
-        resetLogin()
         checkLogin()
+    }
+    
+    func postNotificationAddFavoriteItem(_ item: Item) {
+        let notificationName = Notification.Name("addFavoriteItem")
+        NotificationCenter.default.post(name: notificationName, object: item)
+    }
+    
+    func postNotificationRemoveFavoriteItem(_ item: Item) {
+        let notificationName = Notification.Name("removeFavoriteItem")
+        NotificationCenter.default.post(name: notificationName, object: item)
     }
     
     func getAds() {
@@ -35,26 +45,32 @@ class FeedPresenter: FeedPresenterProtocol {
         }
     }
     
-    func addFavorite(itemId: String?) {
-        FirestoreService.sharedInstance.addFavoriteItem(itemId: itemId) { result in
+    func addFavorite(item: Item) {
+        FirestoreService.sharedInstance.addFavoriteItem(item: item) { [weak self] result in
             switch result {
-            case .success(let message):
-                debugPrint(message)
+            case .success(_):
+                self?.postNotificationAddFavoriteItem(item)
+                debugPrint("added")
             case .failure(let error):
                 debugPrint(error)
             }
         }
     }
     
-    func removeFavorite(itemId: String?) {
-        FirestoreService.sharedInstance.removeFavoriteItem(itemId: itemId) { result in
+    func removeFavorite(item: Item) {
+        FirestoreService.sharedInstance.removeFavoriteItem(item: item) { [weak self] result in
             switch result {
-            case .success(let message):
-                debugPrint(message)
+            case .success(_):
+                self?.postNotificationRemoveFavoriteItem(item)
+                debugPrint("removed")
             case .failure(let error):
                 debugPrint(error)
             }
         }
+    }
+    
+    func openDetailed(item: Item) {
+        coordinator?.showDetailedAd(with: item)
     }
     
     //MARK: - debug

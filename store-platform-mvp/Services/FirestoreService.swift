@@ -62,8 +62,40 @@ class FirestoreService {
 
             completion(.success(items))
         }
+    }        
+    
+    func getFavoritesIds(completion: @escaping (Result<[String], Error>) -> ()) {
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return debugPrint("user id not found in settings")
+        }
+        
+        usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
+            guard let querySnapshot = querySnapshot else {
+                return debugPrint("user id not found in documents")
+            }
+            
+            guard let userDocument = querySnapshot.documents.last?.get("favorites") as? [String] else {
+                return debugPrint("favorite field not found in user document")
+            }
+            
+            completion(.success(userDocument))
+        }
     }
-
+    
+    func getItemByDocumentId(documentId: String, completion: @escaping (Result<Item, Error>) -> ()) {
+        itemsReference.document(documentId).getDocument { documentSnapshot, error in
+            guard let documentSnapshot = documentSnapshot else {
+                return debugPrint("document not found")
+            }
+            
+            guard let item = try? documentSnapshot.data(as: Item.self) else {
+                return debugPrint("decoding item error")
+            }
+            
+            completion(.success(item))
+        }
+    }
+    
     /// Adding user info for user and returns this
     func saveUserInfo(customUser: CustomUser, completion: @escaping (Result<CustomUser, Error>) -> ()) {
         guard let _ = try? usersReference.addDocument(from: customUser) else {
@@ -73,9 +105,9 @@ class FirestoreService {
         completion(.success(customUser))
     }
     
-    func addFavoriteItem(itemId: String?, completion: @escaping (Result<String, Error>) -> ()) {
+    func addFavoriteItem(item: Item, completion: @escaping (Result<Item, Error>) -> ()) {
         guard let userId = SettingsService.sharedInstance.userId,
-              let itemId = itemId else {
+              let itemId = item.id else {
             return
         }
         usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
@@ -85,13 +117,13 @@ class FirestoreService {
             
             let documents = snapshot.documents
             documents.last?.reference.setData(["favorites": FieldValue.arrayUnion([itemId])], merge: true)
-            completion(.success("added"))
+            completion(.success(item))
         }
     }
     
-    func removeFavoriteItem(itemId: String?, completion: @escaping (Result<String, Error>) -> ()) {
+    func removeFavoriteItem(item: Item, completion: @escaping (Result<Item, Error>) -> ()) {
         guard let userId = SettingsService.sharedInstance.userId,
-              let itemId = itemId else {
+              let itemId = item.id else {
             return
         }
         
@@ -102,7 +134,29 @@ class FirestoreService {
             
             let documents = snapshot.documents
             documents.last?.reference.updateData(["favorites": FieldValue.arrayRemove([itemId])])
-            completion(.success("deleted"))
+            completion(.success(item))
+        }
+    }
+    
+    func addItemToCart(selectedSize: String, item: Item, completion: @escaping (Result<String, Error>) -> ()) {
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return
+        }
+        
+        usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
+            guard let snapshot = querySnapshot else {
+                return completion(.failure(error!))
+            }
+            
+            let documents = snapshot.documents
+            guard var encodedItem = try? Firestore.Encoder().encode(item) else {
+                return completion(.failure(FirestoreServiceError.itemEncodingError))
+            }
+            
+            encodedItem["selected_size"] = selectedSize
+            
+            documents.last?.reference.setData(["cart": FieldValue.arrayUnion([encodedItem])], merge: true)
+            completion(.success("added"))
         }
     }
 }
@@ -113,6 +167,7 @@ extension FirestoreService {
         case documentNotFound
         case itemPhotoNotExist
         case itemAddError
+        case itemEncodingError
         case itemDecodingError
         case userIdNotExist
         case userEncodingError

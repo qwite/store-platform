@@ -10,7 +10,7 @@ class LoginView: UIView {
                                          keyboardType: .default,
                                          isSecureTextEntry: true)
     
-    lazy var loginButton = UIButton(text: "Войти", preset: .custom)
+    lazy var loginButton = UIButton(text: "Войти", preset: .customLarge)
     
     lazy var forgotPasswordButton = UIButton(text: "Забыли пароль?", preset: .none)
     
