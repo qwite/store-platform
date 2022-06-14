@@ -1,10 +1,15 @@
 import UIKit
 
+protocol ImagePickerCoordinatorDelegate: AnyObject {
+    func didSelectImage(imageData: Data)
+}
+
 class ImagePickerCoordinator: Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory
-    var childCoordinator = [Coordinator]()
-    var delegate: CreateAdCoordinatorProtocol?
+    var factory: Factory?
+    var finish: (() -> ())?
+    
+    weak var delegate: ImagePickerPresenterDelegate?
     
     func start() {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -16,19 +21,24 @@ class ImagePickerCoordinator: Coordinator {
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
-        factory = DependencyFactory()
+        self.factory = DependencyFactory()
     }
     
     func showPicker(with source: UIImagePickerController.SourceType) {
-        let module = factory.buildImagePickerModule(coordinator: self)
+        guard let delegate = delegate,
+              let module = factory?.buildImagePickerModule(coordinator: self, delegate: delegate) else {
+            return
+        }
+        
         module.sourceType = source
         module.allowsEditing = false
         self.navigationController.present(module, animated: true)
     }
     
-    func closePicker(with imageData: Data) {
-        delegate?.didSelectImage(image: imageData)
+    func closePicker() {
         self.navigationController.dismiss(animated: true, completion: nil)
+        self.delegate = nil
+        finish?()
     }
     
     func sheetAlert() -> UIAlertController {

@@ -48,6 +48,28 @@ class StorageService {
         }
     }
     
+    func uploadImage(with data: Data, type: StoragePathType, completion: @escaping (Result<String, Error>) -> ()) {
+        let fileName = "\(UUID().uuidString).png"
+        let metadata: StorageMetadata = StorageMetadata()
+        metadata.contentType = "png"
+        
+        let reference = self.storageReference.child("\(type.rawValue)/\(fileName)")
+        reference.putData(data, metadata: metadata) { metadata, error in
+            guard let _ = metadata else {
+                return completion(.failure(error!))
+            }
+            
+            reference.downloadURL { url, error in
+                guard let url = url else {
+                    return completion(.failure(StorageErrors.failedToGetDownloadUrl))
+                }
+                
+                let absoluteUrl = url.absoluteString
+                completion(.success(absoluteUrl))
+            }
+        }
+    }
+    
     func getImagesFromUrls(images: [String], size: CGSize,
                         completion: @escaping (Result<UIImageView, Error>) -> ()) {
         
@@ -70,13 +92,23 @@ class StorageService {
         }
     }
     
-    // TODO:
-//    func fetchImagesFromUrls(urls: [String]) {
-//        for (index, url) in urls.enumerated() {
-//            let source = url
-//            storageReference.
-//        }
-//    }
+    func getImageFromUrl(imageUrl: String, completion: @escaping (Result<Data, Error>) -> ()) {
+        guard let url = URL(string: imageUrl) else {
+            fatalError()
+        }
+        
+        let options: KingfisherOptionsInfo  = [.cacheOriginalImage]
+        
+        KingfisherManager.shared.downloader.downloadImage(with: url, options: options) { result in
+            switch result {
+            case .success(let image):
+
+                completion(.success(image.originalData))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
     
 }
 
@@ -85,5 +117,12 @@ extension StorageService {
     private enum StorageErrors: Error {
         case failedToUpload
         case failedToGetDownloadUrl
+    }
+}
+
+extension StorageService {
+    public enum StoragePathType: String {
+        case brandLogo = "brands_images"
+        case messageAttachment = "message_attachments_images"
     }
 }

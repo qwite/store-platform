@@ -1,14 +1,16 @@
 import UIKit
 
-protocol CreateAdCoordinatorProtocol {
-    func didSelectImage(image: Data)
-}
-
-class CreateAdCoordinator: Coordinator {
+class CreateAdCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
     weak var delegate: CreateAdViewPresenterProtocol?
-    var childCoordinator = [Coordinator]()
-    var factory: Factory
+    weak var pickerDelegate: ImagePickerPresenterDelegate?
+    
+    var factory: Factory?
+    var finishFlow: (() -> ())?
+    
+    deinit {
+        debugPrint("create ad coordinator deinit")
+    }
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -16,12 +18,20 @@ class CreateAdCoordinator: Coordinator {
     }
         
     func start() {
-        let module = factory.buildCreateAdModule(coordinator: self)
-        self.navigationController.pushViewController(module, animated: false)
+        guard let module = factory?.buildCreateAdModule(coordinator: self) as? CreateAdViewController else {
+            return
+        }
+        
+        self.pickerDelegate = module.presenter
+        self.navigationController.delegate = self
+        self.navigationController.pushViewController(module, animated: true)
     }
     
     func openCreateSize(with item: Size? = nil) {
-        let module = factory.buildCreateSizeModule(coordinator: self, with: item)
+        guard let module = factory?.buildCreateSizeModule(coordinator: self, with: item) else {
+            return
+        }
+        
         self.navigationController.present(module, animated: true)
     }
     
@@ -57,21 +67,42 @@ class CreateAdCoordinator: Coordinator {
         })
     }
     
-    func openImagePicker() {
+    func showImagePicker() {
         let imagePickerCoordinator = ImagePickerCoordinator(navigationController)
-        imagePickerCoordinator.delegate = self
+        imagePickerCoordinator.delegate = self.pickerDelegate
+        self.addDependency(imagePickerCoordinator)
         imagePickerCoordinator.start()
     }
     
     func openDetailedImage(data: Data) {
-        let module = factory.buildDetailedImageModule(image: data)
+        guard let module = factory?.buildDetailedImageModule(image: data) else {
+            return
+        }
+        
         self.navigationController.pushViewController(module, animated: true)
+    }
+    
+    func finish() {
+        self.navigationController.popViewController(animated: true)
+        self.finishFlow?()
     }
 }
 
-// MARK: - CreateAdCoordinator Protocol
-extension CreateAdCoordinator: CreateAdCoordinatorProtocol {
-    func didSelectImage(image: Data) {
-        delegate?.addImage(image: image)
+extension CreateAdCoordinator: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        guard let fromViewController = navigationController.transitionCoordinator?.viewController(forKey: .from) else {
+             return
+         }
+
+         // Check whether our view controller array already contains that view controller. If it does it means we’re pushing a different view controller on top rather than popping it, so exit.
+         if navigationController.viewControllers.contains(fromViewController) {
+             return
+         }
+
+         // We’re still here – it means we’re popping the view controller, so we can check whether it’s a buy view controller
+         if let buyViewController = fromViewController as? CreateAdViewController {
+             // We're popping a buy view controller; end its coordinator
+             finish()
+         }
     }
 }

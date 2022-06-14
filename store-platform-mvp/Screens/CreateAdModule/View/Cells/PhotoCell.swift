@@ -1,14 +1,14 @@
 import UIKit
 
-protocol PhotoCellDelegate {
+protocol PhotoCellDelegate: AnyObject {
     func didTappedAddPhotoButton()
 }
 
 class PhotoCell: UICollectionViewCell {
     static let reuseId = "Photo"
-    var delegate: PhotoCellDelegate?
+    weak var delegate: PhotoCellDelegate?
     
-    lazy var imageView = UIImageView(image: UIImage(systemName: "book"), contentMode: .scaleAspectFit, clipToBounds: false)
+    lazy var imageView = UIImageView(image: nil, contentMode: .scaleAspectFit, clipToBounds: false)
     
     // MARK: - Lifecycle
     override init(frame: CGRect) {
@@ -31,7 +31,7 @@ extension PhotoCell {
     
     func addPlaceholder() {
         let button = UIButton()
-        imageView.image = UIImage(systemName: "plus.viewfinder")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+        imageView.image = UIImage(systemName: "plus.viewfinder")?.withTintColor(.lightGray, renderingMode: .alwaysOriginal)
         button.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
         addSubview(button)
         button.addSubview(imageView)
@@ -41,6 +41,8 @@ extension PhotoCell {
         }
         
         imageView.snp.makeConstraints { make in
+            make.height.equalTo(button.snp.height).dividedBy(2)
+            make.width.equalTo(button.snp.width).dividedBy(2)
             make.center.equalTo(button.snp.center)
         }
     }

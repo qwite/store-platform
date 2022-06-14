@@ -1,6 +1,7 @@
 import UIKit
 
-protocol TextFieldsViewProtocol: AnyObject {
+// MARK: - TextFieldsViewDelegate
+protocol TextFieldsViewDelegate: AnyObject {
     func getClothingName() -> String
     func getDescription() -> String
 }
@@ -25,17 +26,17 @@ class TextFieldsView: UICollectionReusableView {
         
     lazy var descriptionTextView: UITextView = {
         let textView = UITextView()
-        textView.textColor = .black
+        textView.textColor = .systemGray
         textView.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textView.textAlignment = .left
         textView.textContainer.lineFragmentPadding = 0
         textView.textContainer.lineBreakMode = .byWordWrapping
         textView.textContainerInset = UIEdgeInsets(top: 1, left: 0, bottom: 0, right: 0)
         textView.textContainer.maximumNumberOfLines = 8
-        textView.text = "Бац бац и крутое описание!"
+        textView.text = "Объемная худи с капюшоном из коллекции, посвященной городу Москва, с дизайном в тематике World Tour."
+        textView.delegate = self
         return textView
     }()
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,9 +61,8 @@ extension TextFieldsView {
     }
 }
 
-extension TextFieldsView: TextFieldsViewProtocol {
-
-    
+// TODO: Add some checks
+extension TextFieldsView: TextFieldsViewDelegate {
     func getClothingName() -> String {
         return nameTextField.text!
     }
@@ -72,19 +72,19 @@ extension TextFieldsView: TextFieldsViewProtocol {
     }
 }
 
-//
-//extension TextFieldsView: UITextViewDelegate {
-//    func textViewDidBeginEditing(_ textView: UITextView) {
-//        if textView.textColor == .systemGray {
-//            textView.text = ""
-//            textView.textColor = .black
-//        }
-//    }
-//
-//    func textViewDidEndEditing(_ textView: UITextView) {
-//        if textView.text.isEmpty {
-//            textView.text = "Объемная худи с капюшоном из коллекции, посвященной городу Москва, с дизайном в тематике World Tour."
-//            textView.textColor = .systemGray
-//        }
-//    }
-//}
+
+extension TextFieldsView: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .systemGray {
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Объемная худи с капюшоном из коллекции, посвященной городу Москва, с дизайном в тематике World Tour."
+            textView.textColor = .systemGray
+        }
+    }
+}

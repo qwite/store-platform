@@ -3,11 +3,12 @@ import UIKit
 protocol DetailedAdViewDelegate: AnyObject {
     func didTappedSelectSizeButton()
     func didTappedAddCartButton()
+    func didTappedCommunicationButton()
 }
 
 class DetailedAdView: UIView {
     weak var delegate: DetailedAdViewDelegate?
-    
+    var itemdId: String?
     let brandLabel = UILabel(text: "",
                              font: .systemFont(ofSize: 18, weight: .semibold),
                              textColor: .black)
@@ -34,7 +35,8 @@ class DetailedAdView: UIView {
                                   font: .systemFont(ofSize: 18, weight: .medium),
                                   textColor: .black)
     
-    let selectSizeButton = UIButton(text: "Выберите размер", preset: .select)
+    let selectSizeButton = UIButton(text: "Выберите размер", preset: .select, with: true)
+    let communicationButton = UIButton(text: "Связаться с продавцом", preset: .select)
     let descriptionHeaderLabel = UILabel(text: "Описание",
                                          font: .systemFont(ofSize: 18, weight: .medium),
                                          textColor: .black)
@@ -91,7 +93,6 @@ extension DetailedAdView {
         addSubview(scrollView)
         
         scrollView.snp.makeConstraints { make in
-//            make.height.equalTo(snp.height)
             make.top.equalTo(snp.top)
             make.left.equalTo(snp.left)
             make.right.equalTo(snp.right)
@@ -99,10 +100,10 @@ extension DetailedAdView {
         }
         
 
-        let contentStack = UIStackView(arrangedSubviews: [itemStack, selectSizeButton, descriptionStack],
+        let contentStack = UIStackView(arrangedSubviews: [itemStack, selectSizeButton, descriptionStack, communicationButton],
                                        spacing: 30,
                                        axis: .vertical,
-                                       alignment: .leading)
+                                       alignment: .fill)
         
         scrollView.addSubview(photoScrollView)
         scrollView.addSubview(contentStack)
@@ -123,7 +124,7 @@ extension DetailedAdView {
         
         contentStack.snp.makeConstraints { make in
             make.left.equalTo(scrollView.snp.left).offset(20)
-            make.right.equalTo(scrollView.snp.right)
+            make.right.equalTo(scrollView.snp.right).offset(-20)
             make.bottom.equalTo(scrollView.snp.bottom)
         }
         
@@ -140,6 +141,7 @@ extension DetailedAdView {
     func configureButtons() {
         addCartButton.addTarget(self, action: #selector(addCartButtonAction), for: .touchUpInside)
         selectSizeButton.addTarget(self, action: #selector(selectSizeButtonAction), for: .touchUpInside)
+        communicationButton.addTarget(self, action: #selector(communicationButtonAction), for: .touchUpInside)
     }
     
     @objc func addCartButtonAction() {
@@ -148,5 +150,9 @@ extension DetailedAdView {
     
     @objc func selectSizeButtonAction() {
         delegate?.didTappedSelectSizeButton()
+    }
+    
+    @objc func communicationButtonAction() {
+        delegate?.didTappedCommunicationButton()
     }
 }

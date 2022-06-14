@@ -26,7 +26,28 @@ class FeedPresenter: FeedPresenterProtocol {
         view?.configureViews()
         getAds()
         checkLogin()
+        fetch()
     }
+    
+    func fetch() {
+//        RealTimeService.sharedInstance.createNode(for: "wiWH1iujhw5CS6yoPEhT", with: "Extra brand") { error in
+//            guard error == nil else {
+//                fatalError("\(error!)")
+//            }
+//
+//            print("node created")
+//        }
+        
+//        RealTimeService.sharedInstance.getAllConversationsForBrand(brandId: "wiWH1iujhw5CS6yoPEhT") { result in
+//            switch result {
+//            case .success(let conversations):
+//                print(conversations)
+//            case .failure(let error):
+//                fatalError("\(error)")
+//            }
+//        }
+    }
+    
     
     func postNotificationAddFavoriteItem(_ item: Item) {
         let notificationName = Notification.Name("addFavoriteItem")
@@ -76,6 +97,19 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     func openDetailed(item: Item) {
+        guard let id = item.id else {
+            fatalError()
+        }
+        
+        service?.increaseItemViews(itemId: id, completion: { result in
+            switch result {
+            case .success(let message):
+                debugPrint(message)
+            case .failure(let error):
+                debugPrint(error)
+            }
+        })
+        
         coordinator?.showDetailedAd(with: item)
     }
     

@@ -1,5 +1,4 @@
 import UIKit
-import SwiftUI
 
 // MARK: - TabCoordinator Delegate Protocol
 protocol TabCoordinatorDelegate: AnyObject {
@@ -63,7 +62,7 @@ class TabCoordinator: BaseCoordinator, Coordinator {
             addDependency(coordinator)
             coordinator.start()
         case .seller:
-            let coordinator = CreateAdCoordinator(navigation)
+            let coordinator = SellerCoordinator(navigation)
             addDependency(coordinator)
             coordinator.start()
         case .bag:
@@ -72,11 +71,13 @@ class TabCoordinator: BaseCoordinator, Coordinator {
             coordinator.start()
         case .profile:
             let coordinator = ProfileCoordinator(navigation)
+            coordinator.tabDelegate = self
             addDependency(coordinator)
             coordinator.start()
         }
         
         navigation.navigationBar.topItem?.title = page.title
+        navigation.navigationBar.prefersLargeTitles = true
         navigation.tabBarItem.image = tabImage
         return navigation
     }
@@ -141,7 +142,8 @@ extension TabCoordinator {
             case .feed:
                 return "Лента"
             case .seller:
-                return "Создание"
+                //TODO: fix
+                return ""
             case .favs:
                 return "Избранное"
             case .bag:

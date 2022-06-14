@@ -46,8 +46,15 @@ class LoginPresenter: LoginPresenterProtocol {
     }
     
     func saveUser(_ user: CustomUser) {
-        debugPrint("\(user) saved")
+        guard let firstName = user.firstName,
+              let lastName = user.lastName else {
+            fatalError("user cannot be saved")
+        }
+        
         SettingsService.sharedInstance.isAuthorized = true
         SettingsService.sharedInstance.userId = user.id
+        SettingsService.sharedInstance.userFullName = ["firstName": firstName, "lastName": lastName]
+        
+        debugPrint("\(user) saved")
     }
 }

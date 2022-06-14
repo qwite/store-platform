@@ -8,8 +8,7 @@ class CartCoordinator: Coordinator {
         guard let module = factory?.buildCartModule() else {
             return
         }
-        
-        self.navigationController.pushViewController(module, animated: false)
+         self.navigationController.pushViewController(module, animated: false)
     }
     
     

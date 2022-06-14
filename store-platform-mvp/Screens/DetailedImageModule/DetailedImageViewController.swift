@@ -28,7 +28,6 @@ extension DetailedImageViewController {
             make.right.equalTo(view.snp.right).offset(-20)
             make.height.equalTo(500)
         }
-        imageView.layer.borderWidth = 0.8
     }
 }
 
@@ -38,25 +37,5 @@ extension DetailedImageViewController: DetailedImageViewProtocol {
     func setImage(_ image: Data) {
         let image = UIImage(data: image)
         imageView.image = image
-    }
-}
-
-// MARK: - SwiftUI
-
-import SwiftUI
-struct DetailedImage: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<DetailedImage.ContainerView>)
-        -> DetailedImageViewController {
-            return DetailedImageViewController()
-        }
-        
-        func updateUIViewController(_ uiViewController: DetailedImage.ContainerView.UIViewControllerType,
-                                    context: UIViewControllerRepresentableContext<DetailedImage.ContainerView>) {}
     }
 }

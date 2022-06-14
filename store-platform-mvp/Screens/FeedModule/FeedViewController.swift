@@ -45,6 +45,7 @@ extension FeedViewController: FeedViewProtocol {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCell.reuseId, for: indexPath) as? AdCell else {
                     fatalError("dequeueReusableCell error with AdCell")
                 }
+                
                 cell.delegate = self
                 cell.configure(with: itemIdentifier)
                 return cell

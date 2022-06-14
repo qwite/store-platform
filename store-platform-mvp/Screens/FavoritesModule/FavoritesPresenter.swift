@@ -10,7 +10,7 @@ protocol FavoritesPresenterProtocol {
     func removeFavoriteItemFromView(_ item: Item)
     func openDetailed(with item: Item)
     func openSizePicker(item: Item)
-    func didSelectSize(selectedSize: Size, item: Item)
+    func didAddToCart(item: CartItem)
 }
 
 class FavoritesPresenter: FavoritesPresenterProtocol {
@@ -100,28 +100,22 @@ class FavoritesPresenter: FavoritesPresenterProtocol {
     }
     
     func openSizePicker(item: Item) {
-        guard let sizes = item.sizes else {
-            return
-        }
-        
-        coordinator?.showSizePicker(with: sizes)
-        coordinator?.completionHandler = { [weak self] size in
-            self?.didSelectSize(selectedSize: size, item: item)
+        coordinator?.showSizePicker(for: item)
+        coordinator?.completionHandler = { [weak self] item in
+            print("test")
+            self?.didAddToCart(item: item)
         }
     }
     
-    func didSelectSize(selectedSize: Size, item: Item) {
-        guard let size = selectedSize.size else {
-            return
-        }
-        
-        FirestoreService.sharedInstance.addItemToCart(selectedSize: size, item: item) { [weak self] result in
+    func didAddToCart(item: CartItem) {
+        service?.addItemToCart(item: item, completion: { [weak self] result in
             switch result {
             case .success(_):
                 self?.view?.showSuccessAlert()
             case .failure(let error):
                 debugPrint(error)
             }
-        }
+        })
     }
+
 }

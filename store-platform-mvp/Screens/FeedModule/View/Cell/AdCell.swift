@@ -100,6 +100,14 @@ extension AdCell {
             delegate?.didTappedLikeButton(self)
         }
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.brandNameLabel.text = nil
+        self.clothingNameLabel.text = nil
+        self.priceLabel.text = nil
+        self.scrollView.subviews.forEach({$0.removeFromSuperview()})
+    }
 }
 
 extension AdCell {

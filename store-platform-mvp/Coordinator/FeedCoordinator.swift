@@ -5,9 +5,8 @@ class FeedCoordinator: Coordinator {
     var factory: Factory?
     var childCoordinator = [Coordinator]()
     
-    var completionHandler: ((Size) -> ())?
+    var completionHandler: ((CartItem) -> ())?
 
-    
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
         factory = DependencyFactory()
@@ -32,19 +31,19 @@ class FeedCoordinator: Coordinator {
     }
 }
 
-extension FeedCoordinator: PickSizeCoordinatorProtocol {    
-    func showSizePicker(with sizes: [Size]) {
-        guard let module = factory?.buildSizePickerModule(coordinator: self, sizes: sizes) else {
+extension FeedCoordinator: PickSizeCoordinatorProtocol {
+    func showSizePicker(for item: Item) {
+        guard let module = factory?.buildSizePickerModule(coordinator: self, item: item) else {
             return
         }
         
         self.navigationController.present(module, animated: true)
     }
     
-    func hideSizePicker(with size: Size) {
-        self.navigationController.dismiss(animated: true) { [weak self] in
-            self?.completionHandler?(size)
-            self?.navigationController.popViewController(animated: true)
+    func hideSizePicker(with item: CartItem) {
+        self.navigationController.dismiss(animated: true) {
+            self.completionHandler?(item)
         }
+        self.navigationController.popViewController(animated: true)
     }
 }

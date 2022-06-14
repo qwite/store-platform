@@ -1,6 +1,6 @@
 import Foundation
 
-class BaseCoordinator {
+class BaseCoordinator: NSObject {
     var childCoordinators: [Coordinator] = []
     
     func addDependency(_ coordinator: Coordinator) {
@@ -8,17 +8,19 @@ class BaseCoordinator {
             if element === coordinator { return }
         }
         childCoordinators.append(coordinator)
-        debugPrint("appended: \(coordinator)")
     }
     
     func removeDependency(_ coordinator: Coordinator) {
         guard childCoordinators.isEmpty == false else {
             return
         }
+        
        
         for (index, element) in childCoordinators.enumerated() {
             if element === coordinator {
                 childCoordinators.remove(at: index)
+                debugPrint("removed from childs: \(coordinator)")
+                debugPrint("current childs: \(childCoordinators)")
             }
         }
     }

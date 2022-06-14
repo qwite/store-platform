@@ -1,7 +1,7 @@
 import Foundation
 
 protocol PickSizePresenterProtocol {
-    init(view: PickSizeViewProtocol, sizes: [Size], coordinator: PickSizeCoordinatorProtocol)
+    init(view: PickSizeViewProtocol, item: Item, coordinator: PickSizeCoordinatorProtocol)
     func viewDidLoad()
     func getSizeRowsCount() -> Int
     func getSizeComponentCount() -> Int
@@ -12,12 +12,12 @@ protocol PickSizePresenterProtocol {
 class PickSizePresenter: PickSizePresenterProtocol {
     weak var view: PickSizeViewProtocol?
     weak var coordinator: PickSizeCoordinatorProtocol?
-    var sizes: [Size]
+    var item: Item
     
-    required init(view: PickSizeViewProtocol, sizes: [Size], coordinator: PickSizeCoordinatorProtocol) {
+    required init(view: PickSizeViewProtocol, item: Item, coordinator: PickSizeCoordinatorProtocol) {
         self.view = view
         self.coordinator = coordinator
-        self.sizes = sizes
+        self.item = item
     }
     
     func viewDidLoad() {
@@ -29,16 +29,30 @@ class PickSizePresenter: PickSizePresenterProtocol {
     }
     
     func getSizeRowsCount() -> Int {
+        guard let sizes = item.sizes else {
+            return 0
+        }
+        
         return sizes.count
     }
     
     func getAvailableSizes() -> [Size] {
+        guard let sizes = item.sizes else {
+            fatalError()
+        }
+        
         return sizes
     }
     
     func selectSize(by index: Int) {
-        let selectedSize = sizes[index]
-     
-        coordinator?.hideSizePicker(with: selectedSize)
+        guard let sizes = item.sizes,
+              let selectedSize = sizes[index].size,
+              let selectedPrice = sizes[index].price else {
+            return
+        }
+        
+
+        let cartItem = CartItem(item: item, selectedSize: selectedSize, selectedPrice: selectedPrice)
+        coordinator?.hideSizePicker(with: cartItem)
     }
 }

@@ -1,6 +1,7 @@
 import Foundation
 
-protocol ImagePickerViewProtocol {
+protocol ImagePickerPresenterDelegate: AnyObject {
+    func didCloseImagePicker(with imageData: Data)
 }
 
 protocol ImagePickerPresenterProtocol {
@@ -10,17 +11,19 @@ protocol ImagePickerPresenterProtocol {
 }
 
 class ImagePickerPresenter: ImagePickerPresenterProtocol {
-    var coordinator: ImagePickerCoordinator
-    var view: ImagePickerViewProtocol
+    weak var coordinator: ImagePickerCoordinator?
+    weak var view: ImagePickerViewProtocol?
+    weak var delegate: ImagePickerPresenterDelegate?
     
     required init(coordinator: ImagePickerCoordinator, view: ImagePickerViewProtocol) {
         self.coordinator = coordinator
         self.view = view
     }
     
-    func viewDidLoad() {}
+    public func viewDidLoad() {}
     
-    func didClosePicker(with imageData: Data) {
-        coordinator.closePicker(with: imageData)
+    public func didClosePicker(with imageData: Data) {
+        delegate?.didCloseImagePicker(with: imageData)
+        coordinator?.closePicker()
     }
 }

@@ -1,12 +1,15 @@
 import UIKit
 import SPAlert
 
+// MARK: - DetailedAdViewProtocol
 protocol DetailedAdViewProtocol: AnyObject {
     func configure(with item: Item)
     func showSizePicker()
     func showSuccessAlert()
+    func showChat()
 }
 
+// MARK: - DetailedAdViewController
 class DetailedAdViewController: UIViewController {
     var presenter: DetailedAdPresenter!
     var detailedAdView = DetailedAdView()
@@ -43,6 +46,10 @@ extension DetailedAdViewController: DetailedAdViewProtocol {
     func showSuccessAlert() {
         SPAlert.present(title: "Успешно", message: "Товар был добавлен в корзину", preset: .done)
     }
+    
+    func showChat() {
+        presenter.createConversation()
+    }
 }
 
 extension DetailedAdViewController: UIScrollViewDelegate {
@@ -53,6 +60,10 @@ extension DetailedAdViewController: UIScrollViewDelegate {
 }
 
 extension DetailedAdViewController: DetailedAdViewDelegate {
+    func didTappedCommunicationButton() {
+        showChat()
+    }
+    
     func didTappedSelectSizeButton() {
         showSizePicker()
     }

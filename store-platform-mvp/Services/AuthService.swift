@@ -48,4 +48,14 @@ class AuthService: AuthServiceProtocol {
             completion(.success(user))
         }
     }
+    
+    func logout(completion: @escaping (Result<String, Error>) -> ()) {
+        do {
+            try auth.signOut()
+            completion(.success("signout success"))
+        } catch {
+            completion(.failure(error))
+        }
+    }
+    
 }

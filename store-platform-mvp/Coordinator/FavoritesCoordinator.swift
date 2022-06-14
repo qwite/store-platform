@@ -4,7 +4,7 @@ class FavoritesCoordinator: Coordinator {
     var navigationController: UINavigationController
     var factory: Factory?
     
-    var completionHandler: ((Size) -> ())?
+    var completionHandler: ((CartItem) -> ())?
     var childCoordinator =  [Coordinator]()
     
     func start() {
@@ -31,17 +31,17 @@ class FavoritesCoordinator: Coordinator {
 }
 
 extension FavoritesCoordinator: PickSizeCoordinatorProtocol {
-    func showSizePicker(with sizes: [Size]) {
-        guard let module = factory?.buildSizePickerModule(coordinator: self, sizes: sizes) else {
+    func showSizePicker(for item: Item) {
+        guard let module = factory?.buildSizePickerModule(coordinator: self, item: item) else {
             return
         }
         
         self.navigationController.present(module, animated: true)
     }
     
-    func hideSizePicker(with size: Size) {
+    func hideSizePicker(with item: CartItem) {
         self.navigationController.dismiss(animated: true) { [weak self] in
-            self?.completionHandler?(size)
+            self?.completionHandler?(item)
         }
     }
 }

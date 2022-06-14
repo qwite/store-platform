@@ -1,8 +1,9 @@
 import Foundation
 
 protocol CreateAdViewPresenterProtocol: AnyObject {
-    init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator)
+    init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator, service: UserServiceProtocol)
     func viewDidLoad()
+    
     func createSize(size: Size, completion: @escaping((Result<Size, Error>) -> Void))
     func editSize(size: Size, completion: @escaping ((Result<Size, Error>) -> Void))
     func editSizeView(_ item: Size)
@@ -10,36 +11,38 @@ protocol CreateAdViewPresenterProtocol: AnyObject {
     func setClothingName(_ name: String)
     func setDescription(_ description: String)
     func addImage(image: Data)
+    func popScreen()
     var photos: [Data]? { get set }
 }
 
 class CreateAdPresenter: CreateAdViewPresenterProtocol {
     var photos: [Data]?
     
-    let view: CreateAdViewProtocol
-    let itemBuilder: ItemBuilderProtocol
-    var coordinator: CreateAdCoordinator
+    weak var view: CreateAdViewProtocol?
+    var itemBuilder: ItemBuilderProtocol
+    var service: UserServiceProtocol?
+    weak var coordinator: CreateAdCoordinator?
     
-    required init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator) {
+    required init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator, service: UserServiceProtocol) {
         self.view = view
         self.itemBuilder = itemBuilder
         self.coordinator = coordinator
-        self.coordinator.delegate = self
+        self.coordinator?.delegate = self
+        self.service = service
     }
     
     func viewDidLoad() {
         print("create ad loaded")
-        view.configureCollectionView()
-        view.configureDataSource()
+        view?.configureCollectionView()
+        view?.configureDataSource()
     }
-    
     
     func createSize(size: Size, completion: @escaping ((Result<Size, Error>) -> Void)) {
         guard let result = itemBuilder.addSize(size) else {
             return completion(.failure(ItemBuilder.ItemBuilderError.sizeExistError))
         }
         
-        view.insertSizeSection(item: result)
+        view?.insertSizeSection(item: result)
         completion(.success(result))
     }
     
@@ -48,16 +51,16 @@ class CreateAdPresenter: CreateAdViewPresenterProtocol {
             return completion(.failure(ItemBuilder.ItemBuilderError.indexNotFoundError))
         }
         
-        view.updateSizeSection(item: result)
+        view?.updateSizeSection(item: result)
         completion(.success(result))
     }
     
     @objc func openSizeView() {
-        coordinator.openCreateSize()
+        coordinator?.openCreateSize()
     }
     
     func editSizeView(_ item: Size) {
-        coordinator.openEditSize(item: item)
+        coordinator?.openEditSize(item: item)
     }
     
     func setCategory(_ category: String) {
@@ -69,7 +72,7 @@ class CreateAdPresenter: CreateAdViewPresenterProtocol {
     }
     
     func showImagePicker() {
-        coordinator.openImagePicker()
+        coordinator?.showImagePicker()
     }
     
     // TODO: Need a fix
@@ -79,7 +82,7 @@ class CreateAdPresenter: CreateAdViewPresenterProtocol {
         }
         
         photos?.append(image)
-        view.insertImage(image)
+        view?.insertImage(image)
     }
     
     func setClothingName(_ name: String) {
@@ -95,28 +98,47 @@ class CreateAdPresenter: CreateAdViewPresenterProtocol {
             return debugPrint("Photos not added")
         }
         
-        itemBuilder.setBrandName("test brand")
-        var item = itemBuilder.build()
-        
-        StorageService.sharedInstance.uploadItemImages(with: photos) { result in
+        service?.getBrandName(completion: { result in
             switch result {
-            case .success(let urls):
-                item.photos = urls
-                FirestoreService.sharedInstance.createNewAd(item: item) { result in
+            case .success(let brandName):
+                self.itemBuilder.setBrandName(brandName)
+                var item = self.itemBuilder.build()
+                
+                StorageService.sharedInstance.uploadItemImages(with: photos) { result in
                     switch result {
-                    case .success(let result):
-                        self.view.showSuccessAlert(result)
+                    case .success(let urls):
+                        item.photos = urls
+                        self.service?.addItemToBrand(item: item, completion: { result in
+                            switch result {
+                            case .success(_):
+                                self.view?.showSuccessAlert()
+                                self.coordinator?.finish()
+                            case .failure(let error):
+                                self.view?.showErrorAlert("\(error)")
+                            }
+                        })
                     case .failure(let error):
-                        self.view.showErrorAlert("\(error)")
+                        fatalError()
                     }
                 }
             case .failure(let error):
-                debugPrint(error)
+                fatalError()
             }
-        }
+        })
     }
     
     func showImage(data: Data) {
-        coordinator.openDetailedImage(data: data)
+        coordinator?.openDetailedImage(data: data)
+    }
+    
+    func popScreen() {
+        debugPrint("test")
+    }
+}
+
+// MARK: - ImagePickerPresenterDelegate
+extension CreateAdPresenter: ImagePickerPresenterDelegate {
+    func didCloseImagePicker(with imageData: Data) {
+        self.addImage(image: imageData)
     }
 }

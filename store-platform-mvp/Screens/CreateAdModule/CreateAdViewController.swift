@@ -13,15 +13,15 @@ protocol CreateAdViewProtocol: AnyObject {
     func didSelectColor(_ color: String)
     func insertImage(_ data: Data)
     func didSelectImage(with data: Data)
-    func showSuccessAlert(_ description: String)
-    func showErrorAlert(_ description: String)
+    func showSuccessAlert()
+    func showErrorAlert(_ description: String?)
 }
 
 class CreateAdViewController: UIViewController {
-    let createAdView = CreateAdView()
+    var createAdView = CreateAdView()
     var collectionView: UICollectionView! = nil
 
-    weak var textFieldsDelegate: TextFieldsViewProtocol?
+    weak var textFieldsDelegate: TextFieldsViewDelegate?
     var presenter: CreateAdPresenter!
     
     var dataSource: UICollectionViewDiffableDataSource<CreateAdView.Section, AnyHashable>?
@@ -32,8 +32,6 @@ class CreateAdViewController: UIViewController {
         super.viewDidLoad()
         presenter.viewDidLoad()
     }
-    
-    
 }
 
 extension CreateAdViewController: CreateAdViewProtocol {
@@ -120,11 +118,11 @@ extension CreateAdViewController: CreateAdViewProtocol {
         snapshot.appendSections([.photos])
         snapshot.appendItems([placeholder])
         
-        let categories = ["tshirt", "jeans", "pants", "socks"]
+        let categories = ["Футболка", "Толстовка", "Брюки", "Кофта", "Джинсы", "Куртка", "Рубашка", "Джерси"]
         snapshot.appendSections([.category])
         snapshot.appendItems(categories)
         
-        let colors = ["black", "white", "green", "blue", "brown"]
+        let colors = ["Черный", "Белый", "Красный", "Синий", "Зеленый", "Желтый", "Оранжевый", "Фиолетовый", "Бежевый"]
         snapshot.appendSections([.color])
         snapshot.appendItems(colors)
  
@@ -151,13 +149,6 @@ extension CreateAdViewController: CreateAdViewProtocol {
         newSnapshot?.deleteItems([old])
         dataSource?.apply(newSnapshot!)
     }
-//
-//    func getPhotos() {
-//        var newSnapshot = dataSource?.snapshot()
-//        let items = newSnapshot?.itemIdentifiers.filter({$0 is UIImage}) as! [UIImage]
-//        let dataItems = items.map({$0.pngData()!})
-//        debugPrint(dataItems)
-//    }
     
     func didSelectItem(item: Size) {
         presenter.editSizeView(item)
@@ -182,11 +173,11 @@ extension CreateAdViewController: CreateAdViewProtocol {
         presenter.showImage(data: data)
     }
     
-    func showSuccessAlert(_ description: String) {
-        SPAlert.present(title: "Успех", message: "Позиция \(description) успешно добавлена!", preset: .done)
+    func showSuccessAlert() {
+        SPAlert.present(title: "Успех", message: "Позиция успешно добавлена!", preset: .done)
     }
     
-    func showErrorAlert(_ description: String) {
+    func showErrorAlert(_ description: String?) {
         SPAlert.present(title: "Ошибка", message: "Произошла ошибка при добавлении: \(description)", preset: .error)
     }
 }

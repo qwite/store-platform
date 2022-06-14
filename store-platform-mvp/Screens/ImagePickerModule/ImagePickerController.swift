@@ -1,5 +1,7 @@
 import UIKit
 
+protocol ImagePickerViewProtocol: AnyObject {}
+
 class ImagePickerController: UIImagePickerController {
     var presenter: ImagePickerPresenter!
     //MARK: - Lifecycle
@@ -15,6 +17,7 @@ class ImagePickerController: UIImagePickerController {
 extension ImagePickerController: ImagePickerViewProtocol {
 }
 
+// MARK: - UIImagePickerControllerDelegate & UINavigationControllerDelegate
 extension ImagePickerController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[.originalImage] as? UIImage

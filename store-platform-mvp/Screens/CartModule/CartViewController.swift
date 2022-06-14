@@ -4,14 +4,15 @@ protocol CartViewProtocol: AnyObject {
     func configureCollectionView()
     func configureDataSource()
     func configureViews()
+    func insertItems(items: [CartItem])
 }
 
 class CartViewController: UIViewController {
     var cartView = CartView()
     var presenter: CartPresenter!
     var collectionView: UICollectionView! = nil
-    var dataSource: UICollectionViewDiffableDataSource<CartView.Section, Item>?
-    typealias DataSource = UICollectionViewDiffableDataSource<CartView.Section, Item>
+    var dataSource: UICollectionViewDiffableDataSource<CartView.Section, CartItem>?
+    typealias DataSource = UICollectionViewDiffableDataSource<CartView.Section, CartItem>
     //MARK: - Lifecycle
     
     override func loadView() {
@@ -39,7 +40,8 @@ extension CartViewController: CartViewProtocol {
     func configureCollectionView() {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: cartView.configureLayout())
         collectionView.backgroundColor = .white
-        collectionView.register(CartItem.self, forCellWithReuseIdentifier: CartItem.reuseId)
+        collectionView.delegate = self
+        collectionView.register(CartItemCell.self, forCellWithReuseIdentifier: CartItemCell.reuseId)
         self.collectionView = collectionView
     }
     
@@ -48,14 +50,13 @@ extension CartViewController: CartViewProtocol {
             let section = CartView.Section.allCases[indexPath.section]
             switch section {
             case .cart:
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CartItem.reuseId, for: indexPath) as? CartItem else {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CartItemCell.reuseId, for: indexPath) as? CartItemCell else {
                     fatalError("dequeue error")
                 }
                 
                 let item = itemIdentifier
                 
-                cell.configure(item: item)
-                cell.layer.borderWidth = 1.0
+                cell.configure(cartItem: item)
                 return cell
             }
         })
@@ -64,13 +65,21 @@ extension CartViewController: CartViewProtocol {
         dataSource?.apply(snapshot)
     }
     
-    func snapshotForCurrentState() -> NSDiffableDataSourceSnapshot<CartView.Section, Item> {
-        var snapshot = NSDiffableDataSourceSnapshot<CartView.Section, Item>()
-        let testSize = [Size(size: "S", price: 1337, amount: 3)]
-        let item = Item(brandName: "Amek", clothingName: "tshirt", description: "adsdas", category: "asdsasd", color: "adsds", sizes: testSize)
-        let item1 = Item(brandName: "Amek", clothingName: "hoodie", description: "sdasda", category: "", color: "", sizes: testSize)
+    func snapshotForCurrentState() -> NSDiffableDataSourceSnapshot<CartView.Section, CartItem> {
+        var snapshot = NSDiffableDataSourceSnapshot<CartView.Section, CartItem>()
         snapshot.appendSections([.cart])
-        snapshot.appendItems([item, item1])
         return snapshot
+    }
+    
+    func insertItems(items: [CartItem]) {
+        var snapshot = dataSource?.snapshot()
+        snapshot?.appendItems(items, toSection: .cart)
+        dataSource?.apply(snapshot!)
+    }
+}
+
+extension CartViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        debugPrint("yeat")
     }
 }
