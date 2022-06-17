@@ -88,6 +88,11 @@
 		1F96F5B3282EDE6D00C0F460 /* CreateSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F96F5B2282EDE6D00C0F460 /* CreateSizeViewController.swift */; };
 		1F96F5B5282EDE8E00C0F460 /* CreateSizePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F96F5B4282EDE8E00C0F460 /* CreateSizePresenter.swift */; };
 		1F96F5B8282EDF4B00C0F460 /* CreateSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F96F5B7282EDF4B00C0F460 /* CreateSizeView.swift */; };
+		1FA9CF88285CD964001E671A /* LBBottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 1FA9CF87285CD964001E671A /* LBBottomSheet */; };
+		1FA9CF8B285CE151001E671A /* AvailableParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA9CF8A285CE151001E671A /* AvailableParametersViewController.swift */; };
+		1FA9CF8D285CE176001E671A /* AvailableParametersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA9CF8C285CE176001E671A /* AvailableParametersPresenter.swift */; };
+		1FA9CF91285CE31F001E671A /* AvailableParametersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA9CF90285CE31F001E671A /* AvailableParametersCell.swift */; };
+		1FA9CF93285CE3D2001E671A /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA9CF92285CE3D2001E671A /* Parameter.swift */; };
 		1FAA83A12850D94D00CFF910 /* SellerFinanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FAA83A02850D94D00CFF910 /* SellerFinanceCell.swift */; };
 		1FB3509D28400524007200BB /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3509C28400524007200BB /* FavoritesViewController.swift */; };
 		1FB3509F28400567007200BB /* FavoritesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3509E28400567007200BB /* FavoritesPresenter.swift */; };
@@ -253,6 +258,10 @@
 		1F96F5B2282EDE6D00C0F460 /* CreateSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSizeViewController.swift; sourceTree = "<group>"; };
 		1F96F5B4282EDE8E00C0F460 /* CreateSizePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSizePresenter.swift; sourceTree = "<group>"; };
 		1F96F5B7282EDF4B00C0F460 /* CreateSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSizeView.swift; sourceTree = "<group>"; };
+		1FA9CF8A285CE151001E671A /* AvailableParametersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableParametersViewController.swift; sourceTree = "<group>"; };
+		1FA9CF8C285CE176001E671A /* AvailableParametersPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableParametersPresenter.swift; sourceTree = "<group>"; };
+		1FA9CF90285CE31F001E671A /* AvailableParametersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableParametersCell.swift; sourceTree = "<group>"; };
+		1FA9CF92285CE3D2001E671A /* Parameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parameter.swift; sourceTree = "<group>"; };
 		1FAA83A02850D94D00CFF910 /* SellerFinanceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerFinanceCell.swift; sourceTree = "<group>"; };
 		1FB3509C28400524007200BB /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		1FB3509E28400567007200BB /* FavoritesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesPresenter.swift; sourceTree = "<group>"; };
@@ -312,6 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FF7DB53285A6C93009249DE /* Pods_store_platform_mvp.framework in Frameworks */,
+				1FA9CF88285CD964001E671A /* LBBottomSheet in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -641,6 +651,7 @@
 				1FD3EC25284EA325006789DA /* Statistics.swift */,
 				1FEF588C28554BE0007A2A95 /* Chat.swift */,
 				1F1309CA2856795500A03AF7 /* Conversation.swift */,
+				1FA9CF92285CE3D2001E671A /* Parameter.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -704,6 +715,7 @@
 		1F8E6138284633930040DAE0 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				1FA9CF89285CE12D001E671A /* AvailableParametersModule */,
 				1FBAB777285B390000B6B3ED /* SortingFeedModule */,
 				1FE32502285A1957004D8338 /* SearchModule */,
 				1F1309BF285674E700A03AF7 /* MessagesListModule */,
@@ -788,6 +800,32 @@
 				1F96F5B7282EDF4B00C0F460 /* CreateSizeView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		1FA9CF89285CE12D001E671A /* AvailableParametersModule */ = {
+			isa = PBXGroup;
+			children = (
+				1FA9CF8E285CE315001E671A /* View */,
+				1FA9CF8A285CE151001E671A /* AvailableParametersViewController.swift */,
+				1FA9CF8C285CE176001E671A /* AvailableParametersPresenter.swift */,
+			);
+			path = AvailableParametersModule;
+			sourceTree = "<group>";
+		};
+		1FA9CF8E285CE315001E671A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1FA9CF8F285CE318001E671A /* Cell */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1FA9CF8F285CE318001E671A /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1FA9CF90285CE31F001E671A /* AvailableParametersCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		1FB3509B284004EB007200BB /* FavoritesModule */ = {
@@ -1000,6 +1038,7 @@
 			);
 			name = "store-platform-mvp";
 			packageProductDependencies = (
+				1FA9CF87285CD964001E671A /* LBBottomSheet */,
 			);
 			productName = "store-platform-mvp";
 			productReference = 1F5D7FCA282E47BA00255E71 /* store-platform-mvp.app */;
@@ -1077,6 +1116,7 @@
 			);
 			mainGroup = 1F5D7FC1282E47BA00255E71;
 			packageReferences = (
+				1FA9CF86285CD964001E671A /* XCRemoteSwiftPackageReference "LBBottomSheet" */,
 			);
 			productRefGroup = 1F5D7FCB282E47BA00255E71 /* Products */;
 			projectDirPath = "";
@@ -1236,6 +1276,7 @@
 				1FCEC0A3283163F3000D78AD /* CreateAdCoordinator.swift in Sources */,
 				1FB53BE928492AF800055CCC /* PickSizeCoordinator.swift in Sources */,
 				1FEB1572284E5B7F00DCCBC7 /* AddItemButtonView.swift in Sources */,
+				1FA9CF8D285CE176001E671A /* AvailableParametersPresenter.swift in Sources */,
 				1F8FF0CB284BB80500171B83 /* Constants.swift in Sources */,
 				1F1309C62856779700A03AF7 /* MessagesListView.swift in Sources */,
 				1F8FF0C2284BB00600171B83 /* FillBrandDataViewController.swift in Sources */,
@@ -1256,6 +1297,7 @@
 				1F5D7FCE282E47BA00255E71 /* AppDelegate.swift in Sources */,
 				1F69B6AB2842556D00C75668 /* ProfileViewController.swift in Sources */,
 				1F8CE1372843FD2100AA9398 /* DetailedAdViewController.swift in Sources */,
+				1FA9CF8B285CE151001E671A /* AvailableParametersViewController.swift in Sources */,
 				1FCEC09D28315FB9000D78AD /* AppCoordinator.swift in Sources */,
 				1F227DA92836824200F736F1 /* ImagePickerPresenter.swift in Sources */,
 				1F6986D6283818D100D953D2 /* RegisterViewController.swift in Sources */,
@@ -1267,6 +1309,7 @@
 				1FAA83A12850D94D00CFF910 /* SellerFinanceCell.swift in Sources */,
 				1FF6841F283AB77E00E92481 /* AdCell.swift in Sources */,
 				1F96F5A2282E7B8900C0F460 /* UIButton + Extension.swift in Sources */,
+				1FA9CF91285CE31F001E671A /* AvailableParametersCell.swift in Sources */,
 				1F1E4D9E28383C1E00C9AC05 /* FirestoreService.swift in Sources */,
 				1F08921D284A184B002A2411 /* CartItemCell.swift in Sources */,
 				1F69B6B02842561300C75668 /* ProfileView.swift in Sources */,
@@ -1329,6 +1372,7 @@
 				1F8FF0C9284BB65100171B83 /* FillBrandDataView.swift in Sources */,
 				1F919F0F2855195A0034B475 /* RealTimeService.swift in Sources */,
 				1FFFFB3F283599C800E967E7 /* ItemBuilder.swift in Sources */,
+				1FA9CF93285CE3D2001E671A /* Parameter.swift in Sources */,
 				1FE32504285A1964004D8338 /* SearchViewController.swift in Sources */,
 				1F6986D32838114500D953D2 /* LoginView.swift in Sources */,
 				1F8CE13B2844022400AA9398 /* DetailedAdView.swift in Sources */,
@@ -1577,7 +1621,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "lashmanov.store-platform-mvpTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.6;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/store-platform-mvp.app/store-platform-mvp";
 			};
@@ -1603,7 +1647,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "lashmanov.store-platform-mvpTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.6;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/store-platform-mvp.app/store-platform-mvp";
 			};
@@ -1627,7 +1671,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "lashmanov.store-platform-mvpUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.6;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "store-platform-mvp";
 			};
@@ -1651,7 +1695,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "lashmanov.store-platform-mvpUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.6;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "store-platform-mvp";
 			};
@@ -1697,6 +1741,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1FA9CF86285CD964001E671A /* XCRemoteSwiftPackageReference "LBBottomSheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LunabeeStudio/LBBottomSheet";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1FA9CF87285CD964001E671A /* LBBottomSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1FA9CF86285CD964001E671A /* XCRemoteSwiftPackageReference "LBBottomSheet" */;
+			productName = LBBottomSheet;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1F5D7FC2282E47BA00255E71 /* Project object */;
 }

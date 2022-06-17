@@ -1,39 +1,85 @@
 import Foundation
 
 protocol SortingFeedPresenterDelegate: AnyObject {
-    func insertPopularItems(items: [ItemViews])
+    func insertPopularItems(items: [Item])
     func insertSortedItems(items: [Item])
+    func resetSettings()
 }
 
-protocol SortingFeedPresenterProtocol {
-    init(view: SortingFeedViewProtocol)
+protocol SortingFeedPresenterProtocol: AvailableParameterPresenterDelegate {
+    init(view: SortingFeedViewProtocol, coordinator: FeedCoordinator)
     func viewDidLoad()
     var delegate: SortingFeedPresenterDelegate? { get set }
     
     func buttonWasPressed(with type: RadioButton.RadioButtonType)
     
+    func showColorParameters()
+    func showSizeParameters()
+    func setSelectedPrice(price: [Float])
+    
     func getPopularItems()
     func showResults()
+    func applyFilters(items: [Item]) -> [Item]
     func preparePopularItems(items: [Int : [String : Any]], completion: @escaping (([ItemViews]) -> ()))
+    func clearSortSettings()
+    func closeSortingWindow()
 }
 
 class SortingFeedPresenter: SortingFeedPresenterProtocol {
+    
     var view: SortingFeedViewProtocol?
     weak var delegate: SortingFeedPresenterDelegate?
-    var selectedType: RadioButton.RadioButtonType?
+    weak var coordinator: FeedCoordinator?
     
-    required init(view: SortingFeedViewProtocol) {
+    var selectedType: RadioButton.RadioButtonType?
+    var selectedColors: [String]? {
+        didSet { self.view?.updateColors(colors: selectedColors!) }
+    }
+    
+    var selectedSizes: [String]? {
+        didSet { self.view?.updateSizes(sizes: selectedSizes!) }
+    }
+    
+    var selectedPrice: [Float]? {
+        didSet { self.view?.updatePrice(price: selectedPrice!) }
+    }
+    
+    required init(view: SortingFeedViewProtocol, coordinator: FeedCoordinator) {
         self.view = view
+        self.coordinator = coordinator
     }
     
     func viewDidLoad() {
         view?.configureViews()
         view?.configureButtons()
 //        getPopularItems()
+        
     }
     
     func buttonWasPressed(with type: RadioButton.RadioButtonType) {
         self.selectedType = type
+    }
+    
+    func showColorParameters() {
+        coordinator?.showColorParameters()
+    }
+    
+    func showSizeParameters() {
+        coordinator?.showSizeParameters()
+    }
+    
+    func setSelectedPrice(price: [Float]) {
+        self.selectedPrice = price
+        print(selectedPrice!)
+    }
+    
+    func clearSortSettings() {
+        delegate?.resetSettings()
+        self.closeSortingWindow()
+    }
+    
+    func closeSortingWindow() {
+        coordinator?.hideSortingFeed()
     }
     
     func showResults() {
@@ -53,12 +99,65 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
         }
     }
     
+    func applyFilters(items: [Item]) -> [Item] {
+        var filteredItems: [Item] = items
+        
+        // price from ; price up to
+        if let selectedPrice = self.selectedPrice {
+            filteredItems = filteredItems.filter({ item in
+                let priceFrom = Int(selectedPrice[0])
+                let priceUpTo = Int(selectedPrice[1])
+                guard let firstSizePrice = item.sizes?.first?.price else { return false }
+                
+                return (firstSizePrice >= priceFrom) && (firstSizePrice <= priceUpTo)
+            })
+        }
+        
+        if let selectedColors = selectedColors {
+            filteredItems = filteredItems.filter({ item in
+                selectedColors.contains(where: { $0 == item.color} )
+            })
+        }
+        
+        
+        // item object has sizes: [Size]
+        // size string is size[0].size
+        // selected sizes has array of string sizes ["XS", "S", .. etc]
+        if let selectedSizes = selectedSizes {
+            filteredItems = filteredItems.filter({ item in
+                guard let sizes = item.sizes else { fatalError() }
+                var result: Bool?
+                for size in sizes {
+                    // selectedSizes = ["XS", "M", "L"]
+                    // sizes = ["M"]
+                    if selectedSizes.contains(where: { $0 == size.size}) {
+                        result = true
+                        break
+                    }
+                }
+                
+                guard result != nil else {
+                    return false
+                }
+                
+                return true
+            })
+        }
+        
+        return filteredItems
+    }
+    
+    // MARK: - refactor
     func getPopularItems() {
         FirestoreService.sharedInstance.getPopularItems { [weak self] result in
             switch result {
             case .success(let items):
                 self?.preparePopularItems(items: items, completion: { itemsViews in
-                    self?.delegate?.insertPopularItems(items: itemsViews)
+                    let sortedItems = itemsViews.sorted(by: { $0.views > $1.views })
+                    let resultItems = sortedItems.map({ $0.item })
+                    guard let filteredItems = self?.applyFilters(items: resultItems) else { return }
+                    self?.delegate?.insertPopularItems(items: filteredItems)
+                    self?.closeSortingWindow()
                 })
             case .failure(let error):
                 fatalError("\(error)")
@@ -70,7 +169,9 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
         FirestoreService.sharedInstance.getAllItems(sorted: sorting) { [weak self] result in
             switch result {
             case .success(let items):
-                self?.delegate?.insertSortedItems(items: items)
+                guard let filteredItems = self?.applyFilters(items: items) else { return }
+                self?.delegate?.insertSortedItems(items: filteredItems)
+                self?.closeSortingWindow()
             case .failure(let error):
                 fatalError("\(error)")
             }
@@ -94,5 +195,17 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
         }
         
         completion(itemViews)
+    }
+}
+
+extension SortingFeedPresenter: AvailableParameterPresenterDelegate {
+    func insertSelectedParameters(_ selectedItems: [Parameter]) {
+        guard let firstItem = selectedItems.first else { print("items not found "); return }
+        switch firstItem.type {
+        case .color:
+            self.selectedColors = selectedItems.map({ $0.option })
+        case .size:
+            self.selectedSizes = selectedItems.map({ $0.option })
+        }
     }
 }

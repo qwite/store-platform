@@ -3,7 +3,8 @@ import UIKit
 protocol Factory: AnyObject {
     func buildTabBarModule(coordinator: TabCoordinator) -> UITabBarController
     func buildFeedModule(coordinator: FeedCoordinator, with items: [Item]?) -> UIViewController
-    func buildFeedSortingModule(delegate: SortingFeedPresenterDelegate) -> UIViewController
+    func buildFeedSortingModule(delegate: SortingFeedPresenterDelegate, coordinator: FeedCoordinator) -> UIViewController
+    func buildAvailableParametersModule(delegate: AvailableParameterPresenterDelegate, type: Parameter.ParameterType) -> UIViewController
     func buildSearchModule(coordinator: FeedCoordinator) -> UIViewController
     func buildCreateAdModule(coordinator: CreateAdCoordinator) -> UIViewController
     func buildCreateSizeModule(coordinator: CreateAdCoordinator, with item: Size?) -> UIViewController
@@ -40,10 +41,17 @@ class DependencyFactory: Factory {
         return view
     }
     
-    func buildFeedSortingModule(delegate: SortingFeedPresenterDelegate) -> UIViewController {
+    func buildFeedSortingModule(delegate: SortingFeedPresenterDelegate, coordinator: FeedCoordinator) -> UIViewController {
         let view = SortingFeedViewController()
-        let presenter = SortingFeedPresenter(view: view)
+        let presenter = SortingFeedPresenter(view: view, coordinator: coordinator)
         presenter.delegate = delegate
+        view.presenter = presenter
+        return view
+    }
+    
+    func buildAvailableParametersModule(delegate: AvailableParameterPresenterDelegate, type: Parameter.ParameterType) -> UIViewController {
+        let view = AvailableParametersViewController()
+        let presenter = AvailableParametersPresenter(view: view, delegate: delegate, type: type)
         view.presenter = presenter
         return view
     }

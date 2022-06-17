@@ -1,11 +1,15 @@
 import UIKit
+import LBBottomSheet
 
-class FeedCoordinator: Coordinator {
+class FeedCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     var factory: Factory?
     var childCoordinator = [Coordinator]()
     var completionHandler: ((CartItem) -> ())?
     var parent: FeedViewController?
+    
+    var sortingPresenter: SortingFeedPresenterProtocol?
+    var sortingNavigation: UINavigationController?
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -37,11 +41,43 @@ class FeedCoordinator: Coordinator {
     
     func showSortingFeed() {
         guard let parent = self.parent,
-              let module = factory?.buildFeedSortingModule(delegate: parent.presenter) else {
+              let module = factory?.buildFeedSortingModule(delegate: parent.presenter, coordinator: self) as? SortingFeedViewController else {
             return
         }
         
-        self.navigationController.present(module, animated: true)
+        self.sortingPresenter = module.presenter
+        let navigation = UINavigationController(rootViewController: module)
+        self.sortingNavigation = navigation
+        
+        self.navigationController.presentAsBottomSheet(navigation)
+    }
+    
+    func hideSortingFeed() {
+        guard let sortingNavigation = sortingNavigation else {
+            fatalError()
+        }
+        
+        sortingNavigation.dismiss(animated: true)
+    }
+    
+    func showColorParameters() {
+        guard let navigation = sortingNavigation,
+              let sortingPresenter = self.sortingPresenter,
+              let module = factory?.buildAvailableParametersModule(delegate: sortingPresenter, type: .color) else {
+            return
+        }
+        
+        navigation.pushViewController(module, animated: true)
+    }
+    
+    func showSizeParameters() {
+        guard let navigation = sortingNavigation,
+              let sortingPresenter = self.sortingPresenter,
+              let module = factory?.buildAvailableParametersModule(delegate: sortingPresenter, type: .size) else {
+            return
+        }
+        
+        navigation.pushViewController(module, animated: true)
     }
     
     func showDetailedAd(with item: Item) {
@@ -100,3 +136,4 @@ extension FeedCoordinator: MessagesCoordinatorProtocol {
         
     }
 }
+

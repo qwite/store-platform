@@ -154,9 +154,11 @@ extension FeedPresenter: SortingFeedPresenterDelegate {
         self.view?.updateDataSource(with: items)
     }
     
-    func insertPopularItems(items: [ItemViews]) {
-        let sortedItems = items.sorted(by: { $0.views > $1.views })
-        let resultItems: [Item] = sortedItems.map({ $0.item })
-        self.view?.updateDataSource(with: resultItems)
+    func insertPopularItems(items: [Item]) {
+        self.view?.updateDataSource(with: items)
+    }
+    
+    func resetSettings() {
+        self.getAds()
     }
 }

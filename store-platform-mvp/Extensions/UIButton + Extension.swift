@@ -1,5 +1,6 @@
 import UIKit
 
+// TODO: refactor code
 extension UIButton {
     enum Preset {
         case customLarge
@@ -7,6 +8,8 @@ extension UIButton {
         case select
         case bottom
         case radioButton
+        case filterButton
+        case clearButton
         case icon
     }
     
@@ -105,6 +108,48 @@ extension UIButton {
             
             let radioButtonAttributesText = NSAttributedString(string: text!, attributes: radioButtonAttributes)
             self.setAttributedTitle(radioButtonAttributesText, for: .normal)
+        case .filterButton:
+            self.init(type: .custom)
+            
+            guard let titleView = self.titleLabel else {
+                return
+            }
+            
+            titleView.snp.makeConstraints { make in
+                make.left.equalTo(self.snp.left)
+            }
+            
+            self.snp.makeConstraints { make in
+                make.height.equalTo(20)
+            }
+            
+            let filterButtonAttributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: UIColor.black,
+                .font: UIFont.systemFont(ofSize: 18, weight: .regular)
+            ]
+            
+            let filterButtonAttributesText = NSAttributedString(string: text!, attributes: filterButtonAttributes)
+            self.setAttributedTitle(filterButtonAttributesText, for: .normal)
+        case .clearButton:
+            guard let titleView = self.titleLabel else {
+                return
+            }
+            
+            titleView.snp.makeConstraints { make in
+                make.left.equalTo(self.snp.left)
+            }
+            
+            self.snp.makeConstraints { make in
+                make.height.equalTo(20)
+            }
+            
+            let filterButtonAttributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: UIColor.systemGray,
+                .font: UIFont.systemFont(ofSize: 18, weight: .regular)
+            ]
+            
+            let filterButtonAttributesText = NSAttributedString(string: text!, attributes: filterButtonAttributes)
+            self.setAttributedTitle(filterButtonAttributesText, for: .normal)
         case .none:
             
             let defaultAttributes: [NSAttributedString.Key: Any] = [

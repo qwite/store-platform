@@ -14,6 +14,7 @@ protocol FeedViewProtocol: AnyObject {
 class FeedViewController: UIViewController {
     var feedView = FeedView()
     var presenter: FeedPresenter!
+    
     var collectionView: UICollectionView! = nil
     let searchController = UISearchController()
     var dataSource: UICollectionViewDiffableDataSource<FeedView.Section, Item>?
@@ -61,20 +62,21 @@ extension FeedViewController: FeedViewProtocol {
             }
         })
         
-        let snapshot = snapshotForCurrentState()
-        dataSource?.apply(snapshot)
+//        let snapshot = snapshotForCurrentState()
+//        dataSource?.apply(snapshot)
     }
-    
-    func snapshotForCurrentState() -> NSDiffableDataSourceSnapshot<FeedView.Section, Item> {
-        var snapshot = NSDiffableDataSourceSnapshot<FeedView.Section, Item>()
-        snapshot.appendSections([.ads])
-        return snapshot
-    }
+//
+//    func snapshotForCurrentState() -> NSDiffableDataSourceSnapshot<FeedView.Section, Item> {
+//        var snapshot = NSDiffableDataSourceSnapshot<FeedView.Section, Item>()
+//        snapshot.appendSections([.ads])
+//        return snapshot
+//    }
     
     func insertAds(items: [Item]) {
-        var snapshot = dataSource?.snapshot()
-        snapshot?.appendItems(items)
-        dataSource?.apply(snapshot!)
+        var snapshot = NSDiffableDataSourceSnapshot<FeedView.Section, Item>()
+        snapshot.appendSections([.ads])
+        snapshot.appendItems(items)
+        dataSource?.apply(snapshot)
     }
     
     func removeSearchBar(category: String) {
@@ -165,6 +167,7 @@ extension FeedViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: - UISearchResultsUpdating
 extension FeedViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
