@@ -19,7 +19,7 @@ class AdCell: UICollectionViewCell {
 // MARK: - Helpers func
 extension AdCell {
     func configure(with item: Item) {
-        self.brandNameLabel.text = item.brandName
+        self.brandNameLabel.text = item.brandName.capitalized
         self.clothingNameLabel.text = item.clothingName
         // TODO: fix price
         let price = item.sizes!.first?.price
@@ -68,7 +68,6 @@ extension AdCell {
         }
         
         addSubview(heartButton)
-//        heartButton.backgroundColor = .red
         
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(snp.top)

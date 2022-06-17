@@ -80,7 +80,7 @@ extension SellerCoordinator: MessagesCoordinatorProtocol {
         imagePickerCoordinator.start()
     }
     
-    func showMessenger(conversationId: String, brandId: String?) {
+    func showMessenger(conversationId: String?, brandId: String?) {
         guard let module = factory?.buildMessengerModule(conversationId: conversationId, brandId: brandId, coordinator: self) as? MessengerViewController else {
             fatalError()
         }

@@ -60,7 +60,7 @@ extension DetailedAdView {
             fatalError("error with item object")
         }
         
-        brandLabel.text = item.brandName
+        brandLabel.text = item.brandName.capitalized
         itemLabel.text = item.clothingName
         descriptionLabel.text = item.description
         priceLabel.text = "\(firstPrice) ₽"
@@ -81,6 +81,7 @@ extension DetailedAdView {
     func configureViews() {
         backgroundColor = .white
         descriptionLabel.numberOfLines = 0
+        descriptionLabel.lineBreakMode = .byWordWrapping
         pageControl.hidesForSinglePage = true
         pageControl.currentPageIndicatorTintColor = .black
         pageControl.pageIndicatorTintColor = .gray
@@ -91,41 +92,35 @@ extension DetailedAdView {
         let descriptionStack = UIStackView(arrangedSubviews: [descriptionHeaderLabel, descriptionLabel], spacing: 15, axis: .vertical, alignment: .fill)
         
         addSubview(scrollView)
-        
-        scrollView.snp.makeConstraints { make in
-            make.top.equalTo(snp.top)
-            make.left.equalTo(snp.left)
-            make.right.equalTo(snp.right)
-            make.bottom.equalTo(snp.bottom)
-        }
-        
-
+                
         let contentStack = UIStackView(arrangedSubviews: [itemStack, selectSizeButton, descriptionStack, communicationButton],
-                                       spacing: 30,
+                                       spacing: 20,
                                        axis: .vertical,
                                        alignment: .fill)
         
+
         scrollView.addSubview(photoScrollView)
-        scrollView.addSubview(contentStack)
-        
-        photoScrollView.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.snp.top)
-            make.width.equalTo(snp.width)
-            make.height.equalTo(photoSize.height)
-        }
 
         photoScrollView.isPagingEnabled = true
         photoScrollView.showsHorizontalScrollIndicator = false
         
-        itemStack.snp.makeConstraints { make in
-            make.top.equalTo(photoScrollView.snp.bottom).offset(5)
-            make.centerX.equalTo(scrollView.snp.centerX)
+        photoScrollView.snp.updateConstraints { make in
+            make.top.equalTo(scrollView.snp.top)
+            make.width.equalTo(snp.width)
+            make.height.equalTo(photoSize.height)
         }
         
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(snp.edges)
+        }
+        
+        scrollView.addSubview(contentStack)
+                
         contentStack.snp.makeConstraints { make in
-            make.left.equalTo(scrollView.snp.left).offset(20)
-            make.right.equalTo(scrollView.snp.right).offset(-20)
-            make.bottom.equalTo(scrollView.snp.bottom)
+            make.top.equalTo(photoScrollView.snp.bottom).offset(10)
+            make.left.equalTo(snp.left).offset(20)
+            make.right.equalTo(snp.right).offset(-20)
+            make.bottom.equalTo(scrollView.snp.bottom).offset(-100)
         }
         
         addSubview(addCartButton)
@@ -135,7 +130,6 @@ extension DetailedAdView {
           make.height.equalTo(34)
           make.width.equalTo(self.snp.width).dividedBy(2)
         }
-        
     }
     
     func configureButtons() {

@@ -72,18 +72,106 @@ class FirestoreService {
     }
     
     /// Parse all ads and returns this
-    func getAllItems(completion: @escaping (Result<[Item], Error>) -> ()) {
+    func getAllItems(sorted items: Item.Sorting? = nil, completion: @escaping (Result<[Item], Error>) -> ()) {
         itemsReference.getDocuments { snapshot, error in
             guard let snapshot = snapshot else {
                 return completion(.failure(error!))
             }
             
             let documents = snapshot.documents
-            let items = documents.compactMap { querySnapshot in
+            let resultItems = documents.compactMap { querySnapshot in
                 return try? querySnapshot.data(as: Item.self)
             }
             
-            completion(.success(items))
+            guard let sortedItems = items else {
+                completion(.success(resultItems)); return
+            }
+            
+            
+            // sorting
+            
+            let resultSortedItems: [Item] = resultItems.sorted { firstItem, secondItem in
+                guard let firstPrice = firstItem.sizes?.first?.price,
+                      let secondPrice = secondItem.sizes?.first?.price else {
+                    completion(.failure(FirestoreServiceError.documentNotFound)); fatalError()
+                }
+                
+                switch sortedItems {
+                case .byIncreasePrice:
+                    return secondPrice > firstPrice
+                case .byDecreasePrice:
+                    return secondPrice < firstPrice
+                }
+            }
+            
+            completion(.success(resultSortedItems))
+        }
+    }
+    
+    func getPopularItems(completion: @escaping (Result<[Int: [String: Any]], Error>) -> ()) {
+        itemsReference.getDocuments { querySnapshot, error in
+            guard let snapshot = querySnapshot, snapshot.isEmpty != true else {
+                return completion(.failure(FirestoreServiceError.documentNotFound))
+            }
+            
+            let group = DispatchGroup()
+            /*
+             Result:
+             "itemId":
+             "item": Item,
+             "views": [
+             monthlyData,
+             monthlyData,
+             ...
+             ]
+             
+             */
+            
+            // get items where collection monthly_views not empty
+            // sort items by views
+            // return these items
+            
+            let documents = snapshot.documents
+            var resultDictionary: [Int: [String: Any]] = [:]
+            var counter = 0
+            for document in documents {
+                group.enter()
+                document.reference.collection("monthly_views").getDocuments { querySnapshot, error in
+                    defer { group.leave() }
+                    guard let snapshot = querySnapshot, snapshot.isEmpty != true else {
+                        counter += 1; return
+                    }
+                    
+                    guard let item = try? document.data(as: Item.self) else {
+                        return
+                    }
+                    
+                    // item monthly documents
+                    let monthlyDocuments = snapshot.documents
+                    
+                    let summaryMonthlyViews: [MonthlyViews] = monthlyDocuments.compactMap { documentSnapshot in
+                        guard let monthly = try? documentSnapshot.data(as: MonthlyViews.self) else {
+                            return nil
+                        }
+                        
+                        return monthly
+                    }
+                    
+                    resultDictionary[counter] = [
+                        "item": item,
+                        "views": summaryMonthlyViews
+                    ]
+                    
+                    counter += 1
+                }
+            }
+            
+            group.notify(queue: .main) {
+                if documents.count == counter {
+                    completion(.success(resultDictionary))
+                    return
+                }
+            }
         }
     }
     
@@ -109,6 +197,37 @@ class FirestoreService {
             }
             
             completion(.success(brandName))
+        }
+    }
+    
+    func getItemsByCategory(category: String, completion: @escaping (Result<[Item], Error>) -> ()) {
+        itemsReference.whereField("category", isEqualTo: category).getDocuments { querySnapshot, error in
+            guard let snapshot = querySnapshot, !snapshot.isEmpty else {
+                completion(.failure(FirestoreServiceError.documentNotFound)); return
+            }
+            
+            let documents: [Item] = snapshot.documents.compactMap { snap in
+                guard let item = try? snap.data(as: Item.self) else { return nil }
+                return item
+            }
+            
+            completion(.success(documents))
+        }
+    }
+    
+    func getItemsByBrand(brand: String, completion: @escaping (Result<[Item], Error>) -> ()) {
+        let brandLowerCased = brand.lowercased()
+        itemsReference.whereField("brand_name", isEqualTo: brandLowerCased).getDocuments { querySnapshot, error in
+            guard let snapshot = querySnapshot, !snapshot.isEmpty else {
+                return
+            }
+            
+            let documents: [Item] = snapshot.documents.compactMap { snap in
+                guard let item = try? snap.data(as: Item.self) else { return nil }
+                return item
+            }
+            
+            completion(.success(documents))
         }
     }
     
@@ -199,11 +318,42 @@ class FirestoreService {
             }
             
             let documentReference = userDocument.reference
-            guard let _ = try? documentReference.collection("cart").addDocument(from: selectedItem) else {
+            guard let doc = try? documentReference.collection("cart").addDocument(from: selectedItem) else {
                 return completion(.failure(FirestoreServiceError.itemEncodingError))
             }
             
             completion(.success("item added"))
+        }
+    }
+    
+    func removeItemFromCart(userId: String, selectedItem: CartItem, completion: @escaping ((Error?) -> ())) {
+        usersReference.whereField("id", isEqualTo: userId).getDocuments { snapshot, error in
+            guard let snapshot = snapshot, snapshot.isEmpty != true else {
+                completion(error!); return
+            }
+            
+            guard let userDocument = snapshot.documents.first else {
+                completion(FirestoreServiceError.userDocumentNotFound); return
+            }
+            
+            let documentReference = userDocument.reference
+            documentReference.collection("cart").whereField("item_id", isEqualTo: selectedItem.itemId).getDocuments { querySnapshot, error in
+                guard let snapshot = querySnapshot, snapshot.isEmpty != true else {
+                    completion(FirestoreServiceError.documentNotFound); return
+                }
+                
+                guard let document = snapshot.documents.first else {
+                    return
+                }
+                
+                documentReference.collection("cart").document(document.documentID).delete { error in
+                    guard error == nil else {
+                        completion(error!); return
+                    }
+                    
+                    completion(nil)
+                }
+            }
         }
     }
     
@@ -293,7 +443,7 @@ class FirestoreService {
                     return completion(.failure(error!))
                 }
                 
-                let dict: [String: String] = ["brand_id": brandDocumentId, "brand_name": brand.brandName]
+                let dict: [String: String] = ["brand_id": brandDocumentId, "brand_name": brand.brandName.lowercased()]
                 completion(.success(dict))
             }
         }

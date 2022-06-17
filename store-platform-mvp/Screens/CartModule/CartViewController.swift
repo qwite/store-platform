@@ -5,6 +5,8 @@ protocol CartViewProtocol: AnyObject {
     func configureDataSource()
     func configureViews()
     func insertItems(items: [CartItem])
+    func removeItem(item: CartItem)
+    func setTotalPrice(price: Int?)
 }
 
 class CartViewController: UIViewController {
@@ -13,10 +15,17 @@ class CartViewController: UIViewController {
     var collectionView: UICollectionView! = nil
     var dataSource: UICollectionViewDiffableDataSource<CartView.Section, CartItem>?
     typealias DataSource = UICollectionViewDiffableDataSource<CartView.Section, CartItem>
+    
+    weak var delegate: TotalCartViewDelegate?
     //MARK: - Lifecycle
     
     override func loadView() {
         view = cartView
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        presenter.viewDidAppear()
     }
     
     override func viewDidLoad() {
@@ -42,6 +51,7 @@ extension CartViewController: CartViewProtocol {
         collectionView.backgroundColor = .white
         collectionView.delegate = self
         collectionView.register(CartItemCell.self, forCellWithReuseIdentifier: CartItemCell.reuseId)
+        collectionView.register(TotalCartView.self, forSupplementaryViewOfKind: CartView.SupplementaryKinds.totalCart.rawValue, withReuseIdentifier: TotalCartView.reuseId)
         self.collectionView = collectionView
     }
     
@@ -55,31 +65,79 @@ extension CartViewController: CartViewProtocol {
                 }
                 
                 let item = itemIdentifier
-                
+                cell.delegate = self
                 cell.configure(cartItem: item)
                 return cell
             }
         })
         
-        let snapshot = snapshotForCurrentState()
-        dataSource?.apply(snapshot)
+        dataSource?.supplementaryViewProvider = { (collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+            switch kind {
+            case "section-bottom-total-cart":
+                guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TotalCartView.reuseId, for: indexPath) as? TotalCartView else { fatalError("reuse error") }
+                supplementaryView.configure()
+                self.delegate = supplementaryView
+                return supplementaryView
+            default:
+                return nil
+            }
+        }
+        
+//        let snapshot = snapshotForCurrentState()
+//        dataSource?.apply(snapshot)
     }
     
     func snapshotForCurrentState() -> NSDiffableDataSourceSnapshot<CartView.Section, CartItem> {
         var snapshot = NSDiffableDataSourceSnapshot<CartView.Section, CartItem>()
-        snapshot.appendSections([.cart])
+        
         return snapshot
     }
     
     func insertItems(items: [CartItem]) {
+        var snapshot = NSDiffableDataSourceSnapshot<CartView.Section, CartItem>()
+        snapshot.appendSections([.cart])
+        snapshot.appendItems(items, toSection: .cart)
+        dataSource?.apply(snapshot)
+    }
+    
+    func removeItem(item: CartItem) {
         var snapshot = dataSource?.snapshot()
-        snapshot?.appendItems(items, toSection: .cart)
+        snapshot?.deleteItems([item])
+        
+        guard let availableItems = snapshot?.itemIdentifiers else {
+            print("not found "); return
+        }
+        
+        presenter.setTotalPrice(items: availableItems)
+        
         dataSource?.apply(snapshot!)
+    }
+    
+    func setTotalPrice(price: Int?) {
+        guard let price = price else {
+            return
+        }
+        
+        delegate?.updateTotalPrice(price: price)
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension CartViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         debugPrint("yeat")
+    }
+}
+
+// MARK: - CartItemCellDelegate
+extension CartViewController: CartItemCellDelegate {
+    func didTappedRemoveButton(_ cell: UICollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell),
+              let item = dataSource?.itemIdentifier(for: indexPath) else {
+            fatalError("not founded indexPath or item in datasource")
+        }
+        
+        self.removeItem(item: item)
+        presenter.removeItem(item: item)
     }
 }

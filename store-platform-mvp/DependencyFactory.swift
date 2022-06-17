@@ -2,7 +2,9 @@ import UIKit
 
 protocol Factory: AnyObject {
     func buildTabBarModule(coordinator: TabCoordinator) -> UITabBarController
-    func buildFeedModule(coordinator: FeedCoordinator) -> UIViewController
+    func buildFeedModule(coordinator: FeedCoordinator, with items: [Item]?) -> UIViewController
+    func buildFeedSortingModule(delegate: SortingFeedPresenterDelegate) -> UIViewController
+    func buildSearchModule(coordinator: FeedCoordinator) -> UIViewController
     func buildCreateAdModule(coordinator: CreateAdCoordinator) -> UIViewController
     func buildCreateSizeModule(coordinator: CreateAdCoordinator, with item: Size?) -> UIViewController
     func buildImagePickerModule(coordinator: ImagePickerCoordinator, delegate: ImagePickerPresenterDelegate) -> UIImagePickerController
@@ -14,11 +16,11 @@ protocol Factory: AnyObject {
     func buildCartModule() -> UIViewController
     func buildSizePickerModule(coordinator: PickSizeCoordinatorProtocol, item: Item) -> UIViewController
     func buildProfileModule(coordinator: ProfileCoordinator) -> UIViewController
-    func buildDetailedAdModule(coordinator: PickSizeCoordinatorProtocol, with item: Item) -> UIViewController
+    func buildDetailedAdModule(coordinator: FeedCoordinator, with item: Item) -> UIViewController
     func buildOnboardingModule(coordinator: OnboardingCoordinator) -> UIViewController
     func buildFillBrandDataModule(coordinator: OnboardingCoordinator) -> UIViewController
     func buildSellerModule(coordinator: SellerCoordinator) -> UIViewController
-    func buildMessengerModule(conversationId: String, brandId: String?, coordinator: MessagesCoordinatorProtocol) -> UIViewController
+    func buildMessengerModule(conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol) -> UIViewController
     func buildListMessagesModule(role: RealTimeService.ChatRole, coordinator: MessagesCoordinatorProtocol) -> UIViewController
 }
 
@@ -30,10 +32,25 @@ class DependencyFactory: Factory {
         return view
     }
 
-    func buildFeedModule(coordinator: FeedCoordinator) -> UIViewController {
+    func buildFeedModule(coordinator: FeedCoordinator, with items: [Item]?) -> UIViewController {
         let view = FeedViewController()
         let service = UserService()
-        let presenter = FeedPresenter(view: view, coordinator: coordinator, service: service)
+        let presenter = FeedPresenter(view: view, coordinator: coordinator, service: service, items: items)
+        view.presenter = presenter
+        return view
+    }
+    
+    func buildFeedSortingModule(delegate: SortingFeedPresenterDelegate) -> UIViewController {
+        let view = SortingFeedViewController()
+        let presenter = SortingFeedPresenter(view: view)
+        presenter.delegate = delegate
+        view.presenter = presenter
+        return view
+    }
+    
+    func buildSearchModule(coordinator: FeedCoordinator) -> UIViewController {
+        let view = SearchViewController()
+        let presenter = SearchPresenter(view: view, coordinator: coordinator)
         view.presenter = presenter
         return view
     }
@@ -124,7 +141,7 @@ class DependencyFactory: Factory {
         return view
     }
     
-    func buildDetailedAdModule(coordinator: PickSizeCoordinatorProtocol, with item: Item) -> UIViewController {
+    func buildDetailedAdModule(coordinator: FeedCoordinator, with item: Item) -> UIViewController {
         let view = DetailedAdViewController()
         let service = UserService()
         let presenter = DetailedAdPresenter(view: view, coordinator: coordinator, item: item, service: service)
@@ -155,7 +172,7 @@ class DependencyFactory: Factory {
         return view
     }
     
-    func buildMessengerModule(conversationId: String, brandId: String?, coordinator: MessagesCoordinatorProtocol) -> UIViewController {
+    func buildMessengerModule(conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol) -> UIViewController {
         let view = MessengerViewController()
         let service = UserService()
         let presenter = MessengerPresenter(view: view, service: service, conversationId: conversationId, brandId: brandId, coordinator: coordinator)

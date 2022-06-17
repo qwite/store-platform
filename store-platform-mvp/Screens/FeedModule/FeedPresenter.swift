@@ -1,10 +1,15 @@
 import Foundation
 
 protocol FeedPresenterProtocol: AnyObject {
-    init(view: FeedViewProtocol, coordinator: FeedCoordinator, service: UserServiceProtocol)
+    init(view: FeedViewProtocol, coordinator: FeedCoordinator, service: UserServiceProtocol, items: [Item]?)
     func viewDidLoad()
+    
+    func fetchItems()
     func getAds()
     func openDetailed(item: Item)
+    func openSearch()
+    func openSortingFeed()
+    func searchItems(by brand: String)
     func addFavorite(item: Item)
     func removeFavorite(item: Item)
 }
@@ -14,40 +19,38 @@ class FeedPresenter: FeedPresenterProtocol {
     weak var coordinator: FeedCoordinator?
     var service: UserServiceProtocol?
     
-    required init(view: FeedViewProtocol, coordinator: FeedCoordinator, service: UserServiceProtocol) {
+    var items: [Item]?
+    
+    required init(view: FeedViewProtocol, coordinator: FeedCoordinator, service: UserServiceProtocol, items: [Item]?) {
         self.view = view
         self.coordinator = coordinator
         self.service = service
+        
+        self.items = items
     }
     
     func viewDidLoad() {
         view?.configureCollectionView()
         view?.configureDataSource()
         view?.configureViews()
-        getAds()
-        checkLogin()
-        fetch()
-    }
-    
-    func fetch() {
-//        RealTimeService.sharedInstance.createNode(for: "wiWH1iujhw5CS6yoPEhT", with: "Extra brand") { error in
-//            guard error == nil else {
-//                fatalError("\(error!)")
-//            }
-//
-//            print("node created")
-//        }
+        view?.configureButtons()
         
-//        RealTimeService.sharedInstance.getAllConversationsForBrand(brandId: "wiWH1iujhw5CS6yoPEhT") { result in
-//            switch result {
-//            case .success(let conversations):
-//                print(conversations)
-//            case .failure(let error):
-//                fatalError("\(error)")
-//            }
-//        }
+        fetchItems()
+
+        checkLogin()
+        
+//        sortTestItems()
+    
     }
     
+    func fetchItems() {
+        guard let items = self.items, let firstItem = items.first else {
+            self.getAds(); return
+        }
+        
+        self.view?.insertAds(items: items)
+        self.view?.removeSearchBar(category: firstItem.category)
+    }
     
     func postNotificationAddFavoriteItem(_ item: Item) {
         let notificationName = Notification.Name("addFavoriteItem")
@@ -96,6 +99,21 @@ class FeedPresenter: FeedPresenterProtocol {
         print("removed action...")
     }
     
+    func openSearch() {
+        coordinator?.showSearchScreen()
+    }
+    
+    func searchItems(by brand: String) {
+        FirestoreService.sharedInstance.getItemsByBrand(brand: brand) {  result in
+            switch result {
+            case .success(let items):
+                self.view?.updateDataSource(with: items)
+            case .failure(_):
+                break
+            }
+        }
+    }
+    
     func openDetailed(item: Item) {
         guard let id = item.id else {
             fatalError()
@@ -113,6 +131,10 @@ class FeedPresenter: FeedPresenterProtocol {
         coordinator?.showDetailedAd(with: item)
     }
     
+    func openSortingFeed() {
+        coordinator?.showSortingFeed()
+    }
+    
     //MARK: - debug
     #if DEBUG
     func checkLogin() {
@@ -123,5 +145,18 @@ class FeedPresenter: FeedPresenterProtocol {
     
     func resetLogin() {
         SettingsService.sharedInstance.isAuthorized = false
+    }
+}
+
+// MARK: - SortingFeedPresenterDelegate
+extension FeedPresenter: SortingFeedPresenterDelegate {
+    func insertSortedItems(items: [Item]) {
+        self.view?.updateDataSource(with: items)
+    }
+    
+    func insertPopularItems(items: [ItemViews]) {
+        let sortedItems = items.sorted(by: { $0.views > $1.views })
+        let resultItems: [Item] = sortedItems.map({ $0.item })
+        self.view?.updateDataSource(with: resultItems)
     }
 }

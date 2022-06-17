@@ -54,6 +54,7 @@ extension DetailedAdViewController: DetailedAdViewProtocol {
 
 extension DetailedAdViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        
         let page = scrollView.contentOffset.x / scrollView.frame.size.width
         detailedAdView.pageControl.currentPage = Int(page)
     }

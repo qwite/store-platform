@@ -36,10 +36,13 @@ class RegisterPresenter: RegisterPresenterProtocol {
         FirestoreService.sharedInstance.saveUserInfo(customUser: customUser) { result in
             switch result {
             case .success(_):
-                RealTimeService.sharedInstance.insertUser(with: customUser)
-                
-                self.view?.showSuccessRegister()
-                self.coordinator?.hideRegisterModal()
+                RealTimeService.sharedInstance.insertUser(with: customUser) { error in
+                    guard error == nil else {
+                        fatalError("\(error!)")
+                    }
+                    self.view?.showSuccessRegister()
+                    self.coordinator?.hideRegisterModal()
+                }
             case .failure(let error):
                 debugPrint("\(error)")
             }

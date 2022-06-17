@@ -4,18 +4,27 @@ protocol FeedViewProtocol: AnyObject {
     func configureCollectionView()
     func configureDataSource()
     func configureViews()
+    func configureButtons()
     func insertAds(items: [Item])
+    func removeSearchBar(category: String)
+    func searchFilter(text: String)
+    func updateDataSource(with items: [Item])
 }
 
 class FeedViewController: UIViewController {
     var feedView = FeedView()
     var presenter: FeedPresenter!
     var collectionView: UICollectionView! = nil
+    let searchController = UISearchController()
     var dataSource: UICollectionViewDiffableDataSource<FeedView.Section, Item>?
     typealias DataSource = UICollectionViewDiffableDataSource<FeedView.Section, Item>
     
     override func loadView() {
         view = feedView
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     override func viewDidLoad() {
@@ -68,11 +77,29 @@ extension FeedViewController: FeedViewProtocol {
         dataSource?.apply(snapshot!)
     }
     
+    func removeSearchBar(category: String) {
+        self.searchController.searchBar.removeFromSuperview()
+        self.navigationItem.searchController = nil
+        self.title = category
+    }
+    
+    func configureButtons() {
+        feedView.sortButton.addTarget(self, action: #selector(sortButtonAction), for: .touchUpInside)
+    }
+    
+    @objc private func sortButtonAction() {
+        presenter.openSortingFeed()
+    }
+    
     func configureViews() {
         feedView.backgroundColor = .white
         
         view.addSubview(collectionView)
         view.addSubview(feedView.sortButton)
+        
+        searchController.searchBar.placeholder = "Поиск"
+        searchController.searchBar.delegate = self
+        self.navigationItem.searchController = searchController
         
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -86,6 +113,18 @@ extension FeedViewController: FeedViewProtocol {
             make.height.equalTo(30)
             make.width.equalTo(158)
         }
+    }
+    
+    func searchFilter(text: String) {
+        presenter.searchItems(by: text.lowercased())
+    }
+    
+    func updateDataSource(with items: [Item]) {
+        var snapshot = NSDiffableDataSourceSnapshot<FeedView.Section, Item>()
+
+        snapshot.appendSections([.ads])
+        snapshot.appendItems(items)
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
 }
 
@@ -117,4 +156,25 @@ extension FeedViewController: AdCellDelegate {
         presenter.removeFavorite(item: item)
     }
 }
-  
+
+// MARK: - UISearchBarDelegate
+extension FeedViewController: UISearchBarDelegate {
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        presenter.openSearch()
+        return false
+    }
+}
+
+extension FeedViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        let items = dataSource?.snapshot().itemIdentifiers
+        if items?.count == 0 {
+            print("ZE")
+        }
+        
+        let text = searchController.searchBar.text ?? ""
+        if text.isEmpty { presenter.fetchItems() }
+        self.searchFilter(text: text)
+    }
+}

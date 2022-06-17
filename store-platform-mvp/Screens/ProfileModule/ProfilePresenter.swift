@@ -41,7 +41,7 @@ class ProfilePresenter: ProfilePresenterProtocol {
             case .success(let dict):
                 self?.view?.configure(with: dict)
             case .failure(let error):
-                fatalError("\(error)")
+                print("\(error)")
             }
         })
     }

@@ -2,25 +2,31 @@ import UIKit
 
 class GuestCoordinator: Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory
+    var factory: Factory?
     weak var delegate: TabCoordinatorDelegate?
-    
-    var childCoordinator = [Coordinator]()
-    
+    var finish: (() -> ())?
+
     func start() {
-        let module = factory.buildGuestModule(coordinator: self)
+        guard let module = factory?.buildGuestModule(coordinator: self) else {
+            fatalError()
+        }
+        
         self.navigationController.pushViewController(module, animated: true)
     }
     
-    var finish: (() -> ())?
-    
     func openLogin() {
-        let module = factory.buildLoginModule(coordinator: self)
+        guard let module = factory?.buildLoginModule(coordinator: self) else {
+            fatalError()
+        }
+        
         self.navigationController.present(module, animated: true)
     }
     
     func openRegister() {
-        let module = factory.buildRegisterModule(coordinator: self)
+        guard let module = factory?.buildRegisterModule(coordinator: self) as? RegisterViewController else {
+            fatalError()
+        }
+        
         self.navigationController.present(module, animated: true)
     }
     

@@ -22,3 +22,11 @@ struct Item: Hashable, Codable {
         case sizes
     }
 }
+
+// TODO: move to another place
+extension Item {
+    enum Sorting {
+        case byIncreasePrice
+        case byDecreasePrice
+    }
+}

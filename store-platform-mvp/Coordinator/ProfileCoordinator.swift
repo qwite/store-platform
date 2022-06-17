@@ -1,11 +1,13 @@
 import UIKit
 
-class ProfileCoordinator: Coordinator {
+class ProfileCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
     var factory: Factory?
     
     weak var delegate: ProfilePresenterDelegate?
     weak var tabDelegate: TabCoordinatorDelegate?
+    weak var imagePickerDelegate: ImagePickerPresenterDelegate?
+    
     var childCoordinator = [Coordinator]()
     
     func start() {
@@ -45,11 +47,24 @@ class ProfileCoordinator: Coordinator {
 
 extension ProfileCoordinator: MessagesCoordinatorProtocol {
     func showImageDetail(image: Data) {
+        guard let module = factory?.buildDetailedImageModule(image: image) else {
+            fatalError()
+        }
         
+        self.navigationController.pushViewController(module, animated: true)
     }
     
     func showImagePicker() {
+        // FIXME: remove from arc
+        let imagePickerCoordinator = ImagePickerCoordinator(self.navigationController)
+        imagePickerCoordinator.delegate = self.imagePickerDelegate
         
+        imagePickerCoordinator.finish = {
+            self.removeDependency(imagePickerCoordinator)
+            self.imagePickerDelegate = nil
+        }
+        addDependency(imagePickerCoordinator)
+        imagePickerCoordinator.start()
     }
     
     func showListMessages() {
@@ -60,10 +75,11 @@ extension ProfileCoordinator: MessagesCoordinatorProtocol {
         self.navigationController.pushViewController(module, animated: true)
     }
     
-    func showMessenger(conversationId: String, brandId: String?) {
-        guard let module = factory?.buildMessengerModule(conversationId: conversationId, brandId: nil, coordinator: self) else {
+    func showMessenger(conversationId: String?, brandId: String?) {
+        guard let module = factory?.buildMessengerModule(conversationId: conversationId, brandId: nil, coordinator: self) as? MessengerViewController else {
             fatalError()
         }
+        self.imagePickerDelegate = module.presenter
         
         self.navigationController.pushViewController(module, animated: true)
     }

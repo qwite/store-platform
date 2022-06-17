@@ -1,6 +1,6 @@
 import UIKit
 
-class FavoritesCoordinator: Coordinator {
+class FavoritesCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
     var factory: Factory?
     
@@ -21,12 +21,11 @@ class FavoritesCoordinator: Coordinator {
         self.factory = DependencyFactory()
     }
     
+    // TODO: remove from arc
     func showDetailedAd(with item: Item) {
-        guard let module = factory?.buildDetailedAdModule(coordinator: self, with: item) else {
-            return
-        }
-        
-        self.navigationController.pushViewController(module, animated: true)
+        let feedCoordinator = FeedCoordinator(self.navigationController)
+        self.addDependency(feedCoordinator)
+        feedCoordinator.showDetailedAd(with: item)
     }
 }
 

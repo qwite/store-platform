@@ -15,12 +15,12 @@ extension ProfileView {
         backgroundColor = .white
         profileNameLabel.font = Constants.Fonts.itemTitleFont
         profileNameDescription.font = Constants.Fonts.itemDescriptionFont
-        let labelStack = UIStackView(arrangedSubviews: [profileNameLabel, profileNameDescription], spacing: 5, axis: .vertical, alignment: .center)
+        let labelStack = UIStackView(arrangedSubviews: [profileNameLabel, profileNameDescription], spacing: 5, axis: .vertical, alignment: .fill)
         
         addSubview(labelStack)
         labelStack.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(20)
-            make.centerX.equalTo(snp.centerX)
+            make.left.equalTo(snp.left).offset(20)
         }
         
         let buttonStack = UIStackView(arrangedSubviews: [myOrdersButton, communicationWithStoreButton, settingsButton, logoutButton],

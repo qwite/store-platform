@@ -5,6 +5,10 @@ class CartView: UIView {
         case cart
     }
     
+    enum SupplementaryKinds: String {
+        case totalCart = "section-bottom-total-cart"
+    }
+    
     func configureLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .fractionalHeight(1.0))
@@ -15,6 +19,12 @@ class CartView: UIView {
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 20.0
         section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20)
+        
+        let supplementaryItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                           heightDimension: .absolute(150))
+        let supplementaryItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: supplementaryItemSize, elementKind: SupplementaryKinds.totalCart.rawValue, alignment: .bottom)
+        section.boundarySupplementaryItems = [supplementaryItem]
+        
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }

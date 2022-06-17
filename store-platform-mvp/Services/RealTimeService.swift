@@ -19,11 +19,16 @@ class RealTimeService {
 }
 
 extension RealTimeService {
-    public func insertUser(with user: CustomUser) {
+    public func insertUser(with user: CustomUser, completion: @escaping ((Error?) -> ())) {
         database.child(user.id!).setValue([
             "first_name": user.firstName,
-            "last_name": user.lastName
-        ])
+            "last_name": user.lastName]) { error, _ in
+                guard error == nil else {
+                    completion(error!); return
+                }
+                
+                completion(nil)
+            }
     }
 }
 
@@ -45,7 +50,7 @@ extension RealTimeService {
     
     
     /// new conversation with user and brand
-    public func createNewConversation(with brandId: String, brandName: String, firstMessage: Message, completion: @escaping (Error?) -> ()) {
+    public func createNewConversation(with brandId: String, brandName: String, firstMessage: Message, completion: @escaping (Result<String, Error>) -> ()) {
         guard let userId = SettingsService.sharedInstance.userId,
               let fullName = SettingsService.sharedInstance.userFullName,
               let userName = fullName["firstName"] else {
@@ -121,15 +126,15 @@ extension RealTimeService {
             
             userRef.setValue(userNode) { [weak self] error, _ in
                 guard error == nil else {
-                    return completion(error!)
+                    return completion(.failure(error!))
                 }
                 
                 self?.finishCreatingConversation(userId: userId, conversationId: conversationId, firstMessage: firstMessage, completion: { error in
                     guard error == nil else {
-                        return completion(error!)
+                        return completion(.failure(error!))
                     }
                     
-                    completion(nil)
+                    completion(.success(conversationId))
                 })
                 
             }
@@ -179,6 +184,7 @@ extension RealTimeService {
                       let dateString = latestMessage["date"] as? String else {
                     fatalError()
                 }
+                
                 
                 let conversation = Conversation(id: id, recipientName: brandName, lastMessage: lastMessage, date: dateString)
                 return conversation

@@ -6,6 +6,7 @@ extension UIButton {
         case profile
         case select
         case bottom
+        case radioButton
         case icon
     }
     
@@ -94,7 +95,16 @@ extension UIButton {
                 make.right.equalTo(self.snp.right)
                 make.centerY.equalTo(self.titleLabel!.snp.centerY)
             }
+        case .radioButton:
+            self.init(type: .custom)
             
+            let radioButtonAttributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: UIColor.black,
+                .font: UIFont.systemFont(ofSize: 18, weight: .regular)
+            ]
+            
+            let radioButtonAttributesText = NSAttributedString(string: text!, attributes: radioButtonAttributes)
+            self.setAttributedTitle(radioButtonAttributesText, for: .normal)
         case .none:
             
             let defaultAttributes: [NSAttributedString.Key: Any] = [

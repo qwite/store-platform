@@ -18,9 +18,10 @@ class StorageService {
     func uploadItemImages(with data: [Data], completion: @escaping (Result<[String], Error>) -> ()) {
         let metadata: StorageMetadata = StorageMetadata()
         metadata.contentType = "png"
-        var urls: [String] = []
+        var urls: [Int: String] = [:]
         var counter = 0 // Need for completion
         
+        // TODO: add order
         for item in data {
             let fileName = "\(UUID().uuidString).png"
             let reference = self.storageReference.child("items_images/\(fileName)")
@@ -37,11 +38,12 @@ class StorageService {
                     }
                     
                     let absoluteUrl = url.absoluteString
-                    urls.append(absoluteUrl)
+                    urls[counter] = absoluteUrl
                     counter += 1
                     
                     if counter == data.count {
-                        completion(.success(urls))
+                        debugPrint(urls)
+                        completion(.success(urls.map({ $0.value })))
                     }
                 }
             }

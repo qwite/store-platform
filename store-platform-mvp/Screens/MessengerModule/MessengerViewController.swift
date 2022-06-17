@@ -6,7 +6,7 @@ import Kingfisher
 // MARK: - MessengerViewProtocol
 protocol MessengerViewProtocol: AnyObject {
     func loadFirstMessages()
-    func messagesWasLoaded()
+    func stopLoadingMessages()
 }
 
 // MARK: - MessengerViewController
@@ -24,7 +24,7 @@ class MessengerViewController: MessagesViewController {
         presenter.viewDidLoad()
         
         view.backgroundColor = .white
-        title = "Chat"
+        title = "Мессенджер"
         navigationItem.largeTitleDisplayMode = .never
         
         configureMessenger()
@@ -37,7 +37,7 @@ extension MessengerViewController: MessengerViewProtocol {
         messagesCollectionView.refreshControl?.beginRefreshing()
     }
     
-    func messagesWasLoaded() {
+    func stopLoadingMessages() {
         messagesCollectionView.reloadData()
         self.messagesCollectionView.refreshControl?.endRefreshing()
         self.messagesCollectionView.scrollToLastItem(at: .bottom, animated: true)

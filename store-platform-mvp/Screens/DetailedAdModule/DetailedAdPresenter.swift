@@ -1,7 +1,7 @@
 import Foundation
 
 protocol DetailedAdPresenterProtocol {
-    init(view: DetailedAdViewProtocol, coordinator: PickSizeCoordinatorProtocol, item: Item, service: UserServiceProtocol)
+    init(view: DetailedAdViewProtocol, coordinator: FeedCoordinator, item: Item, service: UserServiceProtocol)
     func viewDidLoad()
     func showSizePicker()
     func didAddToCart(item: CartItem)
@@ -10,12 +10,12 @@ protocol DetailedAdPresenterProtocol {
 
 class DetailedAdPresenter: DetailedAdPresenterProtocol {
     weak var view: DetailedAdViewProtocol?
-    weak var coordinator: PickSizeCoordinatorProtocol?
+    weak var coordinator: FeedCoordinator?
     var service: UserServiceProtocol?
     
     var item: Item
     
-    required init(view: DetailedAdViewProtocol, coordinator: PickSizeCoordinatorProtocol, item: Item, service: UserServiceProtocol) {
+    required init(view: DetailedAdViewProtocol, coordinator: FeedCoordinator, item: Item, service: UserServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
         self.item = item
@@ -27,10 +27,10 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
     }
     
     func createConversation() {
-        FirestoreService.sharedInstance.getBrandIdByName(brandName: item.brandName) { result in
+        FirestoreService.sharedInstance.getBrandIdByName(brandName: item.brandName) { [weak self] result in
             switch result {
             case .success(let brandId):
-                print(brandId)
+                self?.coordinator?.showMessenger(conversationId: nil, brandId: brandId)
             case .failure(let error):
                 fatalError("\(error)")
             }

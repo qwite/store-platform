@@ -25,7 +25,7 @@ class FavoriteCell: UICollectionViewCell {
 // MARK: - Helpers func
 extension FavoriteCell {
     func configure(with item: Item) {
-        self.brandNameLabel.text = item.brandName
+        self.brandNameLabel.text = item.brandName.capitalized
         self.clothingNameLabel.text = item.clothingName
         // TODO: fix price
         let price = item.sizes!.first?.price

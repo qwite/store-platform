@@ -2,7 +2,7 @@ import Foundation
 import MessageKit
 
 protocol MessengerPresenterProtocol: ImagePickerPresenterDelegate {
-    init(view: MessengerViewProtocol, service: UserServiceProtocol, conversationId: String, brandId: String?, coordinator: MessagesCoordinatorProtocol)
+    init(view: MessengerViewProtocol, service: UserServiceProtocol, conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol)
     func viewDidAppear()
     func viewDidLoad()
     
@@ -15,7 +15,7 @@ protocol MessengerPresenterProtocol: ImagePickerPresenterDelegate {
     func sendAttachment(image: Data)
     func didShowImageDetailed(imageUrl: URL)
     
-    var conversationId: String { get set }
+    var conversationId: String? { get set }
     var messages: [Message]! { get set }
     
     func convertFromDate(date: Date) -> String
@@ -27,7 +27,7 @@ class MessengerPresenter: MessengerPresenterProtocol {
     var service: UserServiceProtocol?
     var messages: [Message]! = nil
     
-    var conversationId: String
+    var conversationId: String?
     var brandId: String?
     var brandName: String?
     
@@ -43,7 +43,7 @@ class MessengerPresenter: MessengerPresenterProtocol {
     }()
     
     
-    required init(view: MessengerViewProtocol, service: UserServiceProtocol, conversationId: String, brandId: String?, coordinator: MessagesCoordinatorProtocol) {
+    required init(view: MessengerViewProtocol, service: UserServiceProtocol, conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol) {
         self.view = view
         self.service = service
         self.conversationId = conversationId
@@ -58,9 +58,8 @@ class MessengerPresenter: MessengerPresenterProtocol {
         self.brandId = brandId
     }
     
-    
     func viewDidLoad() {
-
+        
     }
     
     func viewDidAppear() {
@@ -74,8 +73,8 @@ class MessengerPresenter: MessengerPresenterProtocol {
             fatalError()
         }
         
-        if let brandId = brandId {
-            let brandSender = Sender(photoUrl: "", senderId: brandId, displayName: SettingsService.sharedInstance.brandName!)
+        if let brandId = brandId, let brandName = SettingsService.sharedInstance.brandName {
+            let brandSender = Sender(photoUrl: "", senderId: brandId, displayName: brandName)
             return brandSender
         } else {
             let userSender = Sender(photoUrl: "", senderId: userId, displayName: firstName)
@@ -102,36 +101,63 @@ class MessengerPresenter: MessengerPresenterProtocol {
         }
     }
     
-    //    func createConversation(with text: String) {
-    //        let sender = getSelfSender()
-    //        let messageId = UUID().uuidString
-    //
-    //        let message = Message(sender: sender, sentDate: Date(), kind: .text("Hi!"), messageId: messageId)
-    //
-    //        RealTimeService.sharedInstance.createNewConversation(with: "wiWH1iujhw5CS6yoPEhT", brandName: "Extra Brand", firstMessage: message) { error in
-    //            guard error == nil else {
-    //                fatalError("\(error!)")
-    //            }
-    //
-    //            debugPrint("message sent")
-    //        }
-    //    }
-    
-    func listenMessages() {
-        self.view?.loadFirstMessages()
-        RealTimeService.sharedInstance.getAllMessagesForConversation(with: conversationId) { [weak self] result in
+    // create conversation with brand
+    func createConversation(with text: String) {
+        guard let brandId = self.brandId else {
+            fatalError("unwrapping error")
+        }
+        
+        let sender = getSelfSender()
+        
+        let message = Message(sender: sender, sentDate: Date(), kind: .text(text))
+        
+        FirestoreService.sharedInstance.getBrandName(brandId: brandId) { result in
             switch result {
-            case .success(let messages):
-                self?.messages = messages
-                self?.view?.messagesWasLoaded()
+            case .success(let brandName):
+                RealTimeService.sharedInstance.createNewConversation(with: brandId, brandName: brandName, firstMessage: message) { result in
+                    switch result {
+                    case .success(let conversationId):
+                        self.conversationId = conversationId
+                        debugPrint("message sended")
+                        self.listenMessages()
+                    case .failure(let error):
+                        fatalError("\(error)")
+                    }
+                }
             case .failure(let error):
                 fatalError("\(error)")
             }
         }
     }
     
+    func listenMessages() {
+        self.view?.loadFirstMessages()
+        
+        // checks if conversation already created; if not return
+        guard let conversationId = conversationId else {
+            self.view?.stopLoadingMessages(); return
+        }
+        
+        // fetch all messages with brand
+        RealTimeService.sharedInstance.getAllMessagesForConversation(with: conversationId) { [weak self] result in
+            switch result {
+            case .success(let messages):
+                self?.messages = messages
+                self?.view?.stopLoadingMessages()
+            case .failure(let error):
+                fatalError("\(error)")
+            }
+        }
+    }
+    
+    
     func sendMessage(with text: String) {
         let message = Message(sender: getSelfSender(), sentDate: Date(), kind: .text(text))
+        
+        
+        guard let conversationId = self.conversationId else {
+            createConversation(with: text); return
+        }
         
         RealTimeService.sharedInstance.sendMessage(to: conversationId, newMessage: message, role: .user) { error in
             guard error == nil else {

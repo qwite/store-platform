@@ -122,7 +122,7 @@ extension CreateAdViewController: CreateAdViewProtocol {
         snapshot.appendSections([.category])
         snapshot.appendItems(categories)
         
-        let colors = ["Черный", "Белый", "Красный", "Синий", "Зеленый", "Желтый", "Оранжевый", "Фиолетовый", "Бежевый"]
+        let colors = ["Черный", "Белый", "Красный", "Синий", "Зеленый", "Желтый", "Оранжевый", "Фиолетовый", "Бежевый", "Хаки", "Разноцветный"]
         snapshot.appendSections([.color])
         snapshot.appendItems(colors)
  

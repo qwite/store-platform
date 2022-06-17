@@ -46,13 +46,14 @@ class PickSizePresenter: PickSizePresenterProtocol {
     
     func selectSize(by index: Int) {
         guard let sizes = item.sizes,
+              let itemId = item.id,
               let selectedSize = sizes[index].size,
               let selectedPrice = sizes[index].price else {
             return
         }
         
-
-        let cartItem = CartItem(item: item, selectedSize: selectedSize, selectedPrice: selectedPrice)
+        // TODO: remove itemId and rewrite class mb delete this.
+        let cartItem = CartItem(item: item, itemId: itemId, selectedSize: selectedSize, selectedPrice: selectedPrice)
         coordinator?.hideSizePicker(with: cartItem)
     }
 }
