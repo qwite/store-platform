@@ -1,4 +1,5 @@
 import UIKit
+import LBBottomSheet
 
 class FavoritesCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
@@ -35,11 +36,13 @@ extension FavoritesCoordinator: PickSizeCoordinatorProtocol {
             return
         }
         
-        self.navigationController.present(module, animated: true)
+        let behavior: BottomSheetController.Behavior = .init(swipeMode: .top)
+        self.navigationController.presentAsBottomSheet(module, behavior: behavior)
     }
     
     func hideSizePicker(with item: CartItem) {
-        self.navigationController.dismiss(animated: true) { [weak self] in
+        
+        self.navigationController.dismissBottomSheet { [weak self] in
             self?.completionHandler?(item)
         }
     }

@@ -1,34 +1,32 @@
 import UIKit
 
 class LoginView: UIView {
-    lazy var emailField = UITextField(placeholder: "Электронная почта",
+    let emailTextField = UITextField(placeholder: "Электронная почта",
                                       withUnderline: true,
                                       keyboardType: .emailAddress)
     
-    lazy var passwordField = UITextField(placeholder: "Пароль",
+    let passwordTextField = UITextField(placeholder: "Пароль",
                                          withUnderline: true,
                                          keyboardType: .default,
                                          isSecureTextEntry: true)
     
-    lazy var loginButton = UIButton(text: "Войти", preset: .customLarge)
-    
-    lazy var forgotPasswordButton = UIButton(text: "Забыли пароль?", preset: .none)
-    
-    lazy var stack = UIStackView(arrangedSubviews: [emailField,
-                                                    passwordField,
-                                                    loginButton,
-                                                    forgotPasswordButton],
-                                 spacing: 20, axis: .vertical, alignment: .fill)
-    
+    let loginButton = UIButton(text: "Войти", preset: .customLarge)
+            
     func setupViews() {
         backgroundColor = .white
         
-        emailField.autocapitalizationType = .none
-        emailField.autocorrectionType = .no
-        passwordField.autocorrectionType = .no
+        emailTextField.autocapitalizationType = .none
+        emailTextField.autocorrectionType = .no
+        passwordTextField.autocorrectionType = .no
+        
+        let stack = UIStackView(arrangedSubviews: [emailTextField,
+                                                   passwordTextField,
+                                                   loginButton],
+                                spacing: 20, axis: .vertical, alignment: .fill)
         
         addSubview(stack)
         stack.distribution = .fillEqually
+        
         stack.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(20)
             make.left.equalTo(safeAreaLayoutGuide.snp.left).offset(20)

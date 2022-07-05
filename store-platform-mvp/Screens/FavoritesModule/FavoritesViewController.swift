@@ -101,7 +101,7 @@ extension FavoritesViewController: FavoritesViewProtocol {
     }
     
     func showSuccessAlert() {
-        SPAlert.present(title: "Успешно", message: "Товар был добавлен в корзину", preset: .done)
+        SPAlert.present(title: "", message: "Товар в корзине", preset: .done)
     }
 }
 

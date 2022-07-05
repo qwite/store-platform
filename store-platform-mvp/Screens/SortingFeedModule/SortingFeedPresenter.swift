@@ -166,7 +166,7 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
     }
     
     func getItemsByPrice(sorting: Item.Sorting) {
-        FirestoreService.sharedInstance.getAllItems(sorted: sorting) { [weak self] result in
+        FirestoreService.sharedInstance.fetchAllItems(by: sorting) { [weak self] result in
             switch result {
             case .success(let items):
                 guard let filteredItems = self?.applyFilters(items: items) else { return }

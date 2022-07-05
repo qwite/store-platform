@@ -24,7 +24,7 @@ class SearchPresenter: SearchPresenterProtocol {
     }
     
     func searchItems(by category: String) {
-        FirestoreService.sharedInstance.getItemsByCategory(category: category) { [weak self] result in
+        FirestoreService.sharedInstance.fetchItemsByCategory(category: category) { [weak self] result in
             switch result {
             case .success(let items):
                 self?.showResultsScreen(items: items)

@@ -16,6 +16,7 @@ protocol SellerPresenterProtocol {
     
     func showCreateAdScreen()
     func showMessagesList()
+    func showOrders()
     
     func saveLocalBrand()
 }
@@ -67,6 +68,10 @@ class SellerPresenter: SellerPresenterProtocol {
         coordinator?.showCreateAdScreen()
     }
     
+    func showOrders() {
+        coordinator?.showSellerOrders()
+    }
+    
     // Item + views count
     func getItemsFromBrand() {
         debugPrint("[get items from brand]")
@@ -97,6 +102,7 @@ class SellerPresenter: SellerPresenterProtocol {
     
     func getSales() {
         service?.getItemSalesFromBrand(completion: { [weak self] result in
+            print("fetching sales...")
             switch result {
             case .success(let items):
 //                print(items)
@@ -109,12 +115,16 @@ class SellerPresenter: SellerPresenterProtocol {
                     fatalError()
                 }
                 
+                debugPrint(salesPrice)
+                
                 self?.view?.insertSellerSales(sales: sales)
                 self?.view?.insertSellerSalesPrice(salesPrice: salesPrice)
                 self?.view?.insertFinance(finance: Finance(totalPrice: totalPrice))
                 
             case .failure(let error):
                 self?.view?.insertEmptyFinance()
+                print("sales not found!")
+
             }
         })
     }
@@ -142,7 +152,11 @@ class SellerPresenter: SellerPresenterProtocol {
             graphData.append(item)
         }
         
-        return graphData.sorted(by: {$0.maxValue > $1.maxValue})
+        debugPrint("graphData: \(graphData)")
+        
+        //        return graphData.sorted(by: {$0.maxValue > $1.maxValue})
+
+        return graphData.sorted(by: {$0.maxValue < $1.maxValue})
     }
     
     func prepareSalesData(data: [Sales]) -> [FLPiePlotable] {

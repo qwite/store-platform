@@ -24,7 +24,7 @@ class RegisterPresenter: RegisterPresenterProtocol {
         AuthService.sharedInstance.register(email: email, password: password) { result in
             switch result {
             case .success(let user):
-                let customUser = CustomUser(id: user.uid, firstName: firstName, lastName: lastName, email: email)
+                let customUser = UserData(id: user.uid, firstName: firstName, lastName: lastName, email: email)
                 self.saveUserInfo(customUser: customUser)
             case .failure(let error):
                 debugPrint(error)
@@ -32,8 +32,8 @@ class RegisterPresenter: RegisterPresenterProtocol {
         }
     }
     
-    func saveUserInfo(customUser: CustomUser) {
-        FirestoreService.sharedInstance.saveUserInfo(customUser: customUser) { result in
+    func saveUserInfo(customUser: UserData) {
+        FirestoreService.sharedInstance.saveUserData(customUser: customUser) { result in
             switch result {
             case .success(_):
                 RealTimeService.sharedInstance.insertUser(with: customUser) { error in

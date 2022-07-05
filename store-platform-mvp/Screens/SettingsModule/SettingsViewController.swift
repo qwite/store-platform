@@ -1,8 +1,27 @@
-//
-//  SettingsViewController.swift
-//  store-platform-mvp
-//
-//  Created by Artem Lashmanov on 20.06.2022.
-//
+import UIKit
 
-import Foundation
+protocol SettingsViewProtocol: AnyObject {
+    func configure()
+}
+
+class SettingsViewController: UIViewController {
+    var presenter: SettingsPresenterProtocol!
+    var settingsView = SettingsView()
+    
+    override func loadView() {
+        view = settingsView
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        title = "Настройки"
+        presenter.viewDidLoad()
+    }
+}
+
+extension SettingsViewController: SettingsViewProtocol {
+    func configure() {
+        settingsView.configure()
+    }
+}

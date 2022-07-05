@@ -15,17 +15,24 @@ class BaseCoordinator: NSObject {
             return
         }
         
-       
         for (index, element) in childCoordinators.enumerated() {
             if element === coordinator {
                 childCoordinators.remove(at: index)
                 debugPrint("removed from childs: \(coordinator)")
-                debugPrint("current childs: \(childCoordinators)")
+//                debugPrint("current childs: \(childCoordinators)")
             }
         }
     }
     
-    func removeAllGuest() {
+    func removeAllGuestPages() {
+        childCoordinators.removeAll(where: { $0 is GuestCoordinator })
+    }
+    
+    func removeAllPages() {
         childCoordinators.removeAll()
+    }
+    
+    func showAll() {
+        print(childCoordinators)
     }
 }

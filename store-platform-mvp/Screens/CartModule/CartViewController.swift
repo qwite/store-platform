@@ -7,6 +7,11 @@ protocol CartViewProtocol: AnyObject {
     func insertItems(items: [CartItem])
     func removeItem(item: CartItem)
     func setTotalPrice(price: Int?)
+    func getItemsInCart() -> [CartItem]?
+}
+
+protocol CartViewDelegate: AnyObject {
+    func didTappedTotalButton()
 }
 
 class CartViewController: UIViewController {
@@ -76,7 +81,9 @@ extension CartViewController: CartViewProtocol {
             case "section-bottom-total-cart":
                 guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TotalCartView.reuseId, for: indexPath) as? TotalCartView else { fatalError("reuse error") }
                 supplementaryView.configure()
+               //  FIXME:  retain cycle?
                 self.delegate = supplementaryView
+                supplementaryView.delegate = self
                 return supplementaryView
             default:
                 return nil
@@ -113,6 +120,13 @@ extension CartViewController: CartViewProtocol {
         dataSource?.apply(snapshot!)
     }
     
+    func getItemsInCart() -> [CartItem]? {
+        guard let snapshot = dataSource?.snapshot() else { return nil }
+        
+        let items = snapshot.itemIdentifiers
+        return items
+    }
+    
     func setTotalPrice(price: Int?) {
         guard let price = price else {
             return
@@ -139,5 +153,13 @@ extension CartViewController: CartItemCellDelegate {
         
         self.removeItem(item: item)
         presenter.removeItem(item: item)
+    }
+}
+
+// MARK: - CartViewDelegate
+extension CartViewController: CartViewDelegate {
+    func didTappedTotalButton() {
+        print("pressed")
+        presenter.createOrder()
     }
 }

@@ -1,12 +1,14 @@
 import Foundation
 
+// MARK: - FeedPresenterProtocol
 protocol FeedPresenterProtocol: AnyObject {
     init(view: FeedViewProtocol, coordinator: FeedCoordinator, service: UserServiceProtocol, items: [Item]?)
     func viewDidLoad()
     
     func fetchItems()
-    func getAds()
-    func openDetailed(item: Item)
+    func getItems()
+    func getUserSubscriptions()
+    func openDetails(item: Item)
     func openSearch()
     func openSortingFeed()
     func searchItems(by brand: String)
@@ -14,6 +16,7 @@ protocol FeedPresenterProtocol: AnyObject {
     func removeFavorite(item: Item)
 }
 
+// MARK: - FeedPresenterProtocol Implementation
 class FeedPresenter: FeedPresenterProtocol {
     weak var view: FeedViewProtocol?
     weak var coordinator: FeedCoordinator?
@@ -34,21 +37,17 @@ class FeedPresenter: FeedPresenterProtocol {
         view?.configureDataSource()
         view?.configureViews()
         view?.configureButtons()
+        view?.configureNavigationRightButtons()
         
         fetchItems()
-
-        checkLogin()
-        
-//        sortTestItems()
-    
     }
     
     func fetchItems() {
         guard let items = self.items, let firstItem = items.first else {
-            self.getAds(); return
+            self.getItems(); return
         }
         
-        self.view?.insertAds(items: items)
+        self.view?.insertItems(items: items)
         self.view?.removeSearchBar(category: firstItem.category)
     }
     
@@ -62,13 +61,25 @@ class FeedPresenter: FeedPresenterProtocol {
         NotificationCenter.default.post(name: notificationName, object: item)
     }
     
-    func getAds() {
-        FirestoreService.sharedInstance.getAllItems { [weak self] result in
+    func getItems() {
+        FirestoreService.sharedInstance.fetchAllItems { [weak self] result in
             switch result {
             case .success(let items):
-                self?.view?.insertAds(items: items)
+                self?.view?.insertItems(items: items)
             case .failure(let error):
                 debugPrint(error)
+            }
+        }
+    }
+    
+    func getUserSubscriptions() {
+        guard let userId = SettingsService.sharedInstance.userId else { return }
+        FirestoreService.sharedInstance.getSubscriptionsItems(userId: userId) { [weak self] result in
+            switch result {
+            case .success(let items):
+                self?.view?.insertItems(items: items)
+            case .failure(let error):
+                print(error)
             }
         }
     }
@@ -95,16 +106,12 @@ class FeedPresenter: FeedPresenterProtocol {
         })
     }
     
-    func test() {
-        print("removed action...")
-    }
-    
     func openSearch() {
         coordinator?.showSearchScreen()
     }
     
     func searchItems(by brand: String) {
-        FirestoreService.sharedInstance.getItemsByBrand(brand: brand) {  result in
+        FirestoreService.sharedInstance.fetchItemsByBrandName(brand: brand) { result in
             switch result {
             case .success(let items):
                 self.view?.updateDataSource(with: items)
@@ -114,37 +121,12 @@ class FeedPresenter: FeedPresenterProtocol {
         }
     }
     
-    func openDetailed(item: Item) {
-        guard let id = item.id else {
-            fatalError()
-        }
-        
-        service?.increaseItemViews(itemId: id, completion: { result in
-            switch result {
-            case .success(let message):
-                debugPrint(message)
-            case .failure(let error):
-                debugPrint(error)
-            }
-        })
-        
+    func openDetails(item: Item) {
         coordinator?.showDetailedAd(with: item)
     }
     
     func openSortingFeed() {
         coordinator?.showSortingFeed()
-    }
-    
-    //MARK: - debug
-    #if DEBUG
-    func checkLogin() {
-        debugPrint("Авторизован?: \(SettingsService.sharedInstance.isAuthorized)")
-    }
-    #endif
-
-    
-    func resetLogin() {
-        SettingsService.sharedInstance.isAuthorized = false
     }
 }
 
@@ -159,6 +141,6 @@ extension FeedPresenter: SortingFeedPresenterDelegate {
     }
     
     func resetSettings() {
-        self.getAds()
+        self.getItems()
     }
 }

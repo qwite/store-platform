@@ -1,6 +1,6 @@
 import UIKit
 
-// MARK: - TabCoordinator Delegate Protocol
+// MARK: - TabCoordinatorDelegate Protocol
 protocol TabCoordinatorDelegate: AnyObject {
     func updatePages()
 }
@@ -18,19 +18,21 @@ class TabCoordinator: BaseCoordinator, Coordinator {
     
     func start() {
         // Building a controller
-        tabController = factory?.buildTabBarModule(coordinator: self)
+        guard let tabController = factory?.buildTabBarModule(coordinator: self) else { fatalError() }
+        self.tabController = tabController
+        
         setTabBarAppearance()
         // preparing pages
         preparePages()
 
-        self.navigationController.pushViewController(tabController!, animated: true)
+        self.navigationController.pushViewController(tabController, animated: true)
     }
     
     func preparePages() {
         let pages: [TabElements] = TabElements.allCases.sorted(by: {$0.pageNumber < $1.pageNumber})
-        let isAuth = SettingsService.sharedInstance.isAuthorized
-        let navigations: [UINavigationController] = pages.map { page in
-            page.isDisabled && !isAuth ? pageForGuest(page) : pageForUser(page)
+        let isAuthStatus = SettingsService.sharedInstance.isAuthorized
+        let navigations: [UINavigationController] = pages.compactMap { page in
+            page.isDisabled && !isAuthStatus ? setPageForGuest(page) : setPageForUser(page)
         }
         
         tabController?.viewControllers = navigations
@@ -40,21 +42,16 @@ class TabCoordinator: BaseCoordinator, Coordinator {
     func setTabBarAppearance() {
         self.navigationController.setNavigationBarHidden(true, animated: true)
         tabController?.tabBar.backgroundColor = .white
-//        tabController?.tabBarItem.appe
         tabController?.tabBar.isTranslucent = false
         tabController?.tabBar.tintColor = .black
     }
     
-    func pageForUser(_ page: TabElements) -> UINavigationController {
+    func setPageForUser(_ page: TabElements) -> UINavigationController {
         let tabImage = UIImage(named: page.icon)
         let navigation = UINavigationController()
         switch page {
         case .feed:
             let coordinator = FeedCoordinator(navigation)
-            coordinator.finish = { [weak self] in
-                self?.removeDependency(coordinator)
-            }
-            
             addDependency(coordinator)
             coordinator.start()
         case .favs:
@@ -84,9 +81,12 @@ class TabCoordinator: BaseCoordinator, Coordinator {
     
     func resetTabController() {
         tabController?.viewControllers = []
+        
+        // BaseCoordinator method
+        self.removeAllPages()
     }
     
-    func pageForGuest(_ page: TabElements) -> UINavigationController {
+    func setPageForGuest(_ page: TabElements) -> UINavigationController {
         let tabImage = UIImage(named: page.icon)
         let navigation = UINavigationController()
         let coordinator = GuestCoordinator(navigation)
@@ -94,8 +94,7 @@ class TabCoordinator: BaseCoordinator, Coordinator {
         self.addDependency(coordinator)
         coordinator.delegate = self
         coordinator.finish = { [weak self] in
-            self?.removeAllGuest()
-            debugPrint("child -> guest removed")
+            self?.removeAllGuestPages()
         }
         
         coordinator.start()
@@ -105,6 +104,7 @@ class TabCoordinator: BaseCoordinator, Coordinator {
     }
 }
 
+// MARK: - TabCoordinatorDelegate
 extension TabCoordinator: TabCoordinatorDelegate {
     func updatePages() {
         self.resetTabController()
@@ -112,6 +112,7 @@ extension TabCoordinator: TabCoordinatorDelegate {
     }
 }
 
+// MARK: - Enum
 extension TabCoordinator {
     enum TabElements: CaseIterable {
         case feed

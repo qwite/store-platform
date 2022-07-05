@@ -3,14 +3,18 @@ import SPAlert
 
 // MARK: - LoginView Protocol
 protocol LoginViewProtocol: AnyObject {
+    func configure()
     func configureLoginButton()
     func didTappedLoginButton()
-    func showSuccessLogin()
+    
+    func showSuccessMessage(message: String)
+    func showErrorMessage(message: String)
 }
 
+// MARK: - LoginViewController
 class LoginViewController: UIViewController {
     var loginView = LoginView()
-    var presenter: LoginPresenter!
+    var presenter: LoginPresenterProtocol!
    
     //MARK: - Lifecycle
     
@@ -20,25 +24,26 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "test"
-        loginView.setupViews()
         presenter.viewDidLoad()
     }
     
     deinit {
-        debugPrint("login vc deinit")
+        debugPrint("[Log] Login VC deinit")
     }
 }
 
-// MARK: - LoginView Protocol implementation
+// MARK: - LoginView Implementation
 extension LoginViewController: LoginViewProtocol {
+    func configure() {
+        loginView.setupViews()
+        configureLoginButton()
+    }
+    
     @objc func didTappedLoginButton() {
-        let email = loginView.emailField.text
-        let password = loginView.passwordField.text
-        
-        guard let email = email, let password = password else {
-            fatalError("Unwrap error")
-        }
+        guard let email = loginView.emailTextField.text, !email.isEmpty,
+              let password = loginView.passwordTextField.text, !password.isEmpty else {
+                  presenter.handleError(error: .emptyFieldsError); return
+              }
         
         presenter.login(email: email, password: password)
     }
@@ -47,28 +52,11 @@ extension LoginViewController: LoginViewProtocol {
         loginView.loginButton.addTarget(self, action: #selector(didTappedLoginButton), for: .touchUpInside)
     }
     
-    func showSuccessLogin() {
-        SPAlert.present(message: "Успешная авторизация!", haptic: .success)
-    }
-}
-
-
-// MARK: - SwiftUI
-
-import SwiftUI
-struct LoginViewPreview: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
+    func showSuccessMessage(message: String) {
+        SPAlert.present(message: message, haptic: .success)
     }
     
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<LoginViewPreview.ContainerView>)
-        -> LoginViewController {
-            return LoginViewController()
-        }
-        
-        func updateUIViewController(_ uiViewController: LoginViewPreview.ContainerView.UIViewControllerType,
-                                    context: UIViewControllerRepresentableContext<LoginViewPreview.ContainerView>) {}
+    func showErrorMessage(message: String) {
+        SPAlert.present(message: message, haptic: .error)
     }
 }

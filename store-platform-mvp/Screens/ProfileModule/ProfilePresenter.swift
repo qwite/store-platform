@@ -12,6 +12,10 @@ protocol ProfilePresenterProtocol {
     func getFullName()
     func didLogout()
     func didShowMessageList()
+    func didShowUserOrders()
+    func didShowDetailedProfile()
+    func didShowSettings()
+    func didShowSubscriptions()
 }
 
 class ProfilePresenter: ProfilePresenterProtocol {
@@ -22,6 +26,7 @@ class ProfilePresenter: ProfilePresenterProtocol {
     required init(view: ProfileViewProtocol, service: UserServiceProtocol, coordinator: ProfileCoordinator) {
         self.view = view
         self.service = service
+        // MARK: fix
         self.coordinator = coordinator
         coordinator.delegate = self
     }
@@ -36,14 +41,23 @@ class ProfilePresenter: ProfilePresenterProtocol {
     }
     
     func getFullName() {
-        service?.getUserFullName(completion: { [weak self] result in
+        guard let userId = SettingsService.sharedInstance.userId else { return }
+        FirestoreService.sharedInstance.fetchUserData(by: userId) { result in
             switch result {
-            case .success(let dict):
-                self?.view?.configure(with: dict)
+            case .success(let userData):
+                guard let firstName = userData.firstName,
+                      let lastName = userData.lastName else { return }
+                
+                let dict: [String: String] = ["firstName": firstName, "lastName": lastName]
+                self.view?.configure(with: dict)
             case .failure(let error):
-                print("\(error)")
+                debugPrint(error)
             }
-        })
+        }
+    }
+    
+    func didShowDetailedProfile() {
+        coordinator?.showDetailedProfile()
     }
     
     func didLogout() {
@@ -52,6 +66,18 @@ class ProfilePresenter: ProfilePresenterProtocol {
     
     func didShowMessageList() {
         coordinator?.showListMessages()
+    }
+    
+    func didShowUserOrders() {
+        coordinator?.showUserOrders()
+    }
+    
+    func didShowSettings() {
+        coordinator?.showSettings()
+    }
+    
+    func didShowSubscriptions() {
+        coordinator?.showSubscriptions()
     }
 }
 

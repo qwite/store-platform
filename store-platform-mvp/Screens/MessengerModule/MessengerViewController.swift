@@ -28,7 +28,6 @@ class MessengerViewController: MessagesViewController {
         navigationItem.largeTitleDisplayMode = .never
         
         configureMessenger()
-        messagesCollectionView.scrollToLastItem()
     }
 }
 
@@ -116,7 +115,7 @@ extension MessengerViewController: MessagesDisplayDelegate {
 
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
         guard let messages = presenter.messages else {
-            return Message(sender: presenter.getSelfSender(), sentDate: Date(), kind: .text("nope"), messageId: "error")
+            return Message(sender: presenter.getSelfSender(), sentDate: Date(), kind: .text(""), messageId: "error")
         }
         
         return messages[indexPath.section]

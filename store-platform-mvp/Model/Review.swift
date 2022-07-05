@@ -1,8 +1,17 @@
-//
-//  Review.swift
-//  store-platform-mvp
-//
-//  Created by Artem Lashmanov on 23.06.2022.
-//
-
 import Foundation
+import FirebaseFirestoreSwift
+
+struct Review: Codable {
+    @DocumentID var id = UUID().uuidString
+    let text: String
+    let rating: Double
+    let userFirstName: String
+    let userId: String
+    
+    enum CodingKeys: String, CodingKey {
+        case text
+        case rating
+        case userFirstName = "user_first_name"
+        case userId = "user_id"
+    }
+}

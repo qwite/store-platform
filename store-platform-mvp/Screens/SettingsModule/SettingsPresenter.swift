@@ -1,8 +1,20 @@
-//
-//  SettingsPresenter.swift
-//  store-platform-mvp
-//
-//  Created by Artem Lashmanov on 20.06.2022.
-//
-
 import Foundation
+
+protocol SettingsPresenterProtocol {
+    init(view: SettingsViewProtocol, coordinator: ProfileCoordinator)
+    func viewDidLoad()
+}
+
+class SettingsPresenter: SettingsPresenterProtocol {
+    weak var view: SettingsViewProtocol?
+    weak var coordinator: ProfileCoordinator?
+    
+    required init(view: SettingsViewProtocol, coordinator: ProfileCoordinator) {
+        self.view = view
+        self.coordinator = coordinator
+    }
+    
+    func viewDidLoad() {
+        view?.configure()
+    }
+}

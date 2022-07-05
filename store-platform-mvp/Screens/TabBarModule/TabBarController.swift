@@ -1,9 +1,9 @@
 import UIKit
 
-protocol TabBarViewProtocol {
-    
-}
+// MARK: - TabBarViewProtocol
+protocol TabBarViewProtocol: AnyObject {}
 
+// MARK: - TabBarController
 class TabBarController: UITabBarController {
     var presenter: TabBarPresenter!
     
@@ -19,12 +19,10 @@ class TabBarController: UITabBarController {
     
 }
 
+// MARK: - TabBarViewProtocol Implementation
 extension TabBarController: TabBarViewProtocol {
     
 }
 
-extension TabBarController: UITabBarControllerDelegate {
-    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        presenter.select(tabBarController.selectedIndex)
-    }
-}
+// MARK: - UITabBarControllerDelegate
+extension TabBarController: UITabBarControllerDelegate {}

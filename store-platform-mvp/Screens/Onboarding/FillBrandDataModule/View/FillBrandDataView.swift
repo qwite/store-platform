@@ -67,7 +67,7 @@ extension FillBrandDataView {
             make.centerX.equalTo(logoImageView.snp.centerX)
         }
         
-        let deliveryTextFieldsStack = UIStackView(arrangedSubviews: [deliveryCityTextField, firstNameTextField, lastNameTextField, patronymicTextField], spacing: 20, axis: .vertical, alignment: .fill)
+        let deliveryTextFieldsStack = UIStackView(arrangedSubviews: [deliveryCityTextField, lastNameTextField, firstNameTextField , patronymicTextField], spacing: 20, axis: .vertical, alignment: .fill)
         deliveryTextFieldsStack.distribution = .fillEqually
         let deliveryStack = UIStackView(arrangedSubviews: [deliveryTitleLabel, deliveryTextFieldsStack], spacing: 5, axis: .vertical, alignment: .fill)
         

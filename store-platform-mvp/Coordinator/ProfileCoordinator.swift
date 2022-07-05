@@ -40,6 +40,43 @@ class ProfileCoordinator: BaseCoordinator, Coordinator {
         self.navigationController.present(alert, animated: true)
     }
     
+    func showUserOrders() {
+        guard let module = factory?.buildUserOrdersModule(coordinator: self) else { fatalError() }
+        
+        self.navigationController.pushViewController(module, animated: true)
+    }
+    
+    func showDetailedProfile() {
+        guard let module = factory?.buildDetailedProfileModule(coordinator: self) else { fatalError() }
+        
+        self.navigationController.pushViewController(module, animated: true)
+    }
+    
+    func showSettings() {
+        guard let module = factory?.buildSettingsModule(coordinator: self) else { fatalError() }
+        
+        self.navigationController.pushViewController(module, animated: true)
+    }
+    
+    func showSubscriptions() {
+        guard let module = factory?.buildSubscriptionsModule(coordinator: self) else { fatalError() }
+        
+        self.navigationController.pushViewController(module, animated: true)
+    }
+    
+    func showDetailedOrder(order: Order) {
+        guard let module = factory?.buildDetailedOrderModule(coordinator: self, order: order) else { fatalError() }
+        
+        self.navigationController.presentAsBottomSheet(module)
+    }
+    
+    func hideDetailedOrder(brandId: String?) {
+        
+        self.navigationController.dismissBottomSheet {
+            self.showMessenger(conversationId: nil, brandId: brandId)
+        }
+    }
+    
     func updateTabPages() {
         tabDelegate?.updatePages()
     }
@@ -76,9 +113,10 @@ extension ProfileCoordinator: MessagesCoordinatorProtocol {
     }
     
     func showMessenger(conversationId: String?, brandId: String?) {
-        guard let module = factory?.buildMessengerModule(conversationId: conversationId, brandId: nil, coordinator: self) as? MessengerViewController else {
+        guard let module = factory?.buildMessengerModule(conversationId: conversationId, brandId: brandId, coordinator: self) as? MessengerViewController else {
             fatalError()
         }
+        
         self.imagePickerDelegate = module.presenter
         
         self.navigationController.pushViewController(module, animated: true)

@@ -8,6 +8,7 @@ protocol PickSizeViewProtocol: AnyObject {
 }
 
 class PickSizeViewController: UIViewController {
+    @objc var preferredHeightInBottomSheet: CGFloat { return 340 }
     var presenter: PickSizePresenterProtocol!
     var pickSizeView = PickSizeView()
     // MARK: - Lifecycle

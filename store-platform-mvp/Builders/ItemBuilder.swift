@@ -20,7 +20,7 @@ protocol ItemBuilderProtocol {
     func build() -> Item
 }
 
-// MARK: - ItemBuilder implementation
+// MARK: - ItemBuilder Implementation
 class ItemBuilder: ItemBuilderProtocol {
     var brandName: String?
     var clothingName: String?
@@ -29,6 +29,10 @@ class ItemBuilder: ItemBuilderProtocol {
     var color: String?
     var sizes: [Size] = []
 
+    deinit {
+        debugPrint("[Log] ItemBuilder deinit")
+    }
+    
     func setBrandName(_ name: String) {
         self.brandName = name
     }
@@ -49,10 +53,12 @@ class ItemBuilder: ItemBuilderProtocol {
         self.color = color
     }
     
+    // TODO: fix
     func addSize(_ size: Size) -> Size? {
         return addSize(size: size.size!, price: size.price!, amount: size.amount!)
     }
     
+    // TODO: Fix
     func addSize(size: String, price: Int, amount: Int) -> Size? {
         let contains = sizes.contains(where: {$0.size == size})
         if contains {
@@ -64,6 +70,7 @@ class ItemBuilder: ItemBuilderProtocol {
         }
     }
     
+    // TODO: Fix
     func editSize(item: Size) -> Size? {
         if let index = sizes.firstIndex(where: { $0.size == item.size }) {
             sizes.remove(at: index)
@@ -82,7 +89,7 @@ extension ItemBuilder {
               let description = description,
               let category = category,
               let color = color else {
-                  fatalError("\(ItemBuilderError.unwrapError)")
+                  fatalError("\(ItemBuilderError.emptyFieldsError)")
         }
 
         let item = Item(photos: nil,
@@ -96,10 +103,11 @@ extension ItemBuilder {
         return item
     }
     
+    // MARK: Errors enum
     enum ItemBuilderError: Error {
         case sizeExistError
         case indexNotFoundError
-        case unwrapError
+        case emptyFieldsError
         case emptyArraysError
     }
 }

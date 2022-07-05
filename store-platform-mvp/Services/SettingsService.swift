@@ -1,6 +1,6 @@
 import Foundation
 
-class SettingsService {
+final class SettingsService {
     static let sharedInstance = SettingsService()
     private init() {}
     
@@ -65,5 +65,21 @@ class SettingsService {
             
             UserDefaults.standard.set(value, forKey: "brandName")
         }
+    }
+}
+
+// MARK: - Helpers
+extension SettingsService {
+    public func saveUserData(userId: String, userFullName: [String: String]) {
+        self.isAuthorized = true
+        self.userId = userId
+        self.userFullName = userFullName
+    }
+    
+    public func resetUserData() {
+        self.userId = nil
+        self.isAuthorized = false
+        self.userFullName = nil
+        self.brandName = nil
     }
 }

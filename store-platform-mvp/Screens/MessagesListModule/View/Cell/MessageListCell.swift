@@ -11,7 +11,7 @@ class MessageListCell: UICollectionViewCell {
 
 extension MessageListCell {
     func configure(messageListItem: Conversation) {
-        self.recipientNameLabel.text = messageListItem.recipientName
+        self.recipientNameLabel.text = messageListItem.recipientName.capitalized
         self.lastMessageLabel.text = messageListItem.lastMessage
         
         configureTime(date: messageListItem.date)
@@ -55,6 +55,10 @@ extension MessageListCell {
         stack.snp.makeConstraints { make in
             make.top.equalTo(snp.top)
             make.left.equalTo(snp.left)
+        }
+        
+        lastMessageLabel.snp.makeConstraints { make in
+            make.width.equalTo(200)
         }
         
         addSubview(arrowImageView)

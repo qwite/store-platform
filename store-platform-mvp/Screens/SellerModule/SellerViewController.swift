@@ -38,7 +38,7 @@ class SellerViewController: UIViewController {
         super.viewDidLoad()
         presenter.viewDidLoad()
         
-        configureNavigationChatButton()
+        configureNavigationRightButtons()
         
         // TODO: fix
         self.navigationController?.navigationBar.topItem?.title = "Мои товары"
@@ -216,18 +216,25 @@ extension SellerViewController: AddItemButtonViewDelegate {
 
 // MARK: UINavigationBar Button
 extension SellerViewController {
-    func configureNavigationChatButton() {
+    func configureNavigationRightButtons() {
         let messengerImage = UIImage(named: "messenger_seller")?.withTintColor(.black, renderingMode: .alwaysOriginal)
         let messengerItem = UIBarButtonItem(image: messengerImage,
                                             style: .plain,
                                             target: self,
                                             action: #selector(messengerItemAction))
         
-        self.navigationItem.rightBarButtonItem = messengerItem
+        let ordersImage = UIImage(systemName: "doc.plaintext")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+        let ordersItem = UIBarButtonItem(image: ordersImage, style: .plain, target: self, action: #selector(ordersItemAction))
+        
+        self.navigationItem.rightBarButtonItems = [ordersItem, messengerItem]
     }
     
     @objc func messengerItemAction() {
         presenter.showMessagesList()
+    }
+    
+    @objc func ordersItemAction() {
+        presenter.showOrders()
     }
 }
 

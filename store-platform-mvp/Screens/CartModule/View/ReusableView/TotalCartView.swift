@@ -6,6 +6,7 @@ protocol TotalCartViewDelegate: AnyObject {
 
 class TotalCartView: UICollectionReusableView {
     static let reuseId = "TotalCart"
+    weak var delegate: CartViewDelegate?
     let separator = UIView()
     let totalPriceDescriptionLabel = UILabel(text: nil, font: nil, textColor: .black)
     let totalPriceLabel = UILabel(text: nil, font: nil, textColor: .black)
@@ -13,6 +14,7 @@ class TotalCartView: UICollectionReusableView {
     
     func configure() {
         configureViews()
+        configureButtons()
     }
 }
 
@@ -51,6 +53,14 @@ extension TotalCartView {
             make.height.equalTo(34)
             make.centerX.equalTo(snp.centerX)
         }
+    }
+    
+    private func configureButtons() {
+        totalButton.addTarget(self, action: #selector(totalButtonAction), for: .touchUpInside)
+    }
+    
+    @objc func totalButtonAction() {
+        delegate?.didTappedTotalButton()
     }
 }
 

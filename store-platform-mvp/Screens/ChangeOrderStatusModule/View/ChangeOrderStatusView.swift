@@ -1,8 +1,34 @@
-//
-//  ChangeOrderStatusView.swift
-//  store-platform-mvp
-//
-//  Created by Artem Lashmanov on 18.06.2022.
-//
+import UIKit
 
-import Foundation
+class ChangeOrderStatusView: UIView {
+    let statusTitleLabel = UILabel(text: "Статус", font: .systemFont(ofSize: 18, weight: .semibold), textColor: .black)
+    let pickerView = UIPickerView()
+    let button = UIButton(text: "Изменить статус", preset: .bottom)
+}
+
+extension ChangeOrderStatusView {
+    func configureViews() {
+        backgroundColor = .white
+        
+        addSubview(statusTitleLabel)
+        statusTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(40)
+            make.centerX.equalTo(snp.centerX)
+        }
+        
+        addSubview(pickerView)
+        pickerView.snp.makeConstraints { make in
+            make.top.equalTo(statusTitleLabel.snp.bottom)
+            make.left.equalTo(snp.left).offset(20)
+            make.right.equalTo(snp.right).offset(-20)
+        }
+        
+        addSubview(button)
+        button.snp.makeConstraints { make in
+            make.top.equalTo(pickerView.snp.bottom)
+            make.centerX.equalTo(snp.centerX)
+            make.height.equalTo(34)
+            make.width.equalTo(snp.width).dividedBy(2)
+        }
+    }
+}

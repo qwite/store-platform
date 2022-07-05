@@ -30,6 +30,15 @@ class GuestCoordinator: Coordinator {
         self.navigationController.present(module, animated: true)
     }
     
+    func finishFlow() {
+        self.navigationController.dismiss(animated: true) { [weak self] in
+            self?.delegate?.updatePages()
+            self?.finish?()
+        }
+        
+//        self.navigationController.popViewController(animated: false)
+    }
+    
     func hideLoginModal() {
         self.navigationController.dismiss(animated: true) {
             self.delegate?.updatePages()

@@ -1,4 +1,5 @@
 import UIKit
+import LBBottomSheet
 
 class SellerCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
@@ -56,6 +57,23 @@ class SellerCoordinator: BaseCoordinator, Coordinator {
         createAdCoordinator.finishFlow = { [weak self] in
             self?.removeDependency(createAdCoordinator)
         }
+    }
+    
+    public func showSellerOrders() {
+        guard let module = factory?.buildSellerOrdersModule(coordinator: self) else { return }
+        
+        self.navigationController.pushViewController(module, animated: true)
+    }
+    
+    public func changeOrderStatus(order: Order) {
+        guard let module = factory?.buildChangeOrderStatusModule(coordinator: self, order: order) else { return }
+        let behavior: BottomSheetController.Behavior = .init(swipeMode: .top)
+        
+        self.navigationController.presentAsBottomSheet(module, behavior: behavior)
+    }
+    
+    public func hideOrderStatus() {
+        self.navigationController.dismissBottomSheet()
     }
 }
 

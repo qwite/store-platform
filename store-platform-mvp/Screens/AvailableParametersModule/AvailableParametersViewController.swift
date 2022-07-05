@@ -60,6 +60,21 @@ extension AvailableParametersViewController: AvailableParametersView {
             make.right.equalTo(view.snp.right)
             make.bottom.equalTo(view.snp.bottom)
         }
+        
+        let clearButton = UIButton(text: "Очистить", preset: .clearButton)
+        view.addSubview(clearButton)
+        clearButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.right.equalTo(view.snp.right).offset(-20)
+            make.width.equalTo(80)
+            make.height.equalTo(20)
+        }
+    }
+    
+    func clearSelectedItems() {
+        guard let snapshot = dataSource?.snapshot() else { return }
+        let items = snapshot.itemIdentifiers
+        dataSource?.apply(snapshot)
     }
     
     func updateDataSource(items: [Parameter]) {

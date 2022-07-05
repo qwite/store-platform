@@ -24,8 +24,8 @@ class SellerChartCell: UICollectionViewCell {
     
     func createSalesLineChart(data: [MultiPlotable]) {
         let keys = [Key(key: "Выручка", color: .blue)]
-        let chartData = FLChartData(title: "Продажи за месяц", data: data, legendKeys: keys, unitOfMeasure: "")
-        let chart = FLChart(data: chartData, type: .line(config: FLLineConfig()))
+        let chartData = FLChartData(title: "Продажи за месяц", data: data, legendKeys: keys, unitOfMeasure: "₽")
+        let chart = FLChart(data: chartData, type: .line(config: FLLineConfig(showCircles: true)))
         
         setupCardView(chart: chart, showAverage: false)
     }

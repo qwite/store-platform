@@ -23,7 +23,7 @@ protocol BrandBuilderProtocol {
 
 final class BrandBuilderImpl: BrandBuilderProtocol {
     deinit {
-        debugPrint("brand builder deinit")
+        debugPrint("[Log] BrandBuilder deinit")
     }
     
     var brandName: String?
@@ -73,7 +73,7 @@ extension BrandBuilderImpl {
               let firstName = firstName,
               let lastName = lastName,
               let patronymic = patronymic else {
-            fatalError("\(BrandBuilderErrors.unwrapError)")
+            fatalError("\(BrandBuilderErrors.emptyFieldsError)")
         }
         
         let deliveryInfo = Delivery(city: city, firstName: firstName, lastName: lastName, patronymic: patronymic)
@@ -82,6 +82,6 @@ extension BrandBuilderImpl {
     }
     
     enum BrandBuilderErrors: Error {
-        case unwrapError
+        case emptyFieldsError
     }
 }

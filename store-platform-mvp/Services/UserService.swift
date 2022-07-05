@@ -4,7 +4,6 @@ protocol UserServiceProtocol: AnyObject {
     func logout(completion: @escaping (Error?) -> ())
 
     func addItemToCart(item: CartItem, completion: @escaping (Result<CartItem, Error>) -> ())
-    func getUserFullName(completion: @escaping (Result<[String: String], Error>) -> ())
     func getItemsFromCart(completion: @escaping (Result<[CartItem], Error>) -> ())
     func addFavoriteItem(item: Item, completion: @escaping (Result<Item, Error>) -> ())
     func removeFavoriteItem(item: Item, completion: @escaping (Result<Item, Error>) -> ())
@@ -27,33 +26,11 @@ class UserService: UserServiceProtocol {
     }
     
     func logout(completion: @escaping (Error?) -> ()) {
-        AuthService.sharedInstance.logout { result in
-            switch result {
-            case .success(_):
-                SettingsService.sharedInstance.userId = nil
-                SettingsService.sharedInstance.isAuthorized = false
-                SettingsService.sharedInstance.userFullName = nil
-                SettingsService.sharedInstance.brandName = nil
-                completion(nil)
-            case .failure(let error):
-                completion(error)
-            }
-        }
-    }
-    
-    func getUserFullName(completion: @escaping (Result<[String: String], Error>) -> ()) {
-        guard let userId = SettingsService.sharedInstance.userId else {
-            return completion(.failure(UserServiceError.inputDataError))
+        AuthService.sharedInstance.logout { error in
+            guard error == nil else { completion(error); return }
         }
         
-        FirestoreService.sharedInstance.getUserFullName(userId: userId) { result in
-            switch result {
-            case .success(let dictionary):
-                completion(.success(dictionary))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+        SettingsService.sharedInstance.resetUserData()
     }
     
     func getBrandId(completion: @escaping (Result<String, Error>) -> ()) {
@@ -107,13 +84,11 @@ class UserService: UserServiceProtocol {
             return completion(.failure(UserServiceError.inputDataError))
         }
         
-        FirestoreService.sharedInstance.addFavoriteItem(userId: userId, itemId: itemId) { result in
-            switch result {
-            case .success(_):
-                completion(.success(item))
-            case .failure(let error):
-                completion(.failure(error))
-            }
+        FirestoreService.sharedInstance.addFavoriteItem(userId: userId, itemId: itemId) { error in
+            guard error == nil else { completion(.failure(error!)); return }
+            let logMessage = "[Log] Added to favorites"
+            debugPrint(logMessage)
+            completion(.success(item))
         }
     }
     
@@ -303,14 +278,12 @@ class UserService: UserServiceProtocol {
                 FirestoreService.sharedInstance.createAd(item: item) { result in
                     switch result {
                     case .success(let itemId):
-                        FirestoreService.sharedInstance.addItemToBrand(brandId: brandId, itemId: itemId) { result in
-                            switch result {
-                            case .success(let message):
-                                completion(.success(message))
-                            case .failure(let error):
-                                completion(.failure(error))
-                            }
+                        FirestoreService.sharedInstance.putItemIdInBrand(brandId: brandId, itemId: itemId) { error in
+                            guard error == nil else { completion(.failure(error!)); return }
+                            
+                            completion(.success("added"))
                         }
+                        
                     case .failure(let error):
                         completion(.failure(error))
                     }

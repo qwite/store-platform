@@ -1,9 +1,13 @@
 import UIKit
 
+// MARK: - FeedView
 class FeedView: UIView {
+    
+    // MARK: Properties
     lazy var sortButton = UIButton(text: "Сортировать", preset: .bottom)
 }
 
+// MARK: - Layout setup
 extension FeedView {
     enum Section: Int, CaseIterable {
         case ads

@@ -5,14 +5,16 @@ import SPAlert
 protocol DetailedAdViewProtocol: AnyObject {
     func configure(with item: Item)
     func showSizePicker()
-    func showSuccessAlert()
+    func showSuccessAlert(message: String)
     func showChat()
+    func configureReviews(reviews: [Review]?)
 }
 
 // MARK: - DetailedAdViewController
 class DetailedAdViewController: UIViewController {
     var presenter: DetailedAdPresenter!
     var detailedAdView = DetailedAdView()
+    
     // MARK: - Lifecycle
     
     override func loadView() {
@@ -32,26 +34,30 @@ class DetailedAdViewController: UIViewController {
     }
 }
 
+// MARK: - DetailedAdViewProtocol Implementation
 extension DetailedAdViewController: DetailedAdViewProtocol {
     func configure(with item: Item) {
         detailedAdView.configure(with: item)
-        detailedAdView.configureViews()
-        detailedAdView.configureButtons()
     }
     
     func showSizePicker() {
         presenter.showSizePicker()
     }
     
-    func showSuccessAlert() {
-        SPAlert.present(title: "Успешно", message: "Товар был добавлен в корзину", preset: .done)
+    func showSuccessAlert(message: String) {
+        SPAlert.present(title: "", message: message, preset: .done)
     }
     
     func showChat() {
         presenter.createConversation()
     }
+    
+    func configureReviews(reviews: [Review]?) {
+        detailedAdView.createReviewStack(reviews: reviews)
+    }
 }
 
+// MARK: - UIScrollViewDelegate
 extension DetailedAdViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         
@@ -60,6 +66,7 @@ extension DetailedAdViewController: UIScrollViewDelegate {
     }
 }
 
+// MARK: - DetailedAdViewDelegate
 extension DetailedAdViewController: DetailedAdViewDelegate {
     func didTappedCommunicationButton() {
         showChat()
@@ -71,5 +78,9 @@ extension DetailedAdViewController: DetailedAdViewDelegate {
     
     func didTappedAddCartButton() {
         showSizePicker()
+    }
+    
+    func didTappedSubscriptionButton() {
+        presenter.addToSubscriptions()
     }
 }

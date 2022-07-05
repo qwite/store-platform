@@ -1,13 +1,13 @@
 import UIKit
 import LBBottomSheet
 
-class FeedCoordinator: NSObject, Coordinator {
+class FeedCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
     var factory: Factory?
-    var childCoordinator = [Coordinator]()
     var completionHandler: ((CartItem) -> ())?
     var parent: FeedViewController?
-    
+    weak var imagePickerDelegate: ImagePickerPresenterDelegate?
+
     var sortingPresenter: SortingFeedPresenterProtocol?
     var sortingNavigation: UINavigationController?
     
@@ -16,13 +16,16 @@ class FeedCoordinator: NSObject, Coordinator {
         factory = DependencyFactory()
     }
     
+    deinit {
+    }
+    
     var finish: (() -> ())?
     
     func start() {
-        self.showFeed(with: nil)
+        self.showFeed()
     }
     
-    func showFeed(with items: [Item]?) {
+    func showFeed(with items: [Item]? = nil) {
         guard let module = factory?.buildFeedModule(coordinator: self, with: items) as? FeedViewController else {
             return
         }
@@ -53,11 +56,7 @@ class FeedCoordinator: NSObject, Coordinator {
     }
     
     func hideSortingFeed() {
-        guard let sortingNavigation = sortingNavigation else {
-            fatalError()
-        }
-        
-        sortingNavigation.dismiss(animated: true)
+        self.navigationController.dismissBottomSheet()
     }
     
     func showColorParameters() {
@@ -104,14 +103,15 @@ extension FeedCoordinator: PickSizeCoordinatorProtocol {
             return
         }
         
-        self.navigationController.present(module, animated: true)
+        let behavior: BottomSheetController.Behavior = .init(swipeMode: .top)
+        self.navigationController.presentAsBottomSheet(module, behavior: behavior)
     }
     
     func hideSizePicker(with item: CartItem) {
-        self.navigationController.dismiss(animated: true) {
+        self.navigationController.dismissBottomSheet {
             self.completionHandler?(item)
+            self.navigationController.popViewController(animated: true)
         }
-        self.navigationController.popViewController(animated: true)
     }
 }
 
@@ -121,15 +121,27 @@ extension FeedCoordinator: MessagesCoordinatorProtocol {
     }
     
     func showMessenger(conversationId: String?, brandId: String?) {
-        guard let module = factory?.buildMessengerModule(conversationId: nil, brandId: brandId, coordinator: self) else {
+        guard let module = factory?.buildMessengerModule(conversationId: nil, brandId: brandId, coordinator: self) as? MessengerViewController  else {
             fatalError()
         }
+        
+        self.imagePickerDelegate = module.presenter
+
         
         self.navigationController.pushViewController(module, animated: true)
     }
     
     func showImagePicker() {
+        // FIXME: remove from arc
+        let imagePickerCoordinator = ImagePickerCoordinator(self.navigationController)
+        imagePickerCoordinator.delegate = self.imagePickerDelegate
         
+        imagePickerCoordinator.finish = {
+            self.removeDependency(imagePickerCoordinator)
+            self.imagePickerDelegate = nil
+        }
+        addDependency(imagePickerCoordinator)
+        imagePickerCoordinator.start()
     }
     
     func showImageDetail(image: Data) {

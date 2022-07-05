@@ -3,7 +3,7 @@ import Kingfisher
 import UIKit
 
 // MARK: - Singleton Storage Service
-class StorageService {
+final class StorageService {
     static let sharedInstance = StorageService()
     private init() {}
     
@@ -122,6 +122,7 @@ extension StorageService {
     }
 }
 
+// MARK: - StoragePathType
 extension StorageService {
     public enum StoragePathType: String {
         case brandLogo = "brands_images"

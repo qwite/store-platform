@@ -1,69 +1,57 @@
 import UIKit
+import Cosmos
 
+// MARK: - DetailedAdViewDelegate
 protocol DetailedAdViewDelegate: AnyObject {
     func didTappedSelectSizeButton()
     func didTappedAddCartButton()
     func didTappedCommunicationButton()
+    func didTappedSubscriptionButton()
 }
 
+// MARK: - DetailedAdView
 class DetailedAdView: UIView {
     weak var delegate: DetailedAdViewDelegate?
+    
+    // MARK: Properties
     var itemdId: String?
-    let brandLabel = UILabel(text: "",
-                             font: .systemFont(ofSize: 18, weight: .semibold),
-                             textColor: .black)
     
-    let itemLabel = UILabel(text: "",
-                            font: .systemFont(ofSize: 15, weight: .regular),
-                            textColor: .black)
-    let priceLabel = UILabel(text: "",
-                             font: .systemFont(ofSize: 15, weight: .regular),
-                             textColor: .black)
+    let brandLabel = UILabel()
+    let itemLabel = UILabel()
+    let priceLabel = UILabel()
+    let ratingLabel = UILabel()
+    let quantityReview = UILabel()
+    let sizeHeaderLabel = UILabel()
+    let descriptionHeaderLabel = UILabel()
+    let descriptionLabel = UILabel()
     
-    let starIcon = UIImageView(image: UIImage(systemName: "star.fill")?
-                                .withTintColor(.black, renderingMode: .alwaysOriginal))
-    
-    let ratingLabel = UILabel(text: "0.0",
-                              font: .systemFont(ofSize: 14, weight: .regular),
-                              textColor: .black)
-    
-    let quantityReview = UILabel(text: "Отзывы: нет",
-                                 font: .systemFont(ofSize: 14, weight: .regular),
-                                 textColor: .black)
-    
-    let sizeHeaderLabel = UILabel(text: "Выберите размер: ",
-                                  font: .systemFont(ofSize: 18, weight: .medium),
-                                  textColor: .black)
-    
-    let selectSizeButton = UIButton(text: "Выберите размер", preset: .select, with: true)
+    let selectSizeButton = UIButton(text: "Выберите размер", preset: .select, symbol: true)
+    let reviewsButton = UIButton(text: "Отзывы", preset: .select)
     let communicationButton = UIButton(text: "Связаться с продавцом", preset: .select)
-    let descriptionHeaderLabel = UILabel(text: "Описание",
-                                         font: .systemFont(ofSize: 18, weight: .medium),
-                                         textColor: .black)
-    
-    let descriptionLabel = UILabel(text: "",
-                                   font: UIFont.systemFont(ofSize: 14, weight: .regular),
-                                   textColor: .black)
-    
+    let subscriptionButton = UIButton(text: "Добавить в подписки", preset: .select)
+    let addCartButton = UIButton(text: "Добавить в корзину", preset: .bottom)
+
     let photoScrollView = UIScrollView()
     let pageControl = UIPageControl()
     let photoSize: CGSize = CGSize(width: UIScreen.main.bounds.width, height: 350)
     let scrollView = UIScrollView(frame: .zero)
-    let addCartButton = UIButton(text: "Добавить в корзину", preset: .bottom)
+    let reviewStack = UIStackView()
 }
 
+// MARK: - Public methods
 extension DetailedAdView {
     func configure(with item: Item) {
         guard let photos = item.photos,
               let sizes = item.sizes,
               let firstPrice = sizes.first?.price else {
-            fatalError("error with item object")
+            fatalError("error with item")
         }
         
         brandLabel.text = item.brandName.capitalized
         itemLabel.text = item.clothingName
         descriptionLabel.text = item.description
         priceLabel.text = "\(firstPrice) ₽"
+        
         StorageService.sharedInstance.getImagesFromUrls(images: photos, size: photoSize) { [weak self] result in
             switch result {
             case .success(let imageView):
@@ -76,9 +64,34 @@ extension DetailedAdView {
         photoScrollView.contentSize = CGSize(width: CGFloat(photos.count) * UIScreen.main.bounds.width,
                                              height: photoSize.height)
         pageControl.numberOfPages = photos.count
+        
+        configureViews()
+        configureButtons()
     }
     
-    func configureViews() {
+    public func createReviewStack(reviews: [Review]?) {
+        guard let reviews = reviews else {
+            reviewStack.removeFromSuperview(); return
+        }
+
+        for review in reviews {
+            let userLabel = UILabel(text: review.userFirstName, font: .systemFont(ofSize: 15, weight: .semibold), textColor: .black)
+            
+            let cosmosView = configureStars(rating: review.rating)
+            let userReviewLabel = UILabel(text: review.text, font: .systemFont(ofSize: 15, weight: .regular), textColor: .black)
+            userReviewLabel.numberOfLines = 0
+            let userReviewStack = UIStackView(arrangedSubviews: [userLabel, cosmosView, userReviewLabel], spacing: 5, axis: .vertical, alignment: .leading)
+            
+            reviewStack.addArrangedSubview(userReviewStack)
+        }
+    }
+}
+
+// MARK: - Private methods
+extension DetailedAdView {
+    private func configureViews() {
+        configureLabels()
+        
         backgroundColor = .white
         descriptionLabel.numberOfLines = 0
         descriptionLabel.lineBreakMode = .byWordWrapping
@@ -86,19 +99,22 @@ extension DetailedAdView {
         pageControl.currentPageIndicatorTintColor = .black
         pageControl.pageIndicatorTintColor = .gray
 
-        
+        reviewStack.addArrangedSubview(reviewsButton)
+        reviewStack.spacing = 15
+        reviewStack.axis = .vertical
+        reviewStack.alignment = .fill
+
         let itemStack = UIStackView(arrangedSubviews: [pageControl, brandLabel, itemLabel, priceLabel], spacing: 3, axis: .vertical, alignment: .center)
         
         let descriptionStack = UIStackView(arrangedSubviews: [descriptionHeaderLabel, descriptionLabel], spacing: 15, axis: .vertical, alignment: .fill)
         
         addSubview(scrollView)
                 
-        let contentStack = UIStackView(arrangedSubviews: [itemStack, selectSizeButton, descriptionStack, communicationButton],
-                                       spacing: 20,
+        let contentStack = UIStackView(arrangedSubviews: [itemStack, selectSizeButton, descriptionStack, reviewStack, communicationButton, subscriptionButton],
+                                       spacing: 10,
                                        axis: .vertical,
                                        alignment: .fill)
         
-
         scrollView.addSubview(photoScrollView)
 
         photoScrollView.isPagingEnabled = true
@@ -132,21 +148,59 @@ extension DetailedAdView {
         }
     }
     
-    func configureButtons() {
+    private func configureLabels() {
+        brandLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+        itemLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        priceLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        ratingLabel.font = .systemFont(ofSize: 14, weight: .regular)
+        quantityReview.font = .systemFont(ofSize: 14, weight: .regular)
+        sizeHeaderLabel.font = .systemFont(ofSize: 18, weight: .medium)
+        descriptionHeaderLabel.font = .systemFont(ofSize: 18, weight: .medium)
+        descriptionLabel.font = .systemFont(ofSize: 14, weight: .regular)
+        
+        descriptionHeaderLabel.text = "Описание"
+    }
+        
+    private func configureStars( rating: Double) -> CosmosView {
+        let cosmosView = CosmosView()
+        cosmosView.settings.fillMode = .full
+        cosmosView.settings.updateOnTouch = false
+        cosmosView.settings.starSize = 20.0
+        cosmosView.settings.starMargin = 5
+        cosmosView.settings.filledColor = .black
+        cosmosView.settings.filledBorderColor = .black
+        cosmosView.settings.emptyColor = .gray
+        cosmosView.settings.emptyBorderColor = .gray
+        cosmosView.rating = rating
+        
+        return cosmosView
+    }
+        
+    private func configureButtons() {
         addCartButton.addTarget(self, action: #selector(addCartButtonAction), for: .touchUpInside)
         selectSizeButton.addTarget(self, action: #selector(selectSizeButtonAction), for: .touchUpInside)
         communicationButton.addTarget(self, action: #selector(communicationButtonAction), for: .touchUpInside)
+        subscriptionButton.addTarget(self, action: #selector(subscriptionButtonAction), for: .touchUpInside)
     }
     
-    @objc func addCartButtonAction() {
+    private func configureImageView(with urls: [String]) {
+        
+    }
+    
+    // MARK: Actions
+    @objc private func addCartButtonAction() {
         delegate?.didTappedAddCartButton()
     }
     
-    @objc func selectSizeButtonAction() {
+    @objc private func selectSizeButtonAction() {
         delegate?.didTappedSelectSizeButton()
     }
     
-    @objc func communicationButtonAction() {
+    @objc private func communicationButtonAction() {
         delegate?.didTappedCommunicationButton()
+    }
+    
+    @objc private func subscriptionButtonAction() {
+        delegate?.didTappedSubscriptionButton()
     }
 }

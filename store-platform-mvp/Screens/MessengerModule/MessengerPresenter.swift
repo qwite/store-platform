@@ -50,6 +50,7 @@ class MessengerPresenter: MessengerPresenterProtocol {
         self.coordinator = coordinator
         
         if let brandId = brandId {
+            print("\(brandId) setted")
             setBrandOptions(brandId: brandId)
         }
     }

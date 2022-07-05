@@ -4,28 +4,30 @@ import FirebaseAuth
 enum AuthServiceError: Error {
     case signInError
     case createAccountError
-    case unwrapError
+    case logoutError
+    case emptyFieldsError
 }
 
 protocol AuthServiceProtocol {
-    func login(email: String?, password: String?, completion: @escaping (Result<User, Error>) -> ())
-    func register(email: String?, password: String?, completion: @escaping (Result<User, Error>) -> ())
+    func login(email: String?, password: String?, completion: @escaping (Result<User, AuthServiceError>) -> ())
+    func register(email: String?, password: String?, completion: @escaping (Result<User, AuthServiceError>) -> ())
+    func logout(completion: @escaping (AuthServiceError?) -> ())
 }
 
-class AuthService: AuthServiceProtocol {
+final class AuthService: AuthServiceProtocol {
     static let sharedInstance = AuthService()
     private init() {}
     let auth = Auth.auth()
     
-    func login(email: String?, password: String?, completion: @escaping (Result<User, Error>) -> ()) {
+    func login(email: String?, password: String?, completion: @escaping (Result<User, AuthServiceError>) -> ()) {
         guard let email = email,
               let password = password else {
-                  return completion(.failure(AuthServiceError.unwrapError))
-              }
+            completion(.failure(AuthServiceError.emptyFieldsError)); return
+        }
 
         auth.signIn(withEmail: email, password: password) { result, error in
             guard let result = result else {
-                return completion(.failure(AuthServiceError.signInError))
+                completion(.failure(AuthServiceError.signInError)); return
             }
             
             let user = result.user
@@ -33,10 +35,10 @@ class AuthService: AuthServiceProtocol {
         }
     }
     
-    func register(email: String?, password: String?, completion: @escaping (Result<User, Error>) -> ()) {
+    func register(email: String?, password: String?, completion: @escaping (Result<User, AuthServiceError>) -> ()) {
         guard let email = email,
               let password = password else {
-                  return completion(.failure(AuthServiceError.unwrapError))
+            completion(.failure(AuthServiceError.emptyFieldsError)); return
         }
 
         auth.createUser(withEmail: email, password: password) { result, error in
@@ -49,13 +51,12 @@ class AuthService: AuthServiceProtocol {
         }
     }
     
-    func logout(completion: @escaping (Result<String, Error>) -> ()) {
+    func logout(completion: @escaping (AuthServiceError?) -> ()) {
         do {
             try auth.signOut()
-            completion(.success("signout success"))
+            completion(nil)
         } catch {
-            completion(.failure(error))
+            completion(.logoutError)
         }
     }
-    
 }

@@ -9,6 +9,7 @@ extension UIButton {
         case bottom
         case radioButton
         case filterButton
+        case orderButton
         case clearButton
         case icon
     }
@@ -17,7 +18,7 @@ extension UIButton {
                      preset: Preset?,
                      font: UIFont? = nil,
                      iconName: String? = nil,
-                     selectedIconName: String? = nil, with symbol: Bool? = false) {
+                     selectedIconName: String? = nil, symbol: Bool? = false) {
         self.init()
         
         switch preset {
@@ -150,6 +151,22 @@ extension UIButton {
             
             let filterButtonAttributesText = NSAttributedString(string: text!, attributes: filterButtonAttributes)
             self.setAttributedTitle(filterButtonAttributesText, for: .normal)
+        case .orderButton:
+            let orderAttributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: UIColor.black,
+                .font: UIFont.systemFont(ofSize: 10, weight: .semibold)
+            ]
+            
+            let orderAttributedText = NSAttributedString(string: text!, attributes: orderAttributes)
+            self.setAttributedTitle(orderAttributedText, for: .normal)
+            
+            self.snp.makeConstraints { make in
+                make.height.equalTo(20)
+            }
+            
+            self.layer.cornerRadius = 10
+            self.layer.borderWidth = 1.0
+            
         case .none:
             
             let defaultAttributes: [NSAttributedString.Key: Any] = [
