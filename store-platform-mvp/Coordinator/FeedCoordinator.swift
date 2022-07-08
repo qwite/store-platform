@@ -26,27 +26,26 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     }
     
     func showFeed(with items: [Item]? = nil) {
-        guard let module = factory?.buildFeedModule(coordinator: self, with: items) as? FeedViewController else {
-            return
-        }
+        let service = FeedService()
+        let userService = UserService()
+        guard let module = FeedAssembler.buildFeedModule(coordinator: self, service: service, userService: userService, items: items) as? FeedViewController else { fatalError() }
         
         self.parent = module
         self.navigationController.pushViewController(module, animated: true)
     }
     
+    // TODO: fix
     func showSearchFeed() -> UIViewController? {
-        guard let module = factory?.buildFeedModule(coordinator: self, with: nil) as? FeedViewController else {
-            return nil
-        }
+        let service = FeedService()
+        let userService = UserService()
+        guard let module = FeedAssembler.buildFeedModule(coordinator: self, service: service, userService: userService, items: nil) as? FeedViewController else { fatalError() }
         
         return module
     }
     
     func showSortingFeed() {
-        guard let parent = self.parent,
-              let module = factory?.buildFeedSortingModule(delegate: parent.presenter, coordinator: self) as? SortingFeedViewController else {
-            return
-        }
+        let service = FeedService()
+        guard let parent = self.parent, let module = SortingAssembler.buildSortingModule(coordinator: self, service: service, delegate: parent.presenter) as? SortingFeedViewController else { return }
         
         self.sortingPresenter = module.presenter
         let navigation = UINavigationController(rootViewController: module)
@@ -88,9 +87,8 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     }
     
     func showSearchScreen() {
-        guard let module = factory?.buildSearchModule(coordinator: self) else {
-            return
-        }
+        let service = FeedService()
+        let module = SearchAssembler.buildSearchModule(coordinator: self, service: service)
         
         self.navigationController.pushViewController(module, animated: true)
     }

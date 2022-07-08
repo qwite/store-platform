@@ -132,6 +132,7 @@ extension FirestoreService {
 // MARK: - Item/Ads Public methods
 extension FirestoreService {
     
+    /// done
     /// Creating ad with item. Returns documentId
     func createAd(item: Item, completion: @escaping (Result<String, Error>) -> ()) {
         let documentItemId = try? itemsReference.addDocument(from: item, completion: { error in
@@ -145,75 +146,6 @@ extension FirestoreService {
         }
         
         completion(.success(documentItemId))
-    }
-    
-    /// Fetching all items. Optional sorting. Returns [Item]
-    func fetchAllItems(by sort: Item.Sorting? = nil, completion: @escaping (Result<[Item], Error>) -> ()) {
-        itemsReference.getDocuments { snapshot, error in
-            guard let snapshot = snapshot,
-                  !snapshot.isEmpty else {
-                completion(.failure(error!)); return
-            }
-            
-            let documents = snapshot.documents
-            let resultItems = documents.compactMap { querySnapshot in
-                return try? querySnapshot.data(as: Item.self)
-            }
-            
-            guard let sortingOption = sort else {
-                completion(.success(resultItems)); return
-            }
-            
-            // Sorting items
-            let resultSortedItems: [Item] = resultItems.sorted { firstItem, secondItem in
-                guard let firstPrice = firstItem.sizes?.first?.price,
-                      let secondPrice = secondItem.sizes?.first?.price else {
-                    return false
-                }
-                
-                switch sortingOption {
-                case .byIncreasePrice:
-                    return secondPrice > firstPrice
-                case .byDecreasePrice:
-                    return secondPrice < firstPrice
-                }
-            }
-            
-            completion(.success(resultSortedItems))
-        }
-    }
-    
-    /// Fetching items by clothing category. Returns [Item]
-    func fetchItemsByCategory(category: String, completion: @escaping (Result<[Item], Error>) -> ()) {
-        itemsReference.whereField("category", isEqualTo: category).getDocuments { querySnapshot, error in
-            guard let snapshot = querySnapshot, !snapshot.isEmpty else {
-                completion(.failure(FirestoreServiceError.documentNotFound)); return
-            }
-            
-            let documents: [Item] = snapshot.documents.compactMap { snap in
-                guard let item = try? snap.data(as: Item.self) else { return nil }
-                return item
-            }
-            
-            completion(.success(documents))
-        }
-    }
-    
-    /// Fetching items by brand name. Returns [Item]
-    func fetchItemsByBrandName(brand: String, completion: @escaping (Result<[Item], Error>) -> ()) {
-        let brandLowerCased = brand.lowercased()
-        itemsReference.whereField("brand_name", isEqualTo: brandLowerCased).getDocuments { querySnapshot, error in
-            guard let snapshot = querySnapshot, !snapshot.isEmpty else {
-                completion(.failure(FirestoreServiceError.documentNotFound)); return
-            }
-            
-            let documents: [Item] = snapshot.documents.compactMap { snap in
-                guard let item = try? snap.data(as: Item.self) else { return nil }
-                return item
-            }
-            
-            completion(.success(documents))
-        }
     }
     
     // TODO: refactor
@@ -296,6 +228,7 @@ extension FirestoreService {
         }
     }
     
+    /// done
     func getPopularItems(completion: @escaping (Result<[Int: [String: Any]], Error>) -> ()) {
         itemsReference.getDocuments { querySnapshot, error in
             guard let snapshot = querySnapshot,
@@ -919,14 +852,12 @@ extension FirestoreService {
                         }
                         
                         let itemsInBrand = snapshot.documents.compactMap({ try? $0.data(as: Item.self) })
-//                        print(itemsInBrand)
                         items.append(contentsOf: itemsInBrand)
                         subscriptionsCount -= 1
                     }
                 }
                 
                 group.notify(queue: .main) {
-                    print(items.count)
                     completion(.success(items))
                     return
                 }

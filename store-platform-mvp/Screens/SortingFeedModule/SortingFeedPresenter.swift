@@ -1,13 +1,15 @@
 import Foundation
 
+// MARK: - SortingFeedPresenterDelegate
 protocol SortingFeedPresenterDelegate: AnyObject {
     func insertPopularItems(items: [Item])
     func insertSortedItems(items: [Item])
     func resetSettings()
 }
 
+// MARK: - SortingFeedPresenterProtocol
 protocol SortingFeedPresenterProtocol: AvailableParameterPresenterDelegate {
-    init(view: SortingFeedViewProtocol, coordinator: FeedCoordinator)
+    init(view: SortingFeedViewProtocol, coordinator: FeedCoordinator, service: FeedServiceProtocol)
     func viewDidLoad()
     var delegate: SortingFeedPresenterDelegate? { get set }
     
@@ -25,11 +27,13 @@ protocol SortingFeedPresenterProtocol: AvailableParameterPresenterDelegate {
     func closeSortingWindow()
 }
 
+// MARK: SortingFeedPresenter Implementation
 class SortingFeedPresenter: SortingFeedPresenterProtocol {
     
     var view: SortingFeedViewProtocol?
     weak var delegate: SortingFeedPresenterDelegate?
     weak var coordinator: FeedCoordinator?
+    var service: FeedServiceProtocol?
     
     var selectedType: RadioButton.RadioButtonType?
     var selectedColors: [String]? {
@@ -44,16 +48,15 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
         didSet { self.view?.updatePrice(price: selectedPrice!) }
     }
     
-    required init(view: SortingFeedViewProtocol, coordinator: FeedCoordinator) {
+    required init(view: SortingFeedViewProtocol, coordinator: FeedCoordinator, service: FeedServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
+        self.service = service
     }
     
     func viewDidLoad() {
         view?.configureViews()
         view?.configureButtons()
-//        getPopularItems()
-        
     }
     
     func buttonWasPressed(with type: RadioButton.RadioButtonType) {
@@ -166,7 +169,7 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
     }
     
     func getItemsByPrice(sorting: Item.Sorting) {
-        FirestoreService.sharedInstance.fetchAllItems(by: sorting) { [weak self] result in
+        service?.fetchAllItems(by: sorting) { [weak self] result in
             switch result {
             case .success(let items):
                 guard let filteredItems = self?.applyFilters(items: items) else { return }
@@ -198,6 +201,7 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
     }
 }
 
+// MARK: - AvailableParameterPresenterDelegate
 extension SortingFeedPresenter: AvailableParameterPresenterDelegate {
     func insertSelectedParameters(_ selectedItems: [Parameter]) {
         guard let firstItem = selectedItems.first else { print("items not found "); return }

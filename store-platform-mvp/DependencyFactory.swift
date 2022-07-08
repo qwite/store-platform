@@ -2,10 +2,7 @@ import UIKit
 
 protocol Factory: AnyObject {
     func buildTabBarModule(coordinator: TabCoordinator) -> UITabBarController
-    func buildFeedModule(coordinator: FeedCoordinator, with items: [Item]?) -> UIViewController
-    func buildFeedSortingModule(delegate: SortingFeedPresenterDelegate, coordinator: FeedCoordinator) -> UIViewController
     func buildAvailableParametersModule(delegate: AvailableParameterPresenterDelegate, type: Parameter.ParameterType) -> UIViewController
-    func buildSearchModule(coordinator: FeedCoordinator) -> UIViewController
     func buildCreateAdModule(coordinator: CreateAdCoordinator) -> UIViewController
     func buildSubscriptionsModule(coordinator: ProfileCoordinator) -> UIViewController
     func buildUserOrdersModule(coordinator: ProfileCoordinator) -> UIViewController
@@ -39,22 +36,6 @@ class DependencyFactory: Factory {
         view.presenter = presenter
         return view
     }
-
-    func buildFeedModule(coordinator: FeedCoordinator, with items: [Item]?) -> UIViewController {
-        let view = FeedViewController()
-        let service = UserService()
-        let presenter = FeedPresenter(view: view, coordinator: coordinator, service: service, items: items)
-        view.presenter = presenter
-        return view
-    }
-    
-    func buildFeedSortingModule(delegate: SortingFeedPresenterDelegate, coordinator: FeedCoordinator) -> UIViewController {
-        let view = SortingFeedViewController()
-        let presenter = SortingFeedPresenter(view: view, coordinator: coordinator)
-        presenter.delegate = delegate
-        view.presenter = presenter
-        return view
-    }
     
     func buildAvailableParametersModule(delegate: AvailableParameterPresenterDelegate, type: Parameter.ParameterType) -> UIViewController {
         let view = AvailableParametersViewController()
@@ -63,12 +44,6 @@ class DependencyFactory: Factory {
         return view
     }
     
-    func buildSearchModule(coordinator: FeedCoordinator) -> UIViewController {
-        let view = SearchViewController()
-        let presenter = SearchPresenter(view: view, coordinator: coordinator)
-        view.presenter = presenter
-        return view
-    }
     
     func buildSubscriptionsModule(coordinator: ProfileCoordinator) -> UIViewController {
         let view = SubscriptionsViewController()

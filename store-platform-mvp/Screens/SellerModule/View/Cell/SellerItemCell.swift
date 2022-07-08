@@ -1,5 +1,4 @@
 import UIKit
-import SkeletonView
 
 class SellerItemCell: UICollectionViewCell {
     static let reuseId = "SellerItem"
@@ -26,7 +25,6 @@ extension SellerItemCell {
         self.clothingNameLabel.text = itemViews.item.clothingName
         self.viewsCounterLabel.text = "\(itemViews.views)"
         prepareImage(imageUrl: firstPhotoUrl) { image in
-            self.clothingImageView.stopSkeletonAnimation()
             self.clothingImageView.image = image
         }
         

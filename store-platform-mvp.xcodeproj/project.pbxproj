@@ -49,6 +49,10 @@
 		1F5D7FF1282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FF0282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift */; };
 		1F5D8003282E5A6D00255E71 /* DependencyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D8002282E5A6D00255E71 /* DependencyFactory.swift */; };
 		1F5D8008282E5F9200255E71 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D8007282E5F9200255E71 /* FeedViewController.swift */; };
+		1F5EF17A2878B23500448FF5 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5EF1792878B23500448FF5 /* FeedService.swift */; };
+		1F5EF17C2878B57A00448FF5 /* FeedAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5EF17B2878B57A00448FF5 /* FeedAssembler.swift */; };
+		1F5EF17E2878C26E00448FF5 /* SortingAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5EF17D2878C26E00448FF5 /* SortingAssembler.swift */; };
+		1F5EF1802878C3F700448FF5 /* SearchAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5EF17F2878C3F700448FF5 /* SearchAssembler.swift */; };
 		1F6986CE28380EDF00D953D2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6986CD28380EDF00D953D2 /* LoginViewController.swift */; };
 		1F6986D028380EF700D953D2 /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6986CF28380EF700D953D2 /* LoginPresenter.swift */; };
 		1F6986D32838114500D953D2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6986D22838114500D953D2 /* LoginView.swift */; };
@@ -244,6 +248,10 @@
 		1F5D7FF0282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = store_platform_mvpUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		1F5D8002282E5A6D00255E71 /* DependencyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyFactory.swift; sourceTree = "<group>"; };
 		1F5D8007282E5F9200255E71 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		1F5EF1792878B23500448FF5 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
+		1F5EF17B2878B57A00448FF5 /* FeedAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedAssembler.swift; sourceTree = "<group>"; };
+		1F5EF17D2878C26E00448FF5 /* SortingAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingAssembler.swift; sourceTree = "<group>"; };
+		1F5EF17F2878C3F700448FF5 /* SearchAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAssembler.swift; sourceTree = "<group>"; };
 		1F6986CD28380EDF00D953D2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		1F6986CF28380EF700D953D2 /* LoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
 		1F6986D22838114500D953D2 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -418,6 +426,7 @@
 			isa = PBXGroup;
 			children = (
 				1F1E4D9F28383D9800C9AC05 /* AuthService.swift */,
+				1F5EF1792878B23500448FF5 /* FeedService.swift */,
 				1F1E4D9D28383C1E00C9AC05 /* FirestoreService.swift */,
 				1FF68423283AE63A00E92481 /* StorageService.swift */,
 				1F766B9028412273001F2E7E /* SettingsService.swift */,
@@ -650,6 +659,7 @@
 				1FF68418283AB6A400E92481 /* View */,
 				1F5D8007282E5F9200255E71 /* FeedViewController.swift */,
 				1F128C0B282E666400B16BD8 /* FeedPresenter.swift */,
+				1F5EF17B2878B57A00448FF5 /* FeedAssembler.swift */,
 			);
 			path = FeedModule;
 			sourceTree = "<group>";
@@ -939,6 +949,7 @@
 				1FDAC4ED285BA84B00CD5453 /* View */,
 				1FBAB778285B391300B6B3ED /* SortingFeedViewController.swift */,
 				1FBAB77A285B393D00B6B3ED /* SortingFeedPresenter.swift */,
+				1F5EF17D2878C26E00448FF5 /* SortingAssembler.swift */,
 			);
 			path = SortingFeedModule;
 			sourceTree = "<group>";
@@ -1103,6 +1114,7 @@
 				1FE32509285A1F97004D8338 /* View */,
 				1FE32503285A1964004D8338 /* SearchViewController.swift */,
 				1FE32505285A1C0E004D8338 /* SearchPresenter.swift */,
+				1F5EF17F2878C3F700448FF5 /* SearchAssembler.swift */,
 			);
 			path = SearchModule;
 			sourceTree = "<group>";
@@ -1485,6 +1497,7 @@
 			files = (
 				1F8E6132284631220040DAE0 /* CartViewController.swift in Sources */,
 				1FDA0ADC284AA5D600D05D51 /* SellerCoordinator.swift in Sources */,
+				1F5EF17A2878B23500448FF5 /* FeedService.swift in Sources */,
 				1F816C1B2837D95100F48CA0 /* UIImage + Extension.swift in Sources */,
 				1FEB1569284E525A00DCCBC7 /* SellerPresenter.swift in Sources */,
 				1F1309C1285674F600A03AF7 /* MessagesListViewController.swift in Sources */,
@@ -1533,6 +1546,7 @@
 				1FBE20E9285E3E4E00E03AF0 /* SellerOrdersCell.swift in Sources */,
 				1FEB156C284E540300DCCBC7 /* SellerView.swift in Sources */,
 				1FE32506285A1C0E004D8338 /* SearchPresenter.swift in Sources */,
+				1F5EF17C2878B57A00448FF5 /* FeedAssembler.swift in Sources */,
 				1F8E6137284631AA0040DAE0 /* CartView.swift in Sources */,
 				1FAA83A12850D94D00CFF910 /* SellerFinanceCell.swift in Sources */,
 				1FF6841F283AB77E00E92481 /* AdCell.swift in Sources */,
@@ -1575,6 +1589,7 @@
 				1F1E4DA028383D9800C9AC05 /* AuthService.swift in Sources */,
 				1F96F5B3282EDE6D00C0F460 /* CreateSizeViewController.swift in Sources */,
 				1F04F82A284D3BF900BAD49B /* Brand.swift in Sources */,
+				1F5EF17E2878C26E00448FF5 /* SortingAssembler.swift in Sources */,
 				1F69B6AD2842557300C75668 /* ProfilePresenter.swift in Sources */,
 				1F8CE1392843FD7400AA9398 /* DetailedAdPresenter.swift in Sources */,
 				1F69B6B22842572900C75668 /* ProfileCoordinator.swift in Sources */,
@@ -1586,6 +1601,7 @@
 				1F96F5B8282EDF4B00C0F460 /* CreateSizeView.swift in Sources */,
 				1F08921F284A3EEB002A2411 /* UserService.swift in Sources */,
 				1F3F38292847673100228983 /* PickSizeViewController.swift in Sources */,
+				1F5EF1802878C3F700448FF5 /* SearchAssembler.swift in Sources */,
 				1F128C0C282E666400B16BD8 /* FeedPresenter.swift in Sources */,
 				1FB3509D28400524007200BB /* FavoritesViewController.swift in Sources */,
 				1F29DE152842A57C00811F48 /* BaseCoordinator.swift in Sources */,

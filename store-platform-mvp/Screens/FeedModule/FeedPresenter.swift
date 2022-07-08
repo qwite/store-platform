@@ -2,7 +2,12 @@ import Foundation
 
 // MARK: - FeedPresenterProtocol
 protocol FeedPresenterProtocol: AnyObject {
-    init(view: FeedViewProtocol, coordinator: FeedCoordinator, service: UserServiceProtocol, items: [Item]?)
+    init(view: FeedViewProtocol,
+         coordinator: FeedCoordinator,
+         service: FeedServiceProtocol,
+         userService: UserServiceProtocol,
+         items: [Item]?)
+    
     func viewDidLoad()
     
     func fetchItems()
@@ -20,15 +25,20 @@ protocol FeedPresenterProtocol: AnyObject {
 class FeedPresenter: FeedPresenterProtocol {
     weak var view: FeedViewProtocol?
     weak var coordinator: FeedCoordinator?
-    var service: UserServiceProtocol?
     
+    var service: FeedServiceProtocol?
+    var userService: UserServiceProtocol?
     var items: [Item]?
     
-    required init(view: FeedViewProtocol, coordinator: FeedCoordinator, service: UserServiceProtocol, items: [Item]?) {
+    required init(view: FeedViewProtocol,
+                  coordinator: FeedCoordinator,
+                  service: FeedServiceProtocol,
+                  userService: UserServiceProtocol,
+                  items: [Item]?) {
         self.view = view
         self.coordinator = coordinator
         self.service = service
-        
+        self.userService = userService
         self.items = items
     }
     
@@ -62,16 +72,17 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     func getItems() {
-        FirestoreService.sharedInstance.fetchAllItems { [weak self] result in
+        service?.fetchAllItems(by: nil, completion: { [weak self] result in
             switch result {
             case .success(let items):
                 self?.view?.insertItems(items: items)
             case .failure(let error):
-                debugPrint(error)
+                fatalError("\(error)")
             }
-        }
+        })
     }
     
+    // TODO: remove firestore service
     func getUserSubscriptions() {
         guard let userId = SettingsService.sharedInstance.userId else { return }
         FirestoreService.sharedInstance.getSubscriptionsItems(userId: userId) { [weak self] result in
@@ -85,7 +96,7 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     func addFavorite(item: Item) {
-        service?.addFavoriteItem(item: item, completion: { [weak self] result in
+        userService?.addFavoriteItem(item: item, completion: { [weak self] result in
             switch result {
             case .success(let item):
                 self?.postNotificationAddFavoriteItem(item)
@@ -96,7 +107,7 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     func removeFavorite(item: Item) {
-        service?.removeFavoriteItem(item: item, completion: { [weak self] result in
+        userService?.removeFavoriteItem(item: item, completion: { [weak self] result in
             switch result {
             case .success(_):
                 self?.postNotificationRemoveFavoriteItem(item)
@@ -111,7 +122,7 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     func searchItems(by brand: String) {
-        FirestoreService.sharedInstance.fetchItemsByBrandName(brand: brand) { result in
+        service?.fetchItemsByBrandName(brand: brand) { result in
             switch result {
             case .success(let items):
                 self.view?.updateDataSource(with: items)
