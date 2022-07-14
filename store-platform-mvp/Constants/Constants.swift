@@ -9,6 +9,7 @@ enum Constants {
     
     enum Messages {
         static let successUserLogin = "Успешная авторизация!"
+        static let successAddCart = "Товар в корзине!"
     }
     
     enum Errors {

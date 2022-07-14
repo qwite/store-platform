@@ -119,7 +119,7 @@ extension SellerCoordinator: MessagesCoordinatorProtocol {
 
 extension SellerCoordinator {
     func checkSellerStatus(completion: @escaping (Bool) -> ()) {
-        let service = UserService()
+        let service = TOUserService()
         service.getSellerStatus { result in
             guard let _ = try? result.get() else {
                 debugPrint("not seller")

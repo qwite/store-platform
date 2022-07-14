@@ -1,30 +1,45 @@
 import Foundation
 
+// MARK: - DetailedAdPresenterProtocol
 protocol DetailedAdPresenterProtocol {
-    init(view: DetailedAdViewProtocol, coordinator: FeedCoordinator, item: Item, service: UserServiceProtocol)
+    init(view: DetailedAdViewProtocol,
+         coordinator: FeedCoordinator,
+         item: Item,
+         service: FeedServiceProtocol,
+         cartService: CartServiceProtocol,
+         userService: UserServiceProtocol)
+    
     func viewDidLoad()
     
     func increaseItemViews()
     func showSizePicker()
-    func didAddToCart(item: CartItem)
+    func didAddToCart(item: Cart)
     func createConversation()
     func getReviews()
     func addToSubscriptions()
 }
 
+// MARK: - DetailedAdPresenterProtocol Implementation
 class DetailedAdPresenter: DetailedAdPresenterProtocol {
-    weak var view: DetailedAdViewProtocol?
-    weak var coordinator: FeedCoordinator?
-    var service: UserServiceProtocol?
     
-    var item: Item
-    
-    required init(view: DetailedAdViewProtocol, coordinator: FeedCoordinator, item: Item, service: UserServiceProtocol) {
+    required init(view: DetailedAdViewProtocol, coordinator: FeedCoordinator, item: Item, service: FeedServiceProtocol, cartService: CartServiceProtocol, userService: UserServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
         self.item = item
+        
         self.service = service
+        self.cartService = cartService
+        self.userService = userService
     }
+    
+    weak var view: DetailedAdViewProtocol?
+    weak var coordinator: FeedCoordinator?
+    
+    var service: FeedServiceProtocol?
+    var cartService: CartServiceProtocol?
+    var userService: UserServiceProtocol?
+    
+    var item: Item
     
     func viewDidLoad() {
         view?.configure(with: item)
@@ -43,6 +58,7 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
                 debugPrint(error)
             }
         })
+
     }
     
     func createConversation() {
@@ -57,17 +73,14 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
     }
     
     func getReviews() {
-        guard let id = item.id else { fatalError() }
-        
-        FirestoreService.sharedInstance.getReviewsFromItem(itemId: id) { [weak self] result in
+        service?.fetchItemReviews(item: item, completion: { [weak self] result in
             switch result {
             case .success(let reviews):
                 self?.view?.configureReviews(reviews: reviews)
-            case .failure(let error):
-                debugPrint(error)
+            case .failure(_):
                 self?.view?.configureReviews(reviews: nil)
             }
-        }
+        })
     }
     
     func showSizePicker() {        
@@ -77,13 +90,14 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
         }
     }
     
-    func didAddToCart(item: CartItem) {
-        service?.addItemToCart(item: item, completion: { result in
+    func didAddToCart(item: Cart) {
+        guard let userId = SettingsService.sharedInstance.userId else { return }
+        cartService?.addItemCart(userId: userId, cartItem: item, completion: { [weak self] result in
             switch result {
             case .success(_):
-                self.view?.showSuccessAlert(message: "Товар в корзине!")
+                self?.view?.showSuccessAlert(message: Constants.Messages.successAddCart)
             case .failure(let error):
-                debugPrint(error)
+                fatalError("\(error)")
             }
         })
     }

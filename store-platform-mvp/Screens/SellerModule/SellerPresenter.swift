@@ -2,7 +2,7 @@ import Foundation
 import FLCharts
 
 protocol SellerPresenterProtocol {
-    init (view: SellerViewProtocol, coordinator: SellerCoordinator, service: UserServiceProtocol)
+    init (view: SellerViewProtocol, coordinator: SellerCoordinator, service: TOUserServiceProtocol)
     func viewDidLoad()
     func viewWillAppear()
     
@@ -24,9 +24,9 @@ protocol SellerPresenterProtocol {
 class SellerPresenter: SellerPresenterProtocol {
     weak var view: SellerViewProtocol?
     weak var coordinator: SellerCoordinator?
-    var service: UserServiceProtocol?
+    var service: TOUserServiceProtocol?
     
-    required init(view: SellerViewProtocol, coordinator: SellerCoordinator, service: UserServiceProtocol) {
+    required init(view: SellerViewProtocol, coordinator: SellerCoordinator, service: TOUserServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
         self.service = service

@@ -1,18 +1,16 @@
 import UIKit
 import LBBottomSheet
 
+// MARK: - FavoritesCoordinator
 class FavoritesCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
     var factory: Factory?
     
-    var completionHandler: ((CartItem) -> ())?
+    var completionHandler: ((Cart) -> ())?
     var childCoordinator =  [Coordinator]()
     
     func start() {
-        let module = factory?.buildFavoritesModule(coordinator: self)
-        guard let module = module else {
-            fatalError()
-        }
+        let module = FavoritesAssembler.buildFavoritesModule(coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }
@@ -40,7 +38,7 @@ extension FavoritesCoordinator: PickSizeCoordinatorProtocol {
         self.navigationController.presentAsBottomSheet(module, behavior: behavior)
     }
     
-    func hideSizePicker(with item: CartItem) {
+    func hideSizePicker(with item: Cart) {
         
         self.navigationController.dismissBottomSheet { [weak self] in
             self?.completionHandler?(item)

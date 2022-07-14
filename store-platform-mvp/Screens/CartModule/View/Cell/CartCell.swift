@@ -1,14 +1,14 @@
 import UIKit
 
 // MARK: - CartItemCellDelegate
-protocol CartItemCellDelegate: AnyObject {
+protocol CartCellDelegate: AnyObject {
     func didTappedRemoveButton(_ cell: UICollectionViewCell)
 }
 
 // MARK: - CartItemCell
 class CartCell: UICollectionViewCell {
-    static let reuseId = "CartItem"
-    weak var delegate: CartItemCellDelegate?
+    static let reuseId = "CartCell"
+    weak var delegate: CartCellDelegate?
     
     let brandNameLabel = UILabel(text: nil, font: .systemFont(ofSize: 18, weight: .medium), textColor: .black)
     let clothingNameLabel = UILabel(text: nil, font: .systemFont(ofSize: 15, weight: .regular), textColor: .black)
@@ -19,8 +19,9 @@ class CartCell: UICollectionViewCell {
     let removeButton = UIButton(text: nil, preset: .icon, iconName: "xmark")
 }
 
+// MARK: - Public methods
 extension CartCell {
-    func configure(cartItem: Cart) {
+    public func configure(cartItem: Cart) {
         guard let firstPhoto = cartItem.item.photos?.first else {
             return
         }
@@ -35,8 +36,12 @@ extension CartCell {
         configureImageView(photo: firstPhoto)
         configureButtons()
     }
+}
+
+// MARK: - Private methods
+extension CartCell {
     
-    func configureViews() {
+    private func configureViews() {
         imageView.contentMode = .scaleAspectFit
         
         let itemStack = UIStackView(arrangedSubviews: [brandNameLabel, clothingNameLabel], spacing: 3, axis: .vertical, alignment: .fill)

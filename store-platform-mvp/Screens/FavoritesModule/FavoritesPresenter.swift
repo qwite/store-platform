@@ -1,7 +1,7 @@
 import Foundation
 
 protocol FavoritesPresenterProtocol {
-    init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator, service: UserServiceProtocol)
+    init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator, service: FavoritesServiceProtocol)
     func viewDidLoad()
     func addFavoriteItemsObserver ()
     func insertFavoriteItems()
@@ -10,15 +10,15 @@ protocol FavoritesPresenterProtocol {
     func removeFavoriteItemFromView(_ item: Item)
     func openDetailed(with item: Item)
     func openSizePicker(item: Item)
-    func didAddToCart(item: CartItem)
+//    func didAddToCart(item: CartItem)
 }
 
 class FavoritesPresenter: FavoritesPresenterProtocol {
     weak var view: FavoritesViewProtocol?
     weak var coordinator: FavoritesCoordinator?
-    var service: UserServiceProtocol?
+    var service: FavoritesServiceProtocol?
     
-    required init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator, service: UserServiceProtocol) {
+    required init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator, service: FavoritesServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
         self.service = service
@@ -74,18 +74,21 @@ class FavoritesPresenter: FavoritesPresenterProtocol {
     }
 
     func removeFavoriteItem(_ item: Item) {
-        service?.removeFavoriteItem(item: item, completion: { [weak self] result in
+        guard let userId = SettingsService.sharedInstance.userId else { return }
+        
+        service?.removeFavoriteItem(item: item, userId: userId, completion: { [weak self] result in
             switch result {
             case .success(let item):
                 self?.view?.removeFavoriteItem(item)
             case .failure(let error):
-                debugPrint(error)
+                fatalError("\(error)")
             }
         })
     }
-     
+    
     func insertFavoriteItems() {
-        service?.getFavoriteItems(completion: { [weak self] result in
+        guard let userId = SettingsService.sharedInstance.userId else { return }
+        service?.fetchFavoritesItems(userId: userId, completion: { [weak self] result in
             switch result {
             case .success(let items):
                 self?.view?.insertFavorites(items: items)
@@ -103,19 +106,20 @@ class FavoritesPresenter: FavoritesPresenterProtocol {
         coordinator?.showSizePicker(for: item)
         coordinator?.completionHandler = { [weak self] item in
             print("test")
-            self?.didAddToCart(item: item)
+//            self?.didAddToCart(item: item)
         }
     }
     
-    func didAddToCart(item: CartItem) {
-        service?.addItemToCart(item: item, completion: { [weak self] result in
-            switch result {
-            case .success(_):
-                self?.view?.showSuccessAlert()
-            case .failure(let error):
-                debugPrint(error)
-            }
-        })
-    }
+//    TODO: Remake
+//    func didAddToCart(item: CartItem) {
+//        service?.addItemToCart(item: item, completion: { [weak self] result in
+//            switch result {
+//            case .success(_):
+//                self?.view?.showSuccessAlert()
+//            case .failure(let error):
+//                debugPrint(error)
+//            }
+//        })
+//    }
 
 }

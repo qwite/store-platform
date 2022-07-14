@@ -3,7 +3,12 @@ import FirebaseFirestore
 import FirebaseAuth
 import FirebaseFirestoreSwift
 
-class UserService2 {
+protocol UserServiceProtocol {
+    func getUserDocumentSnapshot(by id: String, completion: @escaping (Result<QueryDocumentSnapshot, Error>) -> ())
+    func fetchUserSubscriptions(userId: String, completion: @escaping (Result<[String], Error>) -> ())
+}
+
+class UserService: UserServiceProtocol {
     private let firebaseDb = Firestore.firestore()
 
     /// Users reference
@@ -17,11 +22,11 @@ class UserService2 {
         usersReference.whereField("id", isEqualTo: id).getDocuments { snapshot, error in
             guard let snapshot = snapshot,
                   !snapshot.isEmpty else {
-                completion(.failure(UserService2Errors.userNotExist)); return
+                completion(.failure(UserServiceErrors.userNotExists)); return
             }
             
             guard let document = snapshot.documents.first else {
-                completion(.failure(UserService2Errors.documentNotFound)); return
+                completion(.failure(UserServiceErrors.documentNotFound)); return
             }
             
             completion(.success(document))
@@ -32,13 +37,12 @@ class UserService2 {
     func fetchUserSubscriptions(userId: String, completion: @escaping (Result<[String], Error>) -> ()) {
         self.getUserDocumentSnapshot(by: userId) { result in
             switch result {
-            case .success(let snapshot):
-                let reference = snapshot.reference
-                let collection = reference.collection("subscriptions")
+            case .success(let document):
+                let collection = document.reference.collection("subscriptions")
                 
                 collection.getDocuments { snapshot, error in
                     guard let snapshot = snapshot, !snapshot.isEmpty else {
-                        completion(.failure(UserService2Errors.documentNotFound)); return
+                        completion(.failure(UserServiceErrors.documentNotFound)); return
                     }
                     
                     let list = snapshot.documents.compactMap({ $0.get("brand_name") as? String })
@@ -52,10 +56,11 @@ class UserService2 {
     }
 }
 
-extension UserService2 {
-    private enum UserService2Errors: Error {
-        case userNotExist
+extension UserService {
+    private enum UserServiceErrors: Error {
+        case userNotExists
         case documentNotFound
+        case favItemAlreadyExists
     }
 }
 

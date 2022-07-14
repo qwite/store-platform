@@ -4,7 +4,7 @@ import LBBottomSheet
 class FeedCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
     var factory: Factory?
-    var completionHandler: ((CartItem) -> ())?
+    var completionHandler: ((Cart) -> ())?
     var parent: FeedViewController?
     weak var imagePickerDelegate: ImagePickerPresenterDelegate?
 
@@ -26,20 +26,14 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     }
     
     func showFeed(with items: [Item]? = nil) {
-        let service = FeedService()
-        let userService = UserService()
-        guard let module = FeedAssembler.buildFeedModule(coordinator: self, service: service, userService: userService, items: items) as? FeedViewController else { fatalError() }
-        
+        guard let module = FeedAssembler.buildFeedModule(coordinator: self, items: items) as? FeedViewController else { return }
         self.parent = module
         self.navigationController.pushViewController(module, animated: true)
     }
     
-    // TODO: fix
     func showSearchFeed() -> UIViewController? {
-        let service = FeedService()
-        let userService = UserService()
-        guard let module = FeedAssembler.buildFeedModule(coordinator: self, service: service, userService: userService, items: nil) as? FeedViewController else { fatalError() }
-        
+        guard let module = FeedAssembler.buildFeedModule(coordinator: self, items: nil) as? FeedViewController else { return nil }
+
         return module
     }
     
@@ -105,7 +99,7 @@ extension FeedCoordinator: PickSizeCoordinatorProtocol {
         self.navigationController.presentAsBottomSheet(module, behavior: behavior)
     }
     
-    func hideSizePicker(with item: CartItem) {
+    func hideSizePicker(with item: Cart) {
         self.navigationController.dismissBottomSheet {
             self.completionHandler?(item)
             self.navigationController.popViewController(animated: true)

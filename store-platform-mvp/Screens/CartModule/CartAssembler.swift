@@ -1,8 +1,12 @@
-//
-//  CartAssembler.swift
-//  store-platform-mvp
-//
-//  Created by Artem Lashmanov on 14.07.2022.
-//
+import UIKit
 
-import Foundation
+class CartAssembler {
+    static func buildCartModule() -> UIViewController {
+        let service = CartService()
+        let view = CartViewController()
+        let presenter = CartPresenter(view: view, service: service)
+        view.presenter = presenter
+        return view
+    }
+}
+

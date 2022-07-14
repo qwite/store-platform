@@ -59,7 +59,7 @@ class ProfileCoordinator: BaseCoordinator, Coordinator {
     }
     
     func showSubscriptions() {
-        guard let module = factory?.buildSubscriptionsModule(coordinator: self) else { fatalError() }
+        let module = SubscriptionsAssembler.buildSubscriptionsModule(coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }

@@ -1,28 +1,31 @@
 import UIKit
 
+// MARK: - CartViewProtocol
 protocol CartViewProtocol: AnyObject {
     func configureCollectionView()
     func configureDataSource()
     func configureViews()
-    func insertItems(items: [CartItem])
-    func removeItem(item: CartItem)
+    func insertItems(items: [Cart])
+    func removeItem(item: Cart)
     func setTotalPrice(price: Int?)
-    func getItemsInCart() -> [CartItem]?
+    func getItemsCart() -> [Cart]?
 }
 
+// MARK: - CartViewDelegate
 protocol CartViewDelegate: AnyObject {
     func didTappedTotalButton()
 }
 
+// MARK: - CartViewController
 class CartViewController: UIViewController {
     var cartView = CartView()
     var presenter: CartPresenter!
     var collectionView: UICollectionView! = nil
-    var dataSource: UICollectionViewDiffableDataSource<CartView.Section, CartItem>?
-    typealias DataSource = UICollectionViewDiffableDataSource<CartView.Section, CartItem>
+    var dataSource: UICollectionViewDiffableDataSource<CartView.Section, Cart>?
+    typealias DataSource = UICollectionViewDiffableDataSource<CartView.Section, Cart>
     
     weak var delegate: TotalCartViewDelegate?
-    //MARK: - Lifecycle
+    //MARK: Lifecycle
     
     override func loadView() {
         view = cartView
@@ -39,6 +42,7 @@ class CartViewController: UIViewController {
     }
 }
 
+// MARK: - CartViewProtocol Implementation
 extension CartViewController: CartViewProtocol {
     func configureViews() {
         cartView.backgroundColor = .white
@@ -55,7 +59,7 @@ extension CartViewController: CartViewProtocol {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: cartView.configureLayout())
         collectionView.backgroundColor = .white
         collectionView.delegate = self
-        collectionView.register(CartItemCell.self, forCellWithReuseIdentifier: CartItemCell.reuseId)
+        collectionView.register(CartCell.self, forCellWithReuseIdentifier: CartCell.reuseId)
         collectionView.register(TotalCartView.self, forSupplementaryViewOfKind: CartView.SupplementaryKinds.totalCart.rawValue, withReuseIdentifier: TotalCartView.reuseId)
         self.collectionView = collectionView
     }
@@ -65,7 +69,7 @@ extension CartViewController: CartViewProtocol {
             let section = CartView.Section.allCases[indexPath.section]
             switch section {
             case .cart:
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CartItemCell.reuseId, for: indexPath) as? CartItemCell else {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CartCell.reuseId, for: indexPath) as? CartCell else {
                     fatalError("dequeue error")
                 }
                 
@@ -89,25 +93,17 @@ extension CartViewController: CartViewProtocol {
                 return nil
             }
         }
-        
-//        let snapshot = snapshotForCurrentState()
-//        dataSource?.apply(snapshot)
     }
     
-    func snapshotForCurrentState() -> NSDiffableDataSourceSnapshot<CartView.Section, CartItem> {
-        var snapshot = NSDiffableDataSourceSnapshot<CartView.Section, CartItem>()
-        
-        return snapshot
-    }
     
-    func insertItems(items: [CartItem]) {
-        var snapshot = NSDiffableDataSourceSnapshot<CartView.Section, CartItem>()
+    func insertItems(items: [Cart]) {
+        var snapshot = NSDiffableDataSourceSnapshot<CartView.Section, Cart>()
         snapshot.appendSections([.cart])
         snapshot.appendItems(items, toSection: .cart)
         dataSource?.apply(snapshot)
     }
     
-    func removeItem(item: CartItem) {
+    func removeItem(item: Cart) {
         var snapshot = dataSource?.snapshot()
         snapshot?.deleteItems([item])
         
@@ -120,7 +116,7 @@ extension CartViewController: CartViewProtocol {
         dataSource?.apply(snapshot!)
     }
     
-    func getItemsInCart() -> [CartItem]? {
+    func getItemsCart() -> [Cart]? {
         guard let snapshot = dataSource?.snapshot() else { return nil }
         
         let items = snapshot.itemIdentifiers
@@ -144,7 +140,7 @@ extension CartViewController: UICollectionViewDelegate {
 }
 
 // MARK: - CartItemCellDelegate
-extension CartViewController: CartItemCellDelegate {
+extension CartViewController: CartCellDelegate {
     func didTappedRemoveButton(_ cell: UICollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell),
               let item = dataSource?.itemIdentifier(for: indexPath) else {
@@ -160,6 +156,6 @@ extension CartViewController: CartItemCellDelegate {
 extension CartViewController: CartViewDelegate {
     func didTappedTotalButton() {
         print("pressed")
-        presenter.createOrder()
+//        presenter.createOrder()
     }
 }

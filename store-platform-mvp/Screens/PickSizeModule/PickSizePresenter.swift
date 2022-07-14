@@ -1,14 +1,17 @@
 import Foundation
 
+// MARK: - PickSizePresenterProtocol
 protocol PickSizePresenterProtocol {
     init(view: PickSizeViewProtocol, item: Item, coordinator: PickSizeCoordinatorProtocol)
     func viewDidLoad()
+    
     func getSizeRowsCount() -> Int
     func getSizeComponentCount() -> Int
     func getAvailableSizes() -> [Size]
     func selectSize(by index: Int) 
 }
 
+// MARK: - PickSizePresenterProtocol Implementation
 class PickSizePresenter: PickSizePresenterProtocol {
     weak var view: PickSizeViewProtocol?
     weak var coordinator: PickSizeCoordinatorProtocol?
@@ -51,9 +54,8 @@ class PickSizePresenter: PickSizePresenterProtocol {
               let selectedPrice = sizes[index].price else {
             return
         }
-        
-        // TODO: remove itemId and rewrite class mb delete this.
-        let cartItem = CartItem(item: item, itemId: itemId, selectedSize: selectedSize, selectedPrice: selectedPrice)
+                
+        let cartItem = Cart(itemId: itemId, selectedSize: selectedSize, selectedPrice: selectedPrice)
         coordinator?.hideSizePicker(with: cartItem)
     }
 }

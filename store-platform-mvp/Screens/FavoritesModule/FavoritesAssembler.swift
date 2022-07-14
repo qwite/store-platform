@@ -1,8 +1,12 @@
-//
-//  FavoritesAssembler.swift
-//  store-platform-mvp
-//
-//  Created by Artem Lashmanov on 13.07.2022.
-//
+import UIKit
 
-import Foundation
+// MARK: - FavoritesAssembler
+class FavoritesAssembler {
+    static func buildFavoritesModule(coordinator: FavoritesCoordinator) -> UIViewController {
+        let service = FavoritesService()
+        let view = FavoritesViewController()
+        let presenter = FavoritesPresenter(view: view, coordinator: coordinator, service: service)
+        view.presenter = presenter
+        return view
+    }
+}

@@ -2,12 +2,6 @@ import UIKit
 
 protocol TOUserServiceProtocol: AnyObject {
     func logout(completion: @escaping (Error?) -> ())
-
-    func addItemToCart(item: CartItem, completion: @escaping (Result<CartItem, Error>) -> ())
-    func getItemsFromCart(completion: @escaping (Result<[CartItem], Error>) -> ())
-    func addFavoriteItem(item: Item, completion: @escaping (Result<Item, Error>) -> ())
-    func removeFavoriteItem(item: Item, completion: @escaping (Result<Item, Error>) -> ())
-    func getFavoriteItems(completion: @escaping (Result<[Item], Error>) -> ())
     func uploadBrandLogoImage(data: Data, completion: @escaping (Result<String, Error>) -> ())
     func createBrand(brand: Brand, completion: @escaping (Result<String, Error>) -> ())
     func increaseItemViews(itemId: String, completion: @escaping (Result<String, Error>) -> ())
@@ -48,93 +42,6 @@ class TOUserService: TOUserServiceProtocol {
         }
     }
     
-    func addItemToCart(item: CartItem, completion: @escaping (Result<CartItem, Error>) -> ()) {
-        guard let userId = SettingsService.sharedInstance.userId else {
-            return completion(.failure(UserServiceError.inputDataError))
-        }
-        
-        FirestoreService.sharedInstance.addItemToCart(userId: userId, selectedItem: item) { result in
-            switch result {
-            case .success(_):
-                completion(.success(item))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    func getItemsFromCart(completion: @escaping (Result<[CartItem], Error>) -> ()) {
-        guard let userId = SettingsService.sharedInstance.userId else {
-            return completion(.failure(UserServiceError.inputDataError))
-        }
-        
-        FirestoreService.sharedInstance.getItemsFromCart(userId: userId) { result in
-            switch result {
-            case .success(let items):
-                completion(.success(items))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    func addFavoriteItem(item: Item, completion: @escaping (Result<Item, Error>) -> ()) {
-        guard let itemId = item.id,
-              let userId = SettingsService.sharedInstance.userId else {
-            return completion(.failure(UserServiceError.inputDataError))
-        }
-        
-        FirestoreService.sharedInstance.addFavoriteItem(userId: userId, itemId: itemId) { error in
-            guard error == nil else { completion(.failure(error!)); return }
-            let logMessage = "[Log] Added to favorites"
-            debugPrint(logMessage)
-            completion(.success(item))
-        }
-    }
-    
-    func removeFavoriteItem(item: Item, completion: @escaping (Result<Item, Error>) -> ()) {
-        guard let itemId = item.id,
-              let userId = SettingsService.sharedInstance.userId else {
-            return completion(.failure(UserServiceError.inputDataError))
-        }
-        
-        FirestoreService.sharedInstance.removeFavoriteItem(userId: userId, itemId: itemId) { result in
-            switch result {
-            case .success(_):
-                completion(.success(item))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-
-    // bad solution -> TODO: fix
-    func getFavoriteItems(completion: @escaping (Result<[Item], Error>) -> ()) {
-        guard let userId = SettingsService.sharedInstance.userId else {
-            return
-        }
-        
-        FirestoreService.sharedInstance.getFavoritesIds(by: userId) { result in
-            switch result {
-            case .success(let data):
-                var items: [Item] = []
-                for documentId in data {
-                    FirestoreService.sharedInstance.getItemByDocumentId(documentId: documentId) { result in
-                        guard let item = try? result.get() else {
-                            return completion(.failure(UserServiceError.someError))
-                        }
-                        
-                        items.append(item)
-                        if items.count == data.count {
-                            completion(.success(items))
-                        }
-                    }
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
     
     func uploadBrandLogoImage(data: Data, completion: @escaping (Result<String, Error>) -> ()) {
         StorageService.sharedInstance.uploadImage(with: data, type: .brandLogo) { result in
@@ -186,26 +93,7 @@ class TOUserService: TOUserServiceProtocol {
             }
         }
     }
-    
-    func increaseItemViews(itemId: String, completion: @escaping (Result<String, Error>) -> ()) {
-        let currentDate = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_GB")
-        dateFormatter.setLocalizedDateFormatFromTemplate("MMM")
-        let month = dateFormatter.string(from: currentDate)
-        dateFormatter.setLocalizedDateFormatFromTemplate("d")
-        let day = Int(dateFormatter.string(from: currentDate))!
         
-        FirestoreService.sharedInstance.increaseItemViewsCounter(month: month, day: day, itemId: itemId) { result in
-            switch result {
-            case .success(let message):
-                completion(.success(message))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
     func getBrandName(completion: @escaping (Result<String, Error>) -> ()) {
         guard let userId = SettingsService.sharedInstance.userId else {
             return completion(.failure(UserServiceError.localUserNotExist))

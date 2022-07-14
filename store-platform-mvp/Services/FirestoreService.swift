@@ -112,7 +112,7 @@ extension FirestoreService {
                 let favoritesCollection = document.reference.collection("favorites")
                 // Check if item already exist in 'favorites' user collection
                 favoritesCollection.whereField("item_id", isEqualTo: itemId).getDocuments { snapshot, error in
-                    guard let snapshot = snapshot, !snapshot.isEmpty, snapshot.documents.first == nil else {
+                    guard let snapshot = snapshot, snapshot.documents.first == nil else {
                         completion(FirestoreServiceError.itemAlreadyExist); return
                     }
                     
@@ -149,73 +149,73 @@ extension FirestoreService {
     }
     
     // TODO: refactor
-    func createOrder(userId: String, item: CartItem, date: String, completion: @escaping (Error?) -> ()) {
-        self.fetchUserData(by: userId) { result in
-            switch result {
-            case .success(let userData):
-                guard let details = userData.details,
-                      let city = details.city,
-                      let street = details.street,
-                      let house = details.house,
-                      let apartment = details.apartment,
-                      let phoneNumber = details.phone,
-                      let lastName = userData.lastName,
-                      let firstName = userData.firstName else { return }
-                let shippingAddress = "г. \(city), ул. \(street), д. \(house), кв. \(apartment)"
-                let userFullName = "\(lastName) \(firstName)"
-                
-                self.getBrandIdByName(brandName: item.item.brandName) { result in
-                    switch result {
-                    case .success(let brandId):
-                        
-                        let order = Order(id: nil, userShippingAddress: shippingAddress,
-                                          userPhoneNumber: phoneNumber, userFullName: userFullName,
-                                          brandId: brandId, item: item,
-                                          status: Order.Status.process.rawValue, date: date)
-                        
-                        guard let order = try? self.ordersReference.addDocument(from: order, completion: { error in
-                            guard error == nil else { completion(FirestoreServiceError.brandDecodingError); return }
-                        }) else { completion(FirestoreServiceError.brandDecodingError); return }
-                        
-                        
-                        // data for adding to user and brand
-                        let data: [String: Any] = [
-                            "order_id": order.documentID,
-                            "item_id": item.itemId
-                        ]
-                        
-                        // adding order to user
-                        self.usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
-                            guard let snapshot = querySnapshot,
-                                  snapshot.isEmpty != true,
-                                  let userDocument = snapshot.documents.first else { completion(FirestoreServiceError.documentNotFound); return }
-                            
-                            userDocument.reference.collection("orders").addDocument(data: data) { error in
-                                guard error == nil else { completion(error!); return }
-                            }
-                        }
-                        
-                        // adding order to brand
-                        
-                        self.brandsReference.document(brandId).collection("orders").addDocument(data: data) { error in
-                            guard error == nil else { completion(error!); return}
-                        }
-                        
-                        // remove item from cart
-                        self.removeItemFromCart(userId: userId, selectedItem: item) { error in
-                            guard error == nil else { completion(error!); return }
-                            
-                            completion(nil)
-                        }
-                    case .failure(let error):
-                        completion(error)
-                    }
-                }
-            case .failure(let error):
-                completion(error)
-            }
-        }
-    }
+//    func createOrder(userId: String, item: CartItem, date: String, completion: @escaping (Error?) -> ()) {
+//        self.fetchUserData(by: userId) { result in
+//            switch result {
+//            case .success(let userData):
+//                guard let details = userData.details,
+//                      let city = details.city,
+//                      let street = details.street,
+//                      let house = details.house,
+//                      let apartment = details.apartment,
+//                      let phoneNumber = details.phone,
+//                      let lastName = userData.lastName,
+//                      let firstName = userData.firstName else { return }
+//                let shippingAddress = "г. \(city), ул. \(street), д. \(house), кв. \(apartment)"
+//                let userFullName = "\(lastName) \(firstName)"
+//                
+//                self.getBrandIdByName(brandName: item.item.brandName) { result in
+//                    switch result {
+//                    case .success(let brandId):
+//                        
+//                        let order = Order(id: nil, userShippingAddress: shippingAddress,
+//                                          userPhoneNumber: phoneNumber, userFullName: userFullName,
+//                                          brandId: brandId, item: item,
+//                                          status: Order.Status.process.rawValue, date: date)
+//                        
+//                        guard let order = try? self.ordersReference.addDocument(from: order, completion: { error in
+//                            guard error == nil else { completion(FirestoreServiceError.brandDecodingError); return }
+//                        }) else { completion(FirestoreServiceError.brandDecodingError); return }
+//                        
+//                        
+//                        // data for adding to user and brand
+//                        let data: [String: Any] = [
+//                            "order_id": order.documentID,
+//                            "item_id": item.itemId
+//                        ]
+//                        
+//                        // adding order to user
+//                        self.usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
+//                            guard let snapshot = querySnapshot,
+//                                  snapshot.isEmpty != true,
+//                                  let userDocument = snapshot.documents.first else { completion(FirestoreServiceError.documentNotFound); return }
+//                            
+//                            userDocument.reference.collection("orders").addDocument(data: data) { error in
+//                                guard error == nil else { completion(error!); return }
+//                            }
+//                        }
+//                        
+//                        // adding order to brand
+//                        
+//                        self.brandsReference.document(brandId).collection("orders").addDocument(data: data) { error in
+//                            guard error == nil else { completion(error!); return}
+//                        }
+//                        
+//                        // remove item from cart
+//                        self.removeItemFromCart(userId: userId, selectedItem: item) { error in
+//                            guard error == nil else { completion(error!); return }
+//                            
+//                            completion(nil)
+//                        }
+//                    case .failure(let error):
+//                        completion(error)
+//                    }
+//                }
+//            case .failure(let error):
+//                completion(error)
+//            }
+//        }
+//    }
     
     func changeOrderStatus(orderId: String, status: Order.Status, completion: @escaping (Error?) -> ()) {
         let stringStatus = status.rawValue
@@ -439,118 +439,6 @@ extension FirestoreService {
         }
     }
     
-    func addItemToCart(userId: String, selectedItem: CartItem, completion: @escaping (Result<String, Error>) -> ()) {
-        usersReference.whereField("id", isEqualTo: userId).getDocuments { snapshot, error in
-            guard let snapshot = snapshot else {
-                return completion(.failure(error!))
-            }
-            
-            guard let userDocument = snapshot.documents.first else {
-                return completion(.failure(FirestoreServiceError.userDocumentNotFound))
-            }
-            
-            let documentReference = userDocument.reference
-            guard let doc = try? documentReference.collection("cart").addDocument(from: selectedItem) else {
-                return completion(.failure(FirestoreServiceError.itemEncodingError))
-            }
-            
-            completion(.success("item added"))
-        }
-    }
-    
-    func removeItemFromCart(userId: String, selectedItem: CartItem, completion: @escaping ((Error?) -> ())) {
-        usersReference.whereField("id", isEqualTo: userId).getDocuments { snapshot, error in
-            guard let snapshot = snapshot, snapshot.isEmpty != true else {
-                completion(error!); return
-            }
-            
-            guard let userDocument = snapshot.documents.first else {
-                completion(FirestoreServiceError.userDocumentNotFound); return
-            }
-            
-            let documentReference = userDocument.reference
-            documentReference.collection("cart").whereField("item_id", isEqualTo: selectedItem.itemId).getDocuments { querySnapshot, error in
-                guard let snapshot = querySnapshot, snapshot.isEmpty != true else {
-                    completion(FirestoreServiceError.documentNotFound); return
-                }
-                
-                guard let document = snapshot.documents.first else {
-                    return
-                }
-                
-                documentReference.collection("cart").document(document.documentID).delete { error in
-                    guard error == nil else {
-                        completion(error!); return
-                    }
-                    
-                    completion(nil)
-                }
-            }
-        }
-    }
-    
-    func getItemsFromCart(userId: String, completion: @escaping (Result<[CartItem], Error>) -> ()) {
-        usersReference.whereField("id", isEqualTo: userId).getDocuments { snapshot, error in
-            guard let snapshot = snapshot else {
-                return completion(.failure(error!))
-            }
-            
-            guard let userDocument = snapshot.documents.last else {
-                return print("document not found")
-            }
-            
-            let documentReference = userDocument.reference
-            let cartReference = documentReference.collection("cart")
-            cartReference.getDocuments { snapshot, error in
-                guard let snapshot = snapshot else {
-                    return completion(.failure(error!))
-                }
-                
-                let document = snapshot.documents
-                let items = document.compactMap { querySnapshot in
-                    return try? querySnapshot.data(as: CartItem.self)
-                }
-                
-                completion(.success(items))
-            }
-        }
-    }
-    
-    func getFavoritesIds(by userid: String, completion: @escaping (Result<[String], Error>) -> ()) {
-        usersReference.whereField("id", isEqualTo: userid).getDocuments { snapshot, error in
-            guard let snapshot = snapshot else {
-                return completion(.failure(error!))
-            }
-            
-            guard let userDocument = snapshot.documents.last else {
-                return print("document not found")
-            }
-            
-            let documentReference = userDocument.reference
-            
-            // go to subcollection
-            let favorites = documentReference.collection("favorites")
-            
-            favorites.getDocuments { snap, error in
-                var ids: [String] = []
-                guard let snap = snap else {
-                    return print(error!)
-                }
-                
-                let documents = snap.documents
-                for document in documents {
-                    guard let value = document.get("item_id") as? String else {
-                        return debugPrint("document string decoding error")
-                    }
-                    
-                    ids.append(value)
-                    if ids.count == documents.count {
-                        completion(.success(ids))
-                    }
-                }
-            }
-        }
-    }
     
     func createBrand(userId: String, brand: Brand, completion: @escaping (Result<[String: String], Error>) -> ()) {
         guard let brandDocumentId = try? brandsReference.addDocument(from: brand, completion: { error in
@@ -602,29 +490,6 @@ extension FirestoreService {
                 }
                 
                 completion(.success(true))
-            }
-        }
-    }
-    
-    func increaseItemViewsCounter(month: String, day: Int, itemId: String, completion: @escaping (Result<String, Error>) -> ()) {
-        let reference = itemsReference.document(itemId).collection("monthly_views")
-        reference.whereField("month", isEqualTo: month).whereField("day", isEqualTo: day).getDocuments { querySnapshot, error in
-            guard let snapshot = querySnapshot else {
-                return completion(.failure(error!))
-            }
-            
-            if let documentReference = snapshot.documents.first?.reference  {
-                documentReference.updateData(["amount": FieldValue.increment(Int64(1))])
-                completion(.success("updated"))
-            } else {
-                let monthly = MonthlyViews(month: month, day: day, amount: 1)
-                try? reference.addDocument(from: monthly, completion: { error in
-                    guard error == nil else {
-                        return completion(.failure(error!))
-                    }
-                    
-                    completion(.success("added"))
-                })
             }
         }
     }
@@ -792,33 +657,7 @@ extension FirestoreService {
             completion(nil)
         }
     }
-    
-    func getReviewsFromItem(itemId: String, completion: @escaping (Result<[Review], Error>) -> ()) {
-        itemsReference.document(itemId).collection("reviews").getDocuments { querySnapshot, error in
-            guard let snapshot = querySnapshot, snapshot.isEmpty != true else {
-                print("отзывы не найдены"); return
-            }
-            
-            let reviewIdArray: [String] = snapshot.documents.compactMap({ $0.get("review_id") as? String })
-            var reviews: [Review] = []
-            
-            for id in reviewIdArray {
-                self.getReview(reviewId: id) { result in
-                    switch result {
-                    case .success(let item):
-                        reviews.append(item)
-                    case .failure(_):
-                        fatalError()
-                    }
-                    
-                    if reviews.count == reviewIdArray.count {
-                        completion(.success(reviews))
-                    }
-                }
-            }
-        }
-    }
-    
+        
     func addToSubscriptions(userId: String, brandId: String, brandName: String, completion: @escaping (Error?) -> ()) {
         usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
             guard let snapshot = querySnapshot,
@@ -831,61 +670,6 @@ extension FirestoreService {
                 guard error == nil else { completion(error!); return }
                 
                 completion(nil)
-            }
-        }
-    }
-    
-    func getSubscriptionsItems(userId: String, completion: @escaping (Result<[Item], Error>) -> ()) {
-        self.getSubscriptions(userId: userId) { result in
-            switch result {
-            case .success(let subscriptions):
-                var items: [Item] = []
-                var subscriptionsCount = subscriptions.count
-                let group = DispatchGroup()
-                
-                for value in subscriptions {
-                    group.enter()
-                    self.itemsReference.whereField("brand_name", isEqualTo: value).getDocuments { snapshot, error in
-                        defer { group.leave() }
-                        guard let snapshot = snapshot else {
-                            return
-                        }
-                        
-                        let itemsInBrand = snapshot.documents.compactMap({ try? $0.data(as: Item.self) })
-                        items.append(contentsOf: itemsInBrand)
-                        subscriptionsCount -= 1
-                    }
-                }
-                
-                group.notify(queue: .main) {
-                    completion(.success(items))
-                    return
-                }
-                
-
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    func getSubscriptions(userId: String, completion: @escaping (Result<[String], Error>) -> ()) {
-        usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
-            guard let snapshot = querySnapshot,
-                  snapshot.isEmpty != true else {
-                return
-            }
-            
-            guard let reference = snapshot.documents.first?.reference else { return }
-            
-            reference.collection("subscriptions").getDocuments { querySnapshot, error in
-                guard let querySnapshot = querySnapshot, snapshot.isEmpty != true else {
-                    fatalError()
-                }
-                
-                let subscriptions: [String] = querySnapshot.documents.compactMap({ $0.get("brand_name") as? String })
-                
-                completion(.success(subscriptions))
             }
         }
     }
@@ -914,17 +698,6 @@ extension FirestoreService {
         }
     }
     
-    func getReview(reviewId: String, completion: @escaping (Result<Review, Error>) -> ()) {
-        reviewsReference.document(reviewId).getDocument { documentSnapshot, error in
-            guard let documentSnapshot = documentSnapshot else {
-                completion(.failure(error!)); return
-            }
-            
-            guard let data = try? documentSnapshot.data(as: Review.self) else { completion(.failure(FirestoreServiceError.decodingError)); return }
-            
-            completion(.success(data))
-        }
-    }
 }
 
 // MARK: - Firestore Service Errors

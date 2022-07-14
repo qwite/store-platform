@@ -5,7 +5,7 @@ protocol ProfilePresenterDelegate: AnyObject {
 }
 
 protocol ProfilePresenterProtocol {
-    init(view: ProfileViewProtocol, service: UserServiceProtocol, coordinator: ProfileCoordinator)
+    init(view: ProfileViewProtocol, service: TOUserServiceProtocol, coordinator: ProfileCoordinator)
     func viewDidLoad()
     func viewWillAppear()
     
@@ -20,10 +20,10 @@ protocol ProfilePresenterProtocol {
 
 class ProfilePresenter: ProfilePresenterProtocol {
     weak var view: ProfileViewProtocol?
-    var service: UserServiceProtocol?
+    var service: TOUserServiceProtocol?
     weak var coordinator: ProfileCoordinator?
     
-    required init(view: ProfileViewProtocol, service: UserServiceProtocol, coordinator: ProfileCoordinator) {
+    required init(view: ProfileViewProtocol, service: TOUserServiceProtocol, coordinator: ProfileCoordinator) {
         self.view = view
         self.service = service
         // MARK: fix

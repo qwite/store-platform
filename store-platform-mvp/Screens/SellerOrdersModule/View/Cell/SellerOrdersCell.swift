@@ -15,8 +15,7 @@ class SellerOrdersCell: UICollectionViewCell {
 
 extension SellerOrdersCell {
     func configure(order: Order) {
-        guard let number = order.id,
-              let firstPhotoUrl = order.item.item.photos?.first else { return }
+        guard let number = order.id else { return }
         
         orderNumberLabel.text = "Номер заказа: \(number)"
         dateLabel.text = order.date
@@ -29,7 +28,7 @@ extension SellerOrdersCell {
         
         configureViews()
         configureStatusLabel(status: order.status)
-        configureImageView(photo: firstPhotoUrl)
+//        configureImageView(photo: firstPhotoUrl)
     }
 }
 

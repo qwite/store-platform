@@ -2,7 +2,7 @@ import Foundation
 import MessageKit
 
 protocol MessengerPresenterProtocol: ImagePickerPresenterDelegate {
-    init(view: MessengerViewProtocol, service: UserServiceProtocol, conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol)
+    init(view: MessengerViewProtocol, service: TOUserServiceProtocol, conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol)
     func viewDidAppear()
     func viewDidLoad()
     
@@ -24,7 +24,7 @@ protocol MessengerPresenterProtocol: ImagePickerPresenterDelegate {
 class MessengerPresenter: MessengerPresenterProtocol {
     weak var view: MessengerViewProtocol?
     weak var coordinator: MessagesCoordinatorProtocol?
-    var service: UserServiceProtocol?
+    var service: TOUserServiceProtocol?
     var messages: [Message]! = nil
     
     var conversationId: String?
@@ -43,7 +43,7 @@ class MessengerPresenter: MessengerPresenterProtocol {
     }()
     
     
-    required init(view: MessengerViewProtocol, service: UserServiceProtocol, conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol) {
+    required init(view: MessengerViewProtocol, service: TOUserServiceProtocol, conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol) {
         self.view = view
         self.service = service
         self.conversationId = conversationId

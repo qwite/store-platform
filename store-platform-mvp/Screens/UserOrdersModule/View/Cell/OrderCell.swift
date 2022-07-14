@@ -14,14 +14,14 @@ class OrderCell: UICollectionViewCell {
 
 extension OrderCell {
     public func configure(order: Order) {
-        guard let firstPhotoUrl = order.item.item.photos?.first else { return }
+//        guard let firstPhotoUrl = order.item.item.photos?.first else { return }
         
         orderNumberLabel.text = "\(order.id ?? "null") "
         dateOrderLabel.text = "Заказ от \(order.date)"
     
         configureStatusLabel(status: order.status)
         configureDateLabel(date: order.date)
-        configureImageView(photo: firstPhotoUrl)
+//        configureImageView(photo: firstPhotoUrl)
         configureViews()
         
     }

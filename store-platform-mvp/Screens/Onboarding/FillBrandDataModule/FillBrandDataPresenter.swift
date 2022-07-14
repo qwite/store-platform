@@ -1,7 +1,7 @@
 import Foundation
 
 protocol FillBrandDataPresenterProtocol: ImagePickerPresenterDelegate {
-    init(view: FillBrandDataViewProtocol, coordinator: OnboardingCoordinator, service: UserServiceProtocol)
+    init(view: FillBrandDataViewProtocol, coordinator: OnboardingCoordinator, service: TOUserServiceProtocol)
     func viewDidLoad()
     func showImagePicker()
     func setBrandData(_ brandName: String, _ desc: String, _ city: String, _ firstName: String, _ lastName: String, _ patronymic: String)
@@ -13,11 +13,11 @@ protocol FillBrandDataPresenterProtocol: ImagePickerPresenterDelegate {
 class FillBrandDataPresenter: FillBrandDataPresenterProtocol {
     weak var view: FillBrandDataViewProtocol?
     weak var coordinator: OnboardingCoordinator?
-    var service: UserServiceProtocol?
+    var service: TOUserServiceProtocol?
     //TODO: fix builder init
     var builder = BrandBuilderImpl()
     
-    required init(view: FillBrandDataViewProtocol, coordinator: OnboardingCoordinator, service: UserServiceProtocol) {
+    required init(view: FillBrandDataViewProtocol, coordinator: OnboardingCoordinator, service: TOUserServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
         self.service = service

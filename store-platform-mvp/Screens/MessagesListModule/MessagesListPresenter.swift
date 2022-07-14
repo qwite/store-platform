@@ -1,7 +1,7 @@
 import Foundation
 
 protocol MessagesListPresenterProtocol {
-    init(view: MessagesListViewProtocol, role: RealTimeService.ChatRole, service: UserServiceProtocol, coordinator: MessagesCoordinatorProtocol)
+    init(view: MessagesListViewProtocol, role: RealTimeService.ChatRole, service: TOUserServiceProtocol, coordinator: MessagesCoordinatorProtocol)
     
     func viewDidLoad()
     func showMessenger(with id: String)
@@ -10,10 +10,10 @@ protocol MessagesListPresenterProtocol {
 class MessagesListPresenter: MessagesListPresenterProtocol {
     weak var view: MessagesListViewProtocol?
     var role: RealTimeService.ChatRole
-    var service: UserServiceProtocol?
+    var service: TOUserServiceProtocol?
     weak var coordinator: MessagesCoordinatorProtocol?
     
-    required init(view: MessagesListViewProtocol, role: RealTimeService.ChatRole, service: UserServiceProtocol, coordinator: MessagesCoordinatorProtocol) {
+    required init(view: MessagesListViewProtocol, role: RealTimeService.ChatRole, service: TOUserServiceProtocol, coordinator: MessagesCoordinatorProtocol) {
         self.view = view
         self.role = role
         self.service = service

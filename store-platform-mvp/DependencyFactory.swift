@@ -4,7 +4,6 @@ protocol Factory: AnyObject {
     func buildTabBarModule(coordinator: TabCoordinator) -> UITabBarController
     func buildAvailableParametersModule(delegate: AvailableParameterPresenterDelegate, type: Parameter.ParameterType) -> UIViewController
     func buildCreateAdModule(coordinator: CreateAdCoordinator) -> UIViewController
-    func buildSubscriptionsModule(coordinator: ProfileCoordinator) -> UIViewController
     func buildUserOrdersModule(coordinator: ProfileCoordinator) -> UIViewController
     func buildDetailedOrderModule(coordinator: ProfileCoordinator, order: Order) -> UIViewController
     func buildDetailedProfileModule(coordinator: ProfileCoordinator) -> UIViewController
@@ -17,8 +16,6 @@ protocol Factory: AnyObject {
     func buildLoginModule(coordinator: GuestCoordinator) -> UIViewController
     func buildRegisterModule(coordinator: GuestCoordinator) -> UIViewController
     func buildGuestModule(coordinator: GuestCoordinator) -> UIViewController
-    func buildFavoritesModule(coordinator: FavoritesCoordinator) -> UIViewController
-    func buildCartModule() -> UIViewController
     func buildSizePickerModule(coordinator: PickSizeCoordinatorProtocol, item: Item) -> UIViewController
     func buildProfileModule(coordinator: ProfileCoordinator) -> UIViewController
     func buildDetailedAdModule(coordinator: FeedCoordinator, with item: Item) -> UIViewController
@@ -43,20 +40,12 @@ class DependencyFactory: Factory {
         view.presenter = presenter
         return view
     }
-    
-    
-    func buildSubscriptionsModule(coordinator: ProfileCoordinator) -> UIViewController {
-        let view = SubscriptionsViewController()
-        let presenter = SubscriptionsPresenter(view: view, coordinator: coordinator)
-        view.presenter = presenter
-        return view
-    }
-    
+        
     func buildCreateAdModule(coordinator: CreateAdCoordinator) -> UIViewController {
         let view = CreateAdViewController()
         view.tabBarItem.image = UIImage(systemName: "plus.app")
         view.navigationItem.title = "Создание объявления"
-        let userService = UserService()
+        let userService = TOUserService()
         let presenter = CreateAdPresenter(view: view,
                                           itemBuilder: ItemBuilder(),
                                           coordinator: coordinator, service: userService)
@@ -135,17 +124,9 @@ class DependencyFactory: Factory {
         return view
     }
     
-    func buildFavoritesModule(coordinator: FavoritesCoordinator) -> UIViewController {
-        let view = FavoritesViewController()
-        let service = UserService()
-        let presenter = FavoritesPresenter(view: view, coordinator: coordinator, service: service)
-        view.presenter = presenter
-        return view
-    }
-    
     func buildProfileModule(coordinator: ProfileCoordinator) -> UIViewController {
         let view = ProfileViewController()
-        let service = UserService()
+        let service = TOUserService()
         let presenter = ProfilePresenter(view: view, service: service, coordinator: coordinator)
         view.presenter = presenter
         return view
@@ -165,14 +146,6 @@ class DependencyFactory: Factory {
         return view
     }
     
-    func buildCartModule() -> UIViewController {
-        let view = CartViewController()
-        let service = UserService()
-        let presenter = CartPresenter(view: view, service: service)
-        view.presenter = presenter
-        return view
-    }
-    
     func buildSizePickerModule(coordinator: PickSizeCoordinatorProtocol, item: Item) -> UIViewController {
         let view = PickSizeViewController()
         let presenter = PickSizePresenter(view: view, item: item, coordinator: coordinator)
@@ -182,7 +155,7 @@ class DependencyFactory: Factory {
     
     func buildDetailedAdModule(coordinator: FeedCoordinator, with item: Item) -> UIViewController {
         let view = DetailedAdViewController()
-        let service = UserService()
+        let service = TOUserService()
         let presenter = DetailedAdPresenter(view: view, coordinator: coordinator, item: item, service: service)
         view.presenter = presenter
         return view
@@ -197,7 +170,7 @@ class DependencyFactory: Factory {
     
     func buildFillBrandDataModule(coordinator: OnboardingCoordinator) -> UIViewController {
         let view = FillBrandDataViewController()
-        let service = UserService()
+        let service = TOUserService()
         let presenter = FillBrandDataPresenter(view: view, coordinator: coordinator, service: service)
         view.presenter = presenter
         return view
@@ -205,7 +178,7 @@ class DependencyFactory: Factory {
     
     func buildSellerModule(coordinator: SellerCoordinator) -> UIViewController {
         let view = SellerViewController()
-        let service = UserService()
+        let service = TOUserService()
         let presenter = SellerPresenter(view: view, coordinator: coordinator, service: service)
         view.presenter = presenter
         return view
@@ -213,7 +186,7 @@ class DependencyFactory: Factory {
     
     func buildMessengerModule(conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol) -> UIViewController {
         let view = MessengerViewController()
-        let service = UserService()
+        let service = TOUserService()
         let presenter = MessengerPresenter(view: view, service: service, conversationId: conversationId, brandId: brandId, coordinator: coordinator)
         view.presenter = presenter
         return view
@@ -221,7 +194,7 @@ class DependencyFactory: Factory {
     
     func buildListMessagesModule(role: RealTimeService.ChatRole, coordinator: MessagesCoordinatorProtocol) -> UIViewController {
         let view = MessagesListViewController()
-        let service = UserService()
+        let service = TOUserService()
         let presenter = MessagesListPresenter(view: view, role: role, service: service, coordinator: coordinator)
         view.presenter = presenter
         return view

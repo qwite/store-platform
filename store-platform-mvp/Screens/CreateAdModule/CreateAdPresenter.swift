@@ -1,7 +1,7 @@
 import Foundation
 
 protocol CreateAdViewPresenterProtocol: AnyObject {
-    init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator, service: UserServiceProtocol)
+    init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator, service: TOUserServiceProtocol)
     func viewDidLoad()
     
     func createSize(size: Size, completion: @escaping((Result<Size, Error>) -> Void))
@@ -20,10 +20,10 @@ class CreateAdPresenter: CreateAdViewPresenterProtocol {
     
     weak var view: CreateAdViewProtocol?
     var itemBuilder: ItemBuilderProtocol
-    var service: UserServiceProtocol?
+    var service: TOUserServiceProtocol?
     weak var coordinator: CreateAdCoordinator?
     
-    required init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator, service: UserServiceProtocol) {
+    required init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator, service: TOUserServiceProtocol) {
         self.view = view
         self.itemBuilder = itemBuilder
         self.coordinator = coordinator
