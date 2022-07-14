@@ -1,10 +1,12 @@
 import UIKit
 
+// MARK: - CartItemCellDelegate
 protocol CartItemCellDelegate: AnyObject {
     func didTappedRemoveButton(_ cell: UICollectionViewCell)
 }
 
-class CartItemCell: UICollectionViewCell {
+// MARK: - CartItemCell
+class CartCell: UICollectionViewCell {
     static let reuseId = "CartItem"
     weak var delegate: CartItemCellDelegate?
     
@@ -12,14 +14,13 @@ class CartItemCell: UICollectionViewCell {
     let clothingNameLabel = UILabel(text: nil, font: .systemFont(ofSize: 15, weight: .regular), textColor: .black)
     let priceLabel = UILabel(text: nil, font: .systemFont(ofSize: 15, weight: .regular), textColor: .black)
     let colorLabel = UILabel(text: nil, font: .systemFont(ofSize: 13, weight: .light), textColor: .black)
-    let amountItem = UILabel(text: "Количество 1", font: .systemFont(ofSize: 13, weight: .light), textColor: .black)
     let selectedSizeLabel = UILabel(text: nil, font: .systemFont(ofSize: 13, weight: .light), textColor: .black)
     var imageView = UIImageView()
     let removeButton = UIButton(text: nil, preset: .icon, iconName: "xmark")
 }
 
-extension CartItemCell {
-    func configure(cartItem: CartItem) {
+extension CartCell {
+    func configure(cartItem: Cart) {
         guard let firstPhoto = cartItem.item.photos?.first else {
             return
         }
@@ -39,7 +40,7 @@ extension CartItemCell {
         imageView.contentMode = .scaleAspectFit
         
         let itemStack = UIStackView(arrangedSubviews: [brandNameLabel, clothingNameLabel], spacing: 3, axis: .vertical, alignment: .fill)
-        let selectedInfo = UIStackView(arrangedSubviews: [amountItem, selectedSizeLabel, colorLabel], spacing: 3, axis: .vertical, alignment: .fill)
+        let selectedInfo = UIStackView(arrangedSubviews: [selectedSizeLabel, colorLabel], spacing: 3, axis: .vertical, alignment: .fill)
         
         let bottomStack = UIStackView(arrangedSubviews: [priceLabel], spacing: 0, axis: .vertical, alignment: .fill)
         
