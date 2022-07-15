@@ -65,7 +65,7 @@ extension CartViewController: CartViewProtocol {
     }
     
     func configureDataSource() {
-        dataSource = DataSource(collectionView: self.collectionView, cellProvider: { (collectionView, indexPath, itemIdentifier) -> UICollectionViewCell in
+        dataSource = DataSource(collectionView: self.collectionView, cellProvider: { [weak self] (collectionView, indexPath, itemIdentifier) -> UICollectionViewCell in
             let section = CartView.Section.allCases[indexPath.section]
             switch section {
             case .cart:
@@ -73,9 +73,13 @@ extension CartViewController: CartViewProtocol {
                     fatalError("dequeue error")
                 }
                 
-                let item = itemIdentifier
+                let cartItem = itemIdentifier
                 cell.delegate = self
-                cell.configure(cartItem: item)
+                
+                self?.presenter.getItem(id: cartItem.itemId) { item in
+                    cell.configure(cartItem: cartItem, fetchedItem: item)
+                }
+
                 return cell
             }
         })
@@ -94,7 +98,6 @@ extension CartViewController: CartViewProtocol {
             }
         }
     }
-    
     
     func insertItems(items: [Cart]) {
         var snapshot = NSDiffableDataSourceSnapshot<CartView.Section, Cart>()

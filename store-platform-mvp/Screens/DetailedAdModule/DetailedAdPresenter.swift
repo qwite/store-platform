@@ -11,11 +11,12 @@ protocol DetailedAdPresenterProtocol {
     
     func viewDidLoad()
     
-    func increaseItemViews()
+    func increaseViews()
     func showSizePicker()
     func didAddToCart(item: Cart)
     func createConversation()
     func getReviews()
+    func getCurrentDay() -> MonthlyViews?
     func addToSubscriptions()
 }
 
@@ -43,22 +44,22 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
     
     func viewDidLoad() {
         view?.configure(with: item)
-        increaseItemViews()
+        increaseViews()
         getReviews()
     }
     
-    func increaseItemViews() {
-        guard let itemId = item.id else { return }
-        
-        service?.increaseItemViews(itemId: itemId, completion: { result in
-            switch result {
-            case .success(let message):
-                debugPrint(message)
-            case .failure(let error):
-                debugPrint(error)
-            }
+    func increaseViews() {
+        guard let currentDay = getCurrentDay() else { return }
+        service?.increaseItemViews(item: item, views: currentDay, completion: { error in
+            guard error == nil else { return }
         })
-
+    }
+    
+    func getCurrentDay() -> MonthlyViews? {
+        guard let day = Date.currentDay else { return nil }
+        
+        let views = MonthlyViews(month: Date.currentMonth, day: day)
+        return views
     }
     
     func createConversation() {

@@ -16,9 +16,8 @@ protocol Factory: AnyObject {
     func buildLoginModule(coordinator: GuestCoordinator) -> UIViewController
     func buildRegisterModule(coordinator: GuestCoordinator) -> UIViewController
     func buildGuestModule(coordinator: GuestCoordinator) -> UIViewController
-    func buildSizePickerModule(coordinator: PickSizeCoordinatorProtocol, item: Item) -> UIViewController
+    func buildSizePickerModule(coordinator: SizePickerCoordinatorProtocol, item: Item) -> UIViewController
     func buildProfileModule(coordinator: ProfileCoordinator) -> UIViewController
-    func buildDetailedAdModule(coordinator: FeedCoordinator, with item: Item) -> UIViewController
     func buildOnboardingModule(coordinator: OnboardingCoordinator) -> UIViewController
     func buildFillBrandDataModule(coordinator: OnboardingCoordinator) -> UIViewController
     func buildSellerModule(coordinator: SellerCoordinator) -> UIViewController
@@ -146,21 +145,13 @@ class DependencyFactory: Factory {
         return view
     }
     
-    func buildSizePickerModule(coordinator: PickSizeCoordinatorProtocol, item: Item) -> UIViewController {
-        let view = PickSizeViewController()
+    func buildSizePickerModule(coordinator: SizePickerCoordinatorProtocol, item: Item) -> UIViewController {
+        let view = SizePickerViewController()
         let presenter = PickSizePresenter(view: view, item: item, coordinator: coordinator)
         view.presenter = presenter
         return view
     }
-    
-    func buildDetailedAdModule(coordinator: FeedCoordinator, with item: Item) -> UIViewController {
-        let view = DetailedAdViewController()
-        let service = TOUserService()
-        let presenter = DetailedAdPresenter(view: view, coordinator: coordinator, item: item, service: service)
-        view.presenter = presenter
-        return view
-    }
-    
+        
     func buildOnboardingModule(coordinator: OnboardingCoordinator) -> UIViewController {
         let view = OnboardingViewController()
         let presenter = OnboardingPresenter(view: view, coordinator: coordinator)

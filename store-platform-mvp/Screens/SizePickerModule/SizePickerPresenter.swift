@@ -1,8 +1,8 @@
 import Foundation
 
 // MARK: - PickSizePresenterProtocol
-protocol PickSizePresenterProtocol {
-    init(view: PickSizeViewProtocol, item: Item, coordinator: PickSizeCoordinatorProtocol)
+protocol SizePickerPresenterProtocol {
+    init(view: SizePickerViewProtocol, item: Item, coordinator: SizePickerCoordinatorProtocol)
     func viewDidLoad()
     
     func getSizeRowsCount() -> Int
@@ -12,12 +12,12 @@ protocol PickSizePresenterProtocol {
 }
 
 // MARK: - PickSizePresenterProtocol Implementation
-class PickSizePresenter: PickSizePresenterProtocol {
-    weak var view: PickSizeViewProtocol?
-    weak var coordinator: PickSizeCoordinatorProtocol?
+class PickSizePresenter: SizePickerPresenterProtocol {
+    weak var view: SizePickerViewProtocol?
+    weak var coordinator: SizePickerCoordinatorProtocol?
     var item: Item
     
-    required init(view: PickSizeViewProtocol, item: Item, coordinator: PickSizeCoordinatorProtocol) {
+    required init(view: SizePickerViewProtocol, item: Item, coordinator: SizePickerCoordinatorProtocol) {
         self.view = view
         self.coordinator = coordinator
         self.item = item

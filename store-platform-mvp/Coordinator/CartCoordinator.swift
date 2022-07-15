@@ -5,10 +5,9 @@ class CartCoordinator: Coordinator {
     var factory: Factory?
     
     func start() {
-        guard let module = factory?.buildCartModule() else {
-            return
-        }
-         self.navigationController.pushViewController(module, animated: false)
+        let module = CartAssembler.buildCartModule()
+        
+        self.navigationController.pushViewController(module, animated: true)
     }
     
     

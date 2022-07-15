@@ -2,11 +2,12 @@ import UIKit
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-// MARK: - CartServiceProtocol
+// MARK: - CartService Protocol
 protocol CartServiceProtocol {
     func addItemCart(userId: String, cartItem: Cart, completion: @escaping (Result<Cart, Error>) -> ())
     func removeItemCart(userId: String, cartItem: Cart, completion: @escaping (Error?) -> ())
     func fetchItemsCart(userId: String, completion: @escaping (Result<[Cart], Error>) -> ())
+    func fetchItem(by id: String, completion: @escaping (Result<Item, Error>) -> ())
 }
 
 // MARK: - CartServiceProtocol Implementation
@@ -68,6 +69,17 @@ class CartService: CartServiceProtocol {
                     completion(.success(items))
                 }
                 
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func fetchItem(by id: String, completion: @escaping (Result<Item, Error>) -> ()) {
+        FirestoreService.sharedInstance.getItemByDocumentId(documentId: id) { result in
+            switch result {
+            case .success(let item):
+                completion(.success(item))
             case .failure(let error):
                 completion(.failure(error))
             }

@@ -72,24 +72,21 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
         navigation.pushViewController(module, animated: true)
     }
     
-    func showDetailedAd(with item: Item) {
-        guard let module = factory?.buildDetailedAdModule(coordinator: self, with: item) else {
-            return
-        }
+    func showDetailedAd(with item: Item) {        
+        let module = DetailedAdAssembler.buildDetailedAd(coordinator: self, item: item)
         
         self.navigationController.pushViewController(module, animated: true)
     }
     
     func showSearchScreen() {
-        let service = FeedService()
-        let module = SearchAssembler.buildSearchModule(coordinator: self, service: service)
+        let module = SearchAssembler.buildSearchModule(coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }
     
 }
 
-extension FeedCoordinator: PickSizeCoordinatorProtocol {
+extension FeedCoordinator: SizePickerCoordinatorProtocol {
     func showSizePicker(for item: Item) {
         guard let module = factory?.buildSizePickerModule(coordinator: self, item: item) else {
             return

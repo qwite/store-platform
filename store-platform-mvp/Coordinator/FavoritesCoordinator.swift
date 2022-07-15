@@ -28,7 +28,7 @@ class FavoritesCoordinator: BaseCoordinator, Coordinator {
     }
 }
 
-extension FavoritesCoordinator: PickSizeCoordinatorProtocol {
+extension FavoritesCoordinator: SizePickerCoordinatorProtocol {
     func showSizePicker(for item: Item) {
         guard let module = factory?.buildSizePickerModule(coordinator: self, item: item) else {
             return

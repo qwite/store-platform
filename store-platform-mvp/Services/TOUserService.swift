@@ -4,7 +4,6 @@ protocol TOUserServiceProtocol: AnyObject {
     func logout(completion: @escaping (Error?) -> ())
     func uploadBrandLogoImage(data: Data, completion: @escaping (Result<String, Error>) -> ())
     func createBrand(brand: Brand, completion: @escaping (Result<String, Error>) -> ())
-    func increaseItemViews(itemId: String, completion: @escaping (Result<String, Error>) -> ())
     func getBrandName(completion: @escaping (Result<String, Error>) -> ())
     func getBrandId(completion: @escaping (Result<String, Error>) -> ())
     func getItemViewsBrand(completion: @escaping (Result<[MonthlyViews], Error>) -> ())

@@ -8,6 +8,8 @@ protocol CartPresenterProtocol {
     
     func setTotalPrice(items: [Cart])
     func removeItem(item: Cart)
+    func getItem(id: String, completion: @escaping (Item) -> ())
+
 //    func createOrder()
 }
 
@@ -50,6 +52,17 @@ class CartPresenter: CartPresenterProtocol {
             case .success(let items):
                 self?.view?.insertItems(items: items)
                 self?.setTotalPrice(items: items)
+            case .failure(let error):
+                debugPrint(error)
+            }
+        })
+    }
+    
+    func getItem(id: String, completion: @escaping (Item) -> ()) {
+        service?.fetchItem(by: id, completion: { result in
+            switch result {
+            case .success(let item):
+                completion(item)
             case .failure(let error):
                 debugPrint(error)
             }

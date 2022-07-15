@@ -1,9 +1,11 @@
 import UIKit
 
+// MARK: - RadioButtonDelegate
 protocol RadioButtonDelegate: AnyObject {
     func didButtonPressed(_ sender: UIView)
 }
 
+// MARK: - RadioButton
 class RadioButton: UIButton {
     private var normalView = UIImageView(image: UIImage(named: "button_unselected"))
     private var selectedView: UIView =  UIImageView(image: UIImage(named: "button_selected"))
@@ -31,8 +33,6 @@ class RadioButton: UIButton {
         normalView.removeFromSuperview()
         selectedView.removeFromSuperview()
 
-
-        
         guard let titleView = self.titleLabel else {
             return
         }
@@ -63,6 +63,7 @@ class RadioButton: UIButton {
     }
 }
 
+// MARK: - RadioButtonType
 extension RadioButton {
     enum RadioButtonType {
         case newItems

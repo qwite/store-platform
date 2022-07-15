@@ -21,15 +21,15 @@ class CartCell: UICollectionViewCell {
 
 // MARK: - Public methods
 extension CartCell {
-    public func configure(cartItem: Cart) {
-        guard let firstPhoto = cartItem.item.photos?.first else {
+    public func configure(cartItem: Cart, fetchedItem: Item) {
+        guard let firstPhoto = fetchedItem.photos?.first else {
             return
         }
         
-        brandNameLabel.text = cartItem.item.brandName.capitalized
-        clothingNameLabel.text = cartItem.item.clothingName
+        brandNameLabel.text = fetchedItem.brandName.capitalized
+        clothingNameLabel.text = fetchedItem.clothingName
         priceLabel.text = "\(cartItem.selectedPrice) ₽"
-        colorLabel.text = "Цвет \(cartItem.item.color)"
+        colorLabel.text = "Цвет \(fetchedItem.color)"
         selectedSizeLabel.text = "Размер \(cartItem.selectedSize)"
         
         configureViews()

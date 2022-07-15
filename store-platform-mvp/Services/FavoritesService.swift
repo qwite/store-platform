@@ -2,7 +2,7 @@ import UIKit
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-// MARK: - FavoritesServiceProtocol
+// MARK: - FavoritesService Protocol
 protocol FavoritesServiceProtocol {
     func fetchFavoritesId(userId: String, completion: @escaping (Result<[String], Error>) -> ())
     func fetchFavoritesItems(userId: String, completion: @escaping (Result<[Item], Error>) -> ())

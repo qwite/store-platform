@@ -3,11 +3,13 @@ import FirebaseFirestore
 import FirebaseAuth
 import FirebaseFirestoreSwift
 
+// MARK: - UserService Protocol
 protocol UserServiceProtocol {
     func getUserDocumentSnapshot(by id: String, completion: @escaping (Result<QueryDocumentSnapshot, Error>) -> ())
     func fetchUserSubscriptions(userId: String, completion: @escaping (Result<[String], Error>) -> ())
 }
 
+// MARK: - UserService Implementation
 class UserService: UserServiceProtocol {
     private let firebaseDb = Firestore.firestore()
 
@@ -56,6 +58,7 @@ class UserService: UserServiceProtocol {
     }
 }
 
+// MARK: - UserService Errors
 extension UserService {
     private enum UserServiceErrors: Error {
         case userNotExists

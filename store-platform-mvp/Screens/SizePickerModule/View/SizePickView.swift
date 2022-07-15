@@ -1,37 +1,50 @@
 import UIKit
 
-protocol PickSizeViewDelegate: AnyObject {
+// MARK: - SizePickViewDelegate Protocol
+protocol SizePickViewDelegate: AnyObject {
     func didTappedAddButton(selectedIndex: Int)
 }
 
-class PickSizeView: UIView {
-    weak var delegate: PickSizeViewDelegate?
+// MARK: - SizePickView
+class SizePickView: UIView {
+    weak var delegate: SizePickViewDelegate?
     let pickerView = UIPickerView()
-    let label = UILabel(text: "Выберите размер",
-                        font: .systemFont(ofSize: 18, weight: .semibold),
+    let label = UILabel(text: nil,
+                        font: nil,
                         textColor: .black)
+    
     let button = UIButton(text: "Добавить в корзину", preset: .bottom)
 }
 
-extension PickSizeView {
-    
-    func configurePickerView() {
+// MARK: - Public methods
+extension SizePickView {
+    public func configure() {
+        configurePickerView()
+        configureButtons()
+        configureViews()
+    }
+}
+
+// MARK: - Private methods
+extension SizePickView {
+    private func configurePickerView() {
         pickerView.isMultipleTouchEnabled = true
     }
     
-    func configureButtons() {
+    private func configureButtons() {
         button.addTarget(self, action: #selector(addButtonAction), for: .touchUpInside)
     }
     
-    @objc func addButtonAction() {
+    @objc private func addButtonAction() {
         let index = pickerView.selectedRow(inComponent: 0)
         delegate?.didTappedAddButton(selectedIndex: index)
     }
     
-    func configureViews() {
-        configurePickerView()
-        backgroundColor = .white
+    private func configureViews() {
+        label.text = "Выберите размер"
+        label.font = .systemFont(ofSize: 18, weight: .bold)
         
+        backgroundColor = .white
         addSubview(label)
         
         label.snp.makeConstraints { make in
