@@ -11,9 +11,7 @@ class ProfileCoordinator: BaseCoordinator, Coordinator {
     var childCoordinator = [Coordinator]()
     
     func start() {
-        guard let module = factory?.buildProfileModule(coordinator: self) else {
-            return
-        }
+        let module = ProfileAssembler.buildProfileModule(coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }

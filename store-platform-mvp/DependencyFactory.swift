@@ -16,8 +16,6 @@ protocol Factory: AnyObject {
     func buildLoginModule(coordinator: GuestCoordinator) -> UIViewController
     func buildRegisterModule(coordinator: GuestCoordinator) -> UIViewController
     func buildGuestModule(coordinator: GuestCoordinator) -> UIViewController
-    func buildSizePickerModule(coordinator: SizePickerCoordinatorProtocol, item: Item) -> UIViewController
-    func buildProfileModule(coordinator: ProfileCoordinator) -> UIViewController
     func buildOnboardingModule(coordinator: OnboardingCoordinator) -> UIViewController
     func buildFillBrandDataModule(coordinator: OnboardingCoordinator) -> UIViewController
     func buildSellerModule(coordinator: SellerCoordinator) -> UIViewController
@@ -123,14 +121,6 @@ class DependencyFactory: Factory {
         return view
     }
     
-    func buildProfileModule(coordinator: ProfileCoordinator) -> UIViewController {
-        let view = ProfileViewController()
-        let service = TOUserService()
-        let presenter = ProfilePresenter(view: view, service: service, coordinator: coordinator)
-        view.presenter = presenter
-        return view
-    }
-    
     func buildSettingsModule(coordinator: ProfileCoordinator) -> UIViewController {
         let view = SettingsViewController()
         let presenter = SettingsPresenter(view: view, coordinator: coordinator)
@@ -145,13 +135,6 @@ class DependencyFactory: Factory {
         return view
     }
     
-    func buildSizePickerModule(coordinator: SizePickerCoordinatorProtocol, item: Item) -> UIViewController {
-        let view = SizePickerViewController()
-        let presenter = PickSizePresenter(view: view, item: item, coordinator: coordinator)
-        view.presenter = presenter
-        return view
-    }
-        
     func buildOnboardingModule(coordinator: OnboardingCoordinator) -> UIViewController {
         let view = OnboardingViewController()
         let presenter = OnboardingPresenter(view: view, coordinator: coordinator)

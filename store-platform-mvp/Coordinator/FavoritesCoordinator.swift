@@ -4,7 +4,6 @@ import LBBottomSheet
 // MARK: - FavoritesCoordinator
 class FavoritesCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory?
     
     var completionHandler: ((Cart) -> ())?
     var childCoordinator =  [Coordinator]()
@@ -17,7 +16,6 @@ class FavoritesCoordinator: BaseCoordinator, Coordinator {
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.factory = DependencyFactory()
     }
     
     // TODO: remove from arc
@@ -28,11 +26,10 @@ class FavoritesCoordinator: BaseCoordinator, Coordinator {
     }
 }
 
+// MARK: - SizePickerCoordinatorProtocol
 extension FavoritesCoordinator: SizePickerCoordinatorProtocol {
     func showSizePicker(for item: Item) {
-        guard let module = factory?.buildSizePickerModule(coordinator: self, item: item) else {
-            return
-        }
+        let module = SizePickerAssembler.buildSizePickerModule(coordinator: self, with: item)
         
         let behavior: BottomSheetController.Behavior = .init(swipeMode: .top)
         self.navigationController.presentAsBottomSheet(module, behavior: behavior)

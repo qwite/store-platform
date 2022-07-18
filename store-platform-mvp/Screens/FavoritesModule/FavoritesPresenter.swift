@@ -1,5 +1,6 @@
 import Foundation
 
+// MARK: - FavoritesPresenterProtocol
 protocol FavoritesPresenterProtocol {
     init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator, service: FavoritesServiceProtocol)
     func viewDidLoad()
@@ -25,6 +26,7 @@ class FavoritesPresenter: FavoritesPresenterProtocol {
     }
     
     deinit {
+        // Removing Notification Center
         let notificationName = Notification.Name("addFavoriteItem")
         NotificationCenter.default.removeObserver(self, name: notificationName, object: nil)
     }

@@ -113,9 +113,8 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
                 FirestoreService.sharedInstance.addToSubscriptions(userId: userId, brandId: brandId, brandName: brandName) { [weak self] error in
                     guard error == nil else { print(error!); return}
                     
-                    self?.view?.showSuccessAlert(message: "Бренд добавлен в подписки")
+                    self?.view?.showSuccessAlert(message: Constants.Messages.successAddSubscription)
                 }
-
             case .failure(let error):
                 fatalError("\(error)")
             }

@@ -50,6 +50,9 @@
 		1F5D7FF1282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FF0282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift */; };
 		1F5D8003282E5A6D00255E71 /* DependencyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D8002282E5A6D00255E71 /* DependencyFactory.swift */; };
 		1F5D8008282E5F9200255E71 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D8007282E5F9200255E71 /* FeedViewController.swift */; };
+		1F5E3D6D28854C6600770076 /* SizePickerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5E3D6C28854C6600770076 /* SizePickerAssembler.swift */; };
+		1F5E3D6F28854DEB00770076 /* BrandService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5E3D6E28854DEB00770076 /* BrandService.swift */; };
+		1F5E3D7128854F8200770076 /* ProfileAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5E3D7028854F8200770076 /* ProfileAssembler.swift */; };
 		1F5EF17A2878B23500448FF5 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5EF1792878B23500448FF5 /* FeedService.swift */; };
 		1F5EF17C2878B57A00448FF5 /* FeedAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5EF17B2878B57A00448FF5 /* FeedAssembler.swift */; };
 		1F5EF17E2878C26E00448FF5 /* SortingAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5EF17D2878C26E00448FF5 /* SortingAssembler.swift */; };
@@ -257,6 +260,9 @@
 		1F5D7FF0282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = store_platform_mvpUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		1F5D8002282E5A6D00255E71 /* DependencyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyFactory.swift; sourceTree = "<group>"; };
 		1F5D8007282E5F9200255E71 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		1F5E3D6C28854C6600770076 /* SizePickerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePickerAssembler.swift; sourceTree = "<group>"; };
+		1F5E3D6E28854DEB00770076 /* BrandService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandService.swift; sourceTree = "<group>"; };
+		1F5E3D7028854F8200770076 /* ProfileAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAssembler.swift; sourceTree = "<group>"; };
 		1F5EF1792878B23500448FF5 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
 		1F5EF17B2878B57A00448FF5 /* FeedAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedAssembler.swift; sourceTree = "<group>"; };
 		1F5EF17D2878C26E00448FF5 /* SortingAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingAssembler.swift; sourceTree = "<group>"; };
@@ -451,6 +457,7 @@
 				1F8310052879811500E3D1CB /* UserService.swift */,
 				1FC0D5B1287EF8E800FAB933 /* FavoritesService.swift */,
 				1FC0D5B5287F00C000FAB933 /* CartService.swift */,
+				1F5E3D6E28854DEB00770076 /* BrandService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -596,6 +603,7 @@
 				1F3F382C2847683800228983 /* View */,
 				1F3F38282847673100228983 /* SizePickerViewController.swift */,
 				1F3F382A2847673800228983 /* SizePickerPresenter.swift */,
+				1F5E3D6C28854C6600770076 /* SizePickerAssembler.swift */,
 			);
 			path = SizePickerModule;
 			sourceTree = "<group>";
@@ -735,6 +743,7 @@
 				1F69B6AE2842560E00C75668 /* View */,
 				1F69B6AA2842556D00C75668 /* ProfileViewController.swift */,
 				1F69B6AC2842557300C75668 /* ProfilePresenter.swift */,
+				1F5E3D7028854F8200770076 /* ProfileAssembler.swift */,
 			);
 			path = ProfileModule;
 			sourceTree = "<group>";
@@ -1593,6 +1602,7 @@
 				1F816C17283770D300F48CA0 /* DetailedImageViewController.swift in Sources */,
 				1FBE20D7285E09DB00E03AF0 /* DetailedProfileViewController.swift in Sources */,
 				1F5D8008282E5F9200255E71 /* FeedViewController.swift in Sources */,
+				1F5E3D7128854F8200770076 /* ProfileAssembler.swift in Sources */,
 				1FD3EC26284EA325006789DA /* Statistics.swift in Sources */,
 				1F96F5A7282E883200C0F460 /* HeaderView + BottomView.swift in Sources */,
 				1F8FF0BB284BAA2F00171B83 /* OnboardingPresenter.swift in Sources */,
@@ -1620,6 +1630,7 @@
 				1F5EF17E2878C26E00448FF5 /* SortingAssembler.swift in Sources */,
 				1F69B6AD2842557300C75668 /* ProfilePresenter.swift in Sources */,
 				1F8CE1392843FD7400AA9398 /* DetailedAdPresenter.swift in Sources */,
+				1F5E3D6F28854DEB00770076 /* BrandService.swift in Sources */,
 				1F69B6B22842572900C75668 /* ProfileCoordinator.swift in Sources */,
 				1F4781D2285DD5EB00047317 /* Order.swift in Sources */,
 				1F6986D8283818F400D953D2 /* RegisterPresenter.swift in Sources */,
@@ -1648,6 +1659,7 @@
 				1F919F0B285515890034B475 /* MessengerViewController.swift in Sources */,
 				1F96F5A1282E7B8900C0F460 /* UILabel + Extension.swift in Sources */,
 				1F1309C9285678A500A03AF7 /* MessageListCell.swift in Sources */,
+				1F5E3D6D28854C6600770076 /* SizePickerAssembler.swift in Sources */,
 				1F227DA72836822100F736F1 /* ImagePickerController.swift in Sources */,
 				1F8FF0C0284BADD100171B83 /* OnboardingCoordinator.swift in Sources */,
 				1FF68413283A6F3800E92481 /* TabBarController.swift in Sources */,

@@ -1,11 +1,13 @@
 import Foundation
 
+// MARK: - ProfilePresenterDelegate
 protocol ProfilePresenterDelegate: AnyObject {
     func didTappedLogoutButton()
 }
 
+// MARK: - ProfilePresenterProtocol
 protocol ProfilePresenterProtocol {
-    init(view: ProfileViewProtocol, service: TOUserServiceProtocol, coordinator: ProfileCoordinator)
+    init(view: ProfileViewProtocol, service: UserServiceProtocol, coordinator: ProfileCoordinator)
     func viewDidLoad()
     func viewWillAppear()
     
@@ -18,16 +20,17 @@ protocol ProfilePresenterProtocol {
     func didShowSubscriptions()
 }
 
+// MARK: - ProfilePresenterProtocol Implementation
 class ProfilePresenter: ProfilePresenterProtocol {
     weak var view: ProfileViewProtocol?
-    var service: TOUserServiceProtocol?
+    var service: UserServiceProtocol?
     weak var coordinator: ProfileCoordinator?
     
-    required init(view: ProfileViewProtocol, service: TOUserServiceProtocol, coordinator: ProfileCoordinator) {
+    required init(view: ProfileViewProtocol, service: UserServiceProtocol, coordinator: ProfileCoordinator) {
         self.view = view
         self.service = service
-        // MARK: fix
         self.coordinator = coordinator
+        
         coordinator.delegate = self
     }
     

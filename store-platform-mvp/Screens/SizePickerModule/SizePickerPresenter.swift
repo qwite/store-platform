@@ -1,6 +1,6 @@
 import Foundation
 
-// MARK: - PickSizePresenterProtocol
+// MARK: - SizePickerPresenterProtocol
 protocol SizePickerPresenterProtocol {
     init(view: SizePickerViewProtocol, item: Item, coordinator: SizePickerCoordinatorProtocol)
     func viewDidLoad()
@@ -11,8 +11,8 @@ protocol SizePickerPresenterProtocol {
     func selectSize(by index: Int) 
 }
 
-// MARK: - PickSizePresenterProtocol Implementation
-class PickSizePresenter: SizePickerPresenterProtocol {
+// MARK: - SizePickerPresenterProtocol Implementation
+class SizePickerPresenter: SizePickerPresenterProtocol {
     weak var view: SizePickerViewProtocol?
     weak var coordinator: SizePickerCoordinatorProtocol?
     var item: Item

@@ -7,6 +7,7 @@ import FirebaseFirestoreSwift
 protocol UserServiceProtocol {
     func getUserDocumentSnapshot(by id: String, completion: @escaping (Result<QueryDocumentSnapshot, Error>) -> ())
     func fetchUserSubscriptions(userId: String, completion: @escaping (Result<[String], Error>) -> ())
+    func logout(completion: @escaping (Error?) -> ())
 }
 
 // MARK: - UserService Implementation
@@ -55,6 +56,15 @@ class UserService: UserServiceProtocol {
                 completion(.failure(error))
             }
         }
+    }
+    
+    func logout(completion: @escaping (Error?) -> ()) {
+        AuthService.sharedInstance.logout { error in
+            guard error == nil else { completion(error); return }
+        }
+        
+        SettingsService.sharedInstance.resetUserData()
+        completion(nil)
     }
 }
 

@@ -1,7 +1,6 @@
 import UIKit
 
 protocol TOUserServiceProtocol: AnyObject {
-    func logout(completion: @escaping (Error?) -> ())
     func uploadBrandLogoImage(data: Data, completion: @escaping (Result<String, Error>) -> ())
     func createBrand(brand: Brand, completion: @escaping (Result<String, Error>) -> ())
     func getBrandName(completion: @escaping (Result<String, Error>) -> ())
@@ -13,19 +12,6 @@ protocol TOUserServiceProtocol: AnyObject {
 }
 
 class TOUserService: TOUserServiceProtocol {
-    
-    deinit {
-        debugPrint("user service deinit")
-    }
-    
-    func logout(completion: @escaping (Error?) -> ()) {
-        AuthService.sharedInstance.logout { error in
-            guard error == nil else { completion(error); return }
-        }
-        
-        SettingsService.sharedInstance.resetUserData()
-    }
-    
     func getBrandId(completion: @escaping (Result<String, Error>) -> ()) {
         guard let userId = SettingsService.sharedInstance.userId else {
             return completion(.failure(UserServiceError.inputDataError))

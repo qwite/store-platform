@@ -88,9 +88,7 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
 
 extension FeedCoordinator: SizePickerCoordinatorProtocol {
     func showSizePicker(for item: Item) {
-        guard let module = factory?.buildSizePickerModule(coordinator: self, item: item) else {
-            return
-        }
+        let module = SizePickerAssembler.buildSizePickerModule(coordinator: self, with: item)
         
         let behavior: BottomSheetController.Behavior = .init(swipeMode: .top)
         self.navigationController.presentAsBottomSheet(module, behavior: behavior)
