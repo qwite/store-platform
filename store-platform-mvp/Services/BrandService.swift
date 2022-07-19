@@ -250,7 +250,7 @@ class BrandService: BrandServiceProtocol {
         let monthlyCollection = itemsReference.document(itemId).collection("monthly_views")
         monthlyCollection.whereField("month", isEqualTo: month).getDocuments { snapshot, error in
             guard let snapshot = snapshot, !snapshot.isEmpty else {
-                return completion(.failure(error!))
+                completion(.failure(error!)); return
             }
             
             let monthlyViews = snapshot.documents.compactMap({ try? $0.data(as: MonthlyViews.self) })

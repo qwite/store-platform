@@ -216,7 +216,6 @@ extension RealTimeService {
                     return nil
                 }
                 
-                // FIXME: edit
                 let sender = Sender(photoUrl: "", senderId: senderId, displayName: name)
                 let finalKind: MessageKind?
                 

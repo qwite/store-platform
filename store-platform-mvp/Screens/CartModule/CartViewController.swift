@@ -89,7 +89,6 @@ extension CartViewController: CartViewProtocol {
             case "section-bottom-total-cart":
                 guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TotalCartView.reuseId, for: indexPath) as? TotalCartView else { fatalError("reuse error") }
                 supplementaryView.configure()
-               //  FIXME:  retain cycle?
                 self.delegate = supplementaryView
                 supplementaryView.delegate = self
                 return supplementaryView

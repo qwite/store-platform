@@ -88,7 +88,6 @@ extension ProfileCoordinator: MessagesCoordinatorProtocol {
     }
     
     func showImagePicker() {
-        // FIXME: remove from arc
         let imagePickerCoordinator = ImagePickerCoordinator(self.navigationController)
         imagePickerCoordinator.delegate = self.imagePickerDelegate
         

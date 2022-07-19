@@ -194,7 +194,6 @@ class SellerPresenter: SellerPresenterProtocol {
         return sales
     }
     
-    // FIXME: rewrite
     func convertToItemViews(items: [Item], completion: @escaping ([Views]) -> ()){
         var itemViews: [Views] = []
         let currentMonth = Date.currentMonth
