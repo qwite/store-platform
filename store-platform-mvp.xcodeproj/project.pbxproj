@@ -17,8 +17,7 @@
 		1F05447B2860049F0075451E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F05447A2860049F0075451E /* SettingsViewController.swift */; };
 		1F05447D286004A60075451E /* SettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F05447C286004A60075451E /* SettingsPresenter.swift */; };
 		1F054480286005E30075451E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F05447F286005E30075451E /* SettingsView.swift */; };
-		1F08921D284A184B002A2411 /* CartItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F08921C284A184B002A2411 /* CartItemCell.swift */; };
-		1F08921F284A3EEB002A2411 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F08921E284A3EEB002A2411 /* UserService.swift */; };
+		1F08921D284A184B002A2411 /* CartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F08921C284A184B002A2411 /* CartCell.swift */; };
 		1F128C0C282E666400B16BD8 /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F128C0B282E666400B16BD8 /* FeedPresenter.swift */; };
 		1F1309C1285674F600A03AF7 /* MessagesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1309C0285674F600A03AF7 /* MessagesListViewController.swift */; };
 		1F1309C3285674FE00A03AF7 /* MessagesListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1309C2285674FE00A03AF7 /* MessagesListPresenter.swift */; };
@@ -32,23 +31,50 @@
 		1F227DA02836682D00F736F1 /* ImagePickerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F227D9F2836682D00F736F1 /* ImagePickerCoordinator.swift */; };
 		1F227DA72836822100F736F1 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F227DA62836822100F736F1 /* ImagePickerController.swift */; };
 		1F227DA92836824200F736F1 /* ImagePickerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F227DA82836824200F736F1 /* ImagePickerPresenter.swift */; };
+		1F2333752880938C005ED749 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2333742880938C005ED749 /* Date + Extension.swift */; };
 		1F29DE152842A57C00811F48 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F29DE142842A57C00811F48 /* BaseCoordinator.swift */; };
 		1F29DE182842D4D900811F48 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F29DE172842D4D900811F48 /* FavoritesView.swift */; };
 		1F29DE1B2842D54600811F48 /* FavoriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F29DE1A2842D54600811F48 /* FavoriteCell.swift */; };
-		1F3F38292847673100228983 /* PickSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F38282847673100228983 /* PickSizeViewController.swift */; };
-		1F3F382B2847673800228983 /* PickSizePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F382A2847673800228983 /* PickSizePresenter.swift */; };
-		1F3F382E2847683F00228983 /* PickSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F382D2847683F00228983 /* PickSizeView.swift */; };
+		1F2D8F5D2886B657005B7B23 /* FillBrandDataAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F5C2886B657005B7B23 /* FillBrandDataAssembler.swift */; };
+		1F2D8F5F2886B8E0005B7B23 /* SellerOrdersAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F5E2886B8E0005B7B23 /* SellerOrdersAssembler.swift */; };
+		1F2D8F612886B9F0005B7B23 /* SettingsAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F602886B9F0005B7B23 /* SettingsAssembler.swift */; };
+		1F2D8F632886BC84005B7B23 /* ChangeOrderStatusAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F622886BC84005B7B23 /* ChangeOrderStatusAssembler.swift */; };
+		1F2D8F652886CBB8005B7B23 /* SellerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F642886CBB8005B7B23 /* SellerAssembler.swift */; };
+		1F2D8F672886CFC1005B7B23 /* CreateAdAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F662886CFC1005B7B23 /* CreateAdAssembler.swift */; };
+		1F2D8F692886D050005B7B23 /* MessagesListAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F682886D050005B7B23 /* MessagesListAssembler.swift */; };
+		1F2D8F6B2886D71D005B7B23 /* GuestAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F6A2886D71D005B7B23 /* GuestAssembler.swift */; };
+		1F2D8F6D2886DA55005B7B23 /* RegisterAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F6C2886DA55005B7B23 /* RegisterAssembler.swift */; };
+		1F2D8F6F2886DC74005B7B23 /* LoginAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F6E2886DC74005B7B23 /* LoginAssembler.swift */; };
+		1F2D8F712886DDCF005B7B23 /* DetailedProfileAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F702886DDCF005B7B23 /* DetailedProfileAssembler.swift */; };
+		1F2D8F732886E04A005B7B23 /* DetailedOrderAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F722886E04A005B7B23 /* DetailedOrderAssembler.swift */; };
+		1F2D8F752886E31E005B7B23 /* UserOrdersAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F742886E31E005B7B23 /* UserOrdersAssembler.swift */; };
+		1F2D8F772886E412005B7B23 /* AvailableParametersAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F762886E412005B7B23 /* AvailableParametersAssembler.swift */; };
+		1F3F38292847673100228983 /* SizePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F38282847673100228983 /* SizePickerViewController.swift */; };
+		1F3F382B2847673800228983 /* SizePickerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F382A2847673800228983 /* SizePickerPresenter.swift */; };
+		1F3F382E2847683F00228983 /* SizePickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F382D2847683F00228983 /* SizePickView.swift */; };
+		1F4020052887024100E11861 /* DetailedImageAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4020042887024100E11861 /* DetailedImageAssembler.swift */; };
+		1F4020072887028D00E11861 /* MessengerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4020062887028D00E11861 /* MessengerAssembler.swift */; };
+		1F402009288703F600E11861 /* ImagePickerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F402008288703F600E11861 /* ImagePickerAssembler.swift */; };
+		1F40200B28870BF100E11861 /* OnboardingAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40200A28870BF100E11861 /* OnboardingAssembler.swift */; };
+		1F40200D28870CBA00E11861 /* TabBarAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40200C28870CBA00E11861 /* TabBarAssembler.swift */; };
+		1F40200F28870D7E00E11861 /* CreateSizeAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F40200E28870D7E00E11861 /* CreateSizeAssembler.swift */; };
 		1F4781D2285DD5EB00047317 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D1285DD5EB00047317 /* Order.swift */; };
 		1F4781D5285DDFDC00047317 /* UserOrdersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D4285DDFDC00047317 /* UserOrdersViewController.swift */; };
-		1F4781D7285DDFE200047317 /* UserOrderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D6285DDFE200047317 /* UserOrderPresenter.swift */; };
+		1F4781D7285DDFE200047317 /* UserOrdersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D6285DDFE200047317 /* UserOrdersPresenter.swift */; };
 		1F5D7FCE282E47BA00255E71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FCD282E47BA00255E71 /* AppDelegate.swift */; };
 		1F5D7FD0282E47BA00255E71 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FCF282E47BA00255E71 /* SceneDelegate.swift */; };
 		1F5D7FD7282E47BB00255E71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F5D7FD6282E47BB00255E71 /* Assets.xcassets */; };
 		1F5D7FE5282E47BB00255E71 /* store_platform_mvpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FE4282E47BB00255E71 /* store_platform_mvpTests.swift */; };
 		1F5D7FEF282E47BB00255E71 /* store_platform_mvpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FEE282E47BB00255E71 /* store_platform_mvpUITests.swift */; };
 		1F5D7FF1282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FF0282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift */; };
-		1F5D8003282E5A6D00255E71 /* DependencyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D8002282E5A6D00255E71 /* DependencyFactory.swift */; };
 		1F5D8008282E5F9200255E71 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D8007282E5F9200255E71 /* FeedViewController.swift */; };
+		1F5E3D6D28854C6600770076 /* SizePickerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5E3D6C28854C6600770076 /* SizePickerAssembler.swift */; };
+		1F5E3D6F28854DEB00770076 /* BrandService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5E3D6E28854DEB00770076 /* BrandService.swift */; };
+		1F5E3D7128854F8200770076 /* ProfileAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5E3D7028854F8200770076 /* ProfileAssembler.swift */; };
+		1F5EF17A2878B23500448FF5 /* FeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5EF1792878B23500448FF5 /* FeedService.swift */; };
+		1F5EF17C2878B57A00448FF5 /* FeedAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5EF17B2878B57A00448FF5 /* FeedAssembler.swift */; };
+		1F5EF17E2878C26E00448FF5 /* SortingAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5EF17D2878C26E00448FF5 /* SortingAssembler.swift */; };
+		1F5EF1802878C3F700448FF5 /* SearchAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5EF17F2878C3F700448FF5 /* SearchAssembler.swift */; };
 		1F6986CE28380EDF00D953D2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6986CD28380EDF00D953D2 /* LoginViewController.swift */; };
 		1F6986D028380EF700D953D2 /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6986CF28380EF700D953D2 /* LoginPresenter.swift */; };
 		1F6986D32838114500D953D2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6986D22838114500D953D2 /* LoginView.swift */; };
@@ -63,6 +89,8 @@
 		1F816C17283770D300F48CA0 /* DetailedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F816C16283770D300F48CA0 /* DetailedImageViewController.swift */; };
 		1F816C19283770F000F48CA0 /* DetailedImagePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F816C18283770F000F48CA0 /* DetailedImagePresenter.swift */; };
 		1F816C1B2837D95100F48CA0 /* UIImage + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F816C1A2837D95100F48CA0 /* UIImage + Extension.swift */; };
+		1F8310062879811500E3D1CB /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8310052879811500E3D1CB /* UserService.swift */; };
+		1F8310082879846800E3D1CB /* SubscriptionsAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8310072879846800E3D1CB /* SubscriptionsAssembler.swift */; };
 		1F8CE1372843FD2100AA9398 /* DetailedAdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8CE1362843FD2100AA9398 /* DetailedAdViewController.swift */; };
 		1F8CE1392843FD7400AA9398 /* DetailedAdPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8CE1382843FD7400AA9398 /* DetailedAdPresenter.swift */; };
 		1F8CE13B2844022400AA9398 /* DetailedAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8CE13A2844022400AA9398 /* DetailedAdView.swift */; };
@@ -121,6 +149,12 @@
 		1FBE20EC285E550900E03AF0 /* ChangeOrderStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBE20EB285E550900E03AF0 /* ChangeOrderStatusViewController.swift */; };
 		1FBE20EE285E554100E03AF0 /* ChangeOrderStatusPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBE20ED285E554100E03AF0 /* ChangeOrderStatusPresenter.swift */; };
 		1FBE20F1285E55E000E03AF0 /* ChangeOrderStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBE20F0285E55E000E03AF0 /* ChangeOrderStatusView.swift */; };
+		1FC0D5B2287EF8E800FAB933 /* FavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC0D5B1287EF8E800FAB933 /* FavoritesService.swift */; };
+		1FC0D5B4287EFFD200FAB933 /* FavoritesAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC0D5B3287EFFD200FAB933 /* FavoritesAssembler.swift */; };
+		1FC0D5B6287F00C000FAB933 /* CartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC0D5B5287F00C000FAB933 /* CartService.swift */; };
+		1FC0D5B8288055AD00FAB933 /* Cart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC0D5B7288055AD00FAB933 /* Cart.swift */; };
+		1FC0D5BA28805D8600FAB933 /* CartAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC0D5B928805D8600FAB933 /* CartAssembler.swift */; };
+		1FC0D5BC288060A000FAB933 /* DetailedAdAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC0D5BB288060A000FAB933 /* DetailedAdAssembler.swift */; };
 		1FCEC09928315F5D000D78AD /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCEC09828315F5D000D78AD /* Coordinator.swift */; };
 		1FCEC09D28315FB9000D78AD /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCEC09C28315FB9000D78AD /* AppCoordinator.swift */; };
 		1FCEC09F28315FF6000D78AD /* TabCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCEC09E28315FF6000D78AD /* TabCoordinator.swift */; };
@@ -129,7 +163,6 @@
 		1FCEC0A828316C2F000D78AD /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FCEC0A728316C2F000D78AD /* Launch Screen.storyboard */; };
 		1FD3EC24284EA214006789DA /* SellerChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD3EC23284EA214006789DA /* SellerChartCell.swift */; };
 		1FD3EC26284EA325006789DA /* Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD3EC25284EA325006789DA /* Statistics.swift */; };
-		1FDA0AD0284A81A000D05D51 /* CartItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDA0ACF284A81A000D05D51 /* CartItem.swift */; };
 		1FDA0ADC284AA5D600D05D51 /* SellerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDA0ADB284AA5D600D05D51 /* SellerCoordinator.swift */; };
 		1FDA0ADE284AAE5F00D05D51 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDA0ADD284AAE5F00D05D51 /* OnboardingViewController.swift */; };
 		1FDAC4EC285B839300CD5453 /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FDAC4EB285B839300CD5453 /* RadioButton.swift */; };
@@ -208,8 +241,7 @@
 		1F05447A2860049F0075451E /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		1F05447C286004A60075451E /* SettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenter.swift; sourceTree = "<group>"; };
 		1F05447F286005E30075451E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		1F08921C284A184B002A2411 /* CartItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemCell.swift; sourceTree = "<group>"; };
-		1F08921E284A3EEB002A2411 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		1F08921C284A184B002A2411 /* CartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCell.swift; sourceTree = "<group>"; };
 		1F128C0B282E666400B16BD8 /* FeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenter.swift; sourceTree = "<group>"; };
 		1F1309C0285674F600A03AF7 /* MessagesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesListViewController.swift; sourceTree = "<group>"; };
 		1F1309C2285674FE00A03AF7 /* MessagesListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesListPresenter.swift; sourceTree = "<group>"; };
@@ -223,15 +255,36 @@
 		1F227D9F2836682D00F736F1 /* ImagePickerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerCoordinator.swift; sourceTree = "<group>"; };
 		1F227DA62836822100F736F1 /* ImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerController.swift; sourceTree = "<group>"; };
 		1F227DA82836824200F736F1 /* ImagePickerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerPresenter.swift; sourceTree = "<group>"; };
+		1F2333742880938C005ED749 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
 		1F29DE142842A57C00811F48 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
 		1F29DE172842D4D900811F48 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 		1F29DE1A2842D54600811F48 /* FavoriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCell.swift; sourceTree = "<group>"; };
-		1F3F38282847673100228983 /* PickSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickSizeViewController.swift; sourceTree = "<group>"; };
-		1F3F382A2847673800228983 /* PickSizePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickSizePresenter.swift; sourceTree = "<group>"; };
-		1F3F382D2847683F00228983 /* PickSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickSizeView.swift; sourceTree = "<group>"; };
+		1F2D8F5C2886B657005B7B23 /* FillBrandDataAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillBrandDataAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F5E2886B8E0005B7B23 /* SellerOrdersAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerOrdersAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F602886B9F0005B7B23 /* SettingsAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F622886BC84005B7B23 /* ChangeOrderStatusAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeOrderStatusAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F642886CBB8005B7B23 /* SellerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F662886CFC1005B7B23 /* CreateAdAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAdAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F682886D050005B7B23 /* MessagesListAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesListAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F6A2886D71D005B7B23 /* GuestAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F6C2886DA55005B7B23 /* RegisterAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F6E2886DC74005B7B23 /* LoginAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F702886DDCF005B7B23 /* DetailedProfileAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedProfileAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F722886E04A005B7B23 /* DetailedOrderAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedOrderAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F742886E31E005B7B23 /* UserOrdersAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOrdersAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F762886E412005B7B23 /* AvailableParametersAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableParametersAssembler.swift; sourceTree = "<group>"; };
+		1F3F38282847673100228983 /* SizePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePickerViewController.swift; sourceTree = "<group>"; };
+		1F3F382A2847673800228983 /* SizePickerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePickerPresenter.swift; sourceTree = "<group>"; };
+		1F3F382D2847683F00228983 /* SizePickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePickView.swift; sourceTree = "<group>"; };
+		1F4020042887024100E11861 /* DetailedImageAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedImageAssembler.swift; sourceTree = "<group>"; };
+		1F4020062887028D00E11861 /* MessengerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessengerAssembler.swift; sourceTree = "<group>"; };
+		1F402008288703F600E11861 /* ImagePickerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerAssembler.swift; sourceTree = "<group>"; };
+		1F40200A28870BF100E11861 /* OnboardingAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingAssembler.swift; sourceTree = "<group>"; };
+		1F40200C28870CBA00E11861 /* TabBarAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarAssembler.swift; sourceTree = "<group>"; };
+		1F40200E28870D7E00E11861 /* CreateSizeAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSizeAssembler.swift; sourceTree = "<group>"; };
 		1F4781D1285DD5EB00047317 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		1F4781D4285DDFDC00047317 /* UserOrdersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOrdersViewController.swift; sourceTree = "<group>"; };
-		1F4781D6285DDFE200047317 /* UserOrderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOrderPresenter.swift; sourceTree = "<group>"; };
+		1F4781D6285DDFE200047317 /* UserOrdersPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOrdersPresenter.swift; sourceTree = "<group>"; };
 		1F5D7FCA282E47BA00255E71 /* store-platform-mvp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "store-platform-mvp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F5D7FCD282E47BA00255E71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F5D7FCF282E47BA00255E71 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -242,8 +295,14 @@
 		1F5D7FEA282E47BB00255E71 /* store-platform-mvpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "store-platform-mvpUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F5D7FEE282E47BB00255E71 /* store_platform_mvpUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = store_platform_mvpUITests.swift; sourceTree = "<group>"; };
 		1F5D7FF0282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = store_platform_mvpUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		1F5D8002282E5A6D00255E71 /* DependencyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyFactory.swift; sourceTree = "<group>"; };
 		1F5D8007282E5F9200255E71 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		1F5E3D6C28854C6600770076 /* SizePickerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePickerAssembler.swift; sourceTree = "<group>"; };
+		1F5E3D6E28854DEB00770076 /* BrandService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandService.swift; sourceTree = "<group>"; };
+		1F5E3D7028854F8200770076 /* ProfileAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAssembler.swift; sourceTree = "<group>"; };
+		1F5EF1792878B23500448FF5 /* FeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedService.swift; sourceTree = "<group>"; };
+		1F5EF17B2878B57A00448FF5 /* FeedAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedAssembler.swift; sourceTree = "<group>"; };
+		1F5EF17D2878C26E00448FF5 /* SortingAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingAssembler.swift; sourceTree = "<group>"; };
+		1F5EF17F2878C3F700448FF5 /* SearchAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAssembler.swift; sourceTree = "<group>"; };
 		1F6986CD28380EDF00D953D2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		1F6986CF28380EF700D953D2 /* LoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
 		1F6986D22838114500D953D2 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -258,6 +317,8 @@
 		1F816C16283770D300F48CA0 /* DetailedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedImageViewController.swift; sourceTree = "<group>"; };
 		1F816C18283770F000F48CA0 /* DetailedImagePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedImagePresenter.swift; sourceTree = "<group>"; };
 		1F816C1A2837D95100F48CA0 /* UIImage + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Extension.swift"; sourceTree = "<group>"; };
+		1F8310052879811500E3D1CB /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		1F8310072879846800E3D1CB /* SubscriptionsAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionsAssembler.swift; sourceTree = "<group>"; };
 		1F8CE1362843FD2100AA9398 /* DetailedAdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedAdViewController.swift; sourceTree = "<group>"; };
 		1F8CE1382843FD7400AA9398 /* DetailedAdPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedAdPresenter.swift; sourceTree = "<group>"; };
 		1F8CE13A2844022400AA9398 /* DetailedAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedAdView.swift; sourceTree = "<group>"; };
@@ -315,6 +376,12 @@
 		1FBE20EB285E550900E03AF0 /* ChangeOrderStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChangeOrderStatusViewController.swift; path = "store-platform-mvp/Screens/SellerOrdersModule/View/Cell/ChangeOrderStatusViewController.swift"; sourceTree = SOURCE_ROOT; };
 		1FBE20ED285E554100E03AF0 /* ChangeOrderStatusPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeOrderStatusPresenter.swift; sourceTree = "<group>"; };
 		1FBE20F0285E55E000E03AF0 /* ChangeOrderStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeOrderStatusView.swift; sourceTree = "<group>"; };
+		1FC0D5B1287EF8E800FAB933 /* FavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesService.swift; sourceTree = "<group>"; };
+		1FC0D5B3287EFFD200FAB933 /* FavoritesAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesAssembler.swift; sourceTree = "<group>"; };
+		1FC0D5B5287F00C000FAB933 /* CartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartService.swift; sourceTree = "<group>"; };
+		1FC0D5B7288055AD00FAB933 /* Cart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cart.swift; sourceTree = "<group>"; };
+		1FC0D5B928805D8600FAB933 /* CartAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartAssembler.swift; sourceTree = "<group>"; };
+		1FC0D5BB288060A000FAB933 /* DetailedAdAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedAdAssembler.swift; sourceTree = "<group>"; };
 		1FCEC09828315F5D000D78AD /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		1FCEC09C28315FB9000D78AD /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		1FCEC09E28315FF6000D78AD /* TabCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCoordinator.swift; sourceTree = "<group>"; };
@@ -323,7 +390,6 @@
 		1FCEC0A728316C2F000D78AD /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		1FD3EC23284EA214006789DA /* SellerChartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerChartCell.swift; sourceTree = "<group>"; };
 		1FD3EC25284EA325006789DA /* Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statistics.swift; sourceTree = "<group>"; };
-		1FDA0ACF284A81A000D05D51 /* CartItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItem.swift; sourceTree = "<group>"; };
 		1FDA0ADB284AA5D600D05D51 /* SellerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerCoordinator.swift; sourceTree = "<group>"; };
 		1FDA0ADD284AAE5F00D05D51 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		1FDAC4EB285B839300CD5453 /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
@@ -410,6 +476,7 @@
 				1F03A5AA282E75F500A6A299 /* View */,
 				1F03A5A4282E74DD00A6A299 /* CreateAdViewController.swift */,
 				1F03A5A6282E74F700A6A299 /* CreateAdPresenter.swift */,
+				1F2D8F662886CFC1005B7B23 /* CreateAdAssembler.swift */,
 			);
 			path = CreateAdModule;
 			sourceTree = "<group>";
@@ -418,11 +485,15 @@
 			isa = PBXGroup;
 			children = (
 				1F1E4D9F28383D9800C9AC05 /* AuthService.swift */,
+				1F5E3D6E28854DEB00770076 /* BrandService.swift */,
 				1F1E4D9D28383C1E00C9AC05 /* FirestoreService.swift */,
+				1F5EF1792878B23500448FF5 /* FeedService.swift */,
 				1FF68423283AE63A00E92481 /* StorageService.swift */,
 				1F766B9028412273001F2E7E /* SettingsService.swift */,
-				1F08921E284A3EEB002A2411 /* UserService.swift */,
 				1F919F0E2855195A0034B475 /* RealTimeService.swift */,
+				1F8310052879811500E3D1CB /* UserService.swift */,
+				1FC0D5B1287EF8E800FAB933 /* FavoritesService.swift */,
+				1FC0D5B5287F00C000FAB933 /* CartService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -466,6 +537,7 @@
 				1F05447E286005DE0075451E /* View */,
 				1F05447A2860049F0075451E /* SettingsViewController.swift */,
 				1F05447C286004A60075451E /* SettingsPresenter.swift */,
+				1F2D8F602886B9F0005B7B23 /* SettingsAssembler.swift */,
 			);
 			path = SettingsModule;
 			sourceTree = "<group>";
@@ -481,7 +553,7 @@
 		1F08921B284A1841002A2411 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				1F08921C284A184B002A2411 /* CartItemCell.swift */,
+				1F08921C284A184B002A2411 /* CartCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -497,6 +569,7 @@
 				1F96F59E282E7B8900C0F460 /* UITextField + Extension.swift */,
 				1F816C1A2837D95100F48CA0 /* UIImage + Extension.swift */,
 				1FDAC4EB285B839300CD5453 /* RadioButton.swift */,
+				1F2333742880938C005ED749 /* Date + Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -507,6 +580,7 @@
 				1F1309C42856778C00A03AF7 /* View */,
 				1F1309C0285674F600A03AF7 /* MessagesListViewController.swift */,
 				1F1309C2285674FE00A03AF7 /* MessagesListPresenter.swift */,
+				1F2D8F682886D050005B7B23 /* MessagesListAssembler.swift */,
 			);
 			path = MessagesListModule;
 			sourceTree = "<group>";
@@ -528,18 +602,12 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		1F1E4DA4283846EF00C9AC05 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		1F227DA12836732700F736F1 /* ImagePickerModule */ = {
 			isa = PBXGroup;
 			children = (
 				1F227DA62836822100F736F1 /* ImagePickerController.swift */,
 				1F227DA82836824200F736F1 /* ImagePickerPresenter.swift */,
+				1F402008288703F600E11861 /* ImagePickerAssembler.swift */,
 			);
 			path = ImagePickerModule;
 			sourceTree = "<group>";
@@ -561,20 +629,21 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		1F3F38272847671E00228983 /* PickSizeModule */ = {
+		1F3F38272847671E00228983 /* SizePickerModule */ = {
 			isa = PBXGroup;
 			children = (
 				1F3F382C2847683800228983 /* View */,
-				1F3F38282847673100228983 /* PickSizeViewController.swift */,
-				1F3F382A2847673800228983 /* PickSizePresenter.swift */,
+				1F3F38282847673100228983 /* SizePickerViewController.swift */,
+				1F3F382A2847673800228983 /* SizePickerPresenter.swift */,
+				1F5E3D6C28854C6600770076 /* SizePickerAssembler.swift */,
 			);
-			path = PickSizeModule;
+			path = SizePickerModule;
 			sourceTree = "<group>";
 		};
 		1F3F382C2847683800228983 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				1F3F382D2847683F00228983 /* PickSizeView.swift */,
+				1F3F382D2847683F00228983 /* SizePickView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -584,7 +653,8 @@
 			children = (
 				1FBE20C5285DE30300E03AF0 /* View */,
 				1F4781D4285DDFDC00047317 /* UserOrdersViewController.swift */,
-				1F4781D6285DDFE200047317 /* UserOrderPresenter.swift */,
+				1F4781D6285DDFE200047317 /* UserOrdersPresenter.swift */,
+				1F2D8F742886E31E005B7B23 /* UserOrdersAssembler.swift */,
 			);
 			path = UserOrdersModule;
 			sourceTree = "<group>";
@@ -616,7 +686,6 @@
 			children = (
 				1F797BB6286C43A9001945D0 /* Builders */,
 				1F6986CB28380EB300D953D2 /* Constants */,
-				1F5D8002282E5A6D00255E71 /* DependencyFactory.swift */,
 				1F03A5A8282E759E00A6A299 /* Services */,
 				1F766B8F28411D5E001F2E7E /* Model */,
 				1FCEC0862830EE30000D78AD /* Coordinator */,
@@ -650,6 +719,7 @@
 				1FF68418283AB6A400E92481 /* View */,
 				1F5D8007282E5F9200255E71 /* FeedViewController.swift */,
 				1F128C0B282E666400B16BD8 /* FeedPresenter.swift */,
+				1F5EF17B2878B57A00448FF5 /* FeedAssembler.swift */,
 			);
 			path = FeedModule;
 			sourceTree = "<group>";
@@ -668,6 +738,7 @@
 				1F6986D12838113F00D953D2 /* View */,
 				1F6986CD28380EDF00D953D2 /* LoginViewController.swift */,
 				1F6986CF28380EF700D953D2 /* LoginPresenter.swift */,
+				1F2D8F6E2886DC74005B7B23 /* LoginAssembler.swift */,
 			);
 			path = LoginModule;
 			sourceTree = "<group>";
@@ -683,10 +754,10 @@
 		1F6986D4283818BC00D953D2 /* RegisterModule */ = {
 			isa = PBXGroup;
 			children = (
-				1F1E4DA4283846EF00C9AC05 /* Model */,
 				1F6986D92838199200D953D2 /* View */,
 				1F6986D5283818D100D953D2 /* RegisterViewController.swift */,
 				1F6986D7283818F400D953D2 /* RegisterPresenter.swift */,
+				1F2D8F6C2886DA55005B7B23 /* RegisterAssembler.swift */,
 			);
 			path = RegisterModule;
 			sourceTree = "<group>";
@@ -705,6 +776,7 @@
 				1F69B6AE2842560E00C75668 /* View */,
 				1F69B6AA2842556D00C75668 /* ProfileViewController.swift */,
 				1F69B6AC2842557300C75668 /* ProfilePresenter.swift */,
+				1F5E3D7028854F8200770076 /* ProfileAssembler.swift */,
 			);
 			path = ProfileModule;
 			sourceTree = "<group>";
@@ -723,7 +795,7 @@
 				1F1E4DA52838473200C9AC05 /* UserData.swift */,
 				1F96F5AE282EA35100C0F460 /* Size.swift */,
 				1FFFFB3C2835996C00E967E7 /* Item.swift */,
-				1FDA0ACF284A81A000D05D51 /* CartItem.swift */,
+				1FC0D5B7288055AD00FAB933 /* Cart.swift */,
 				1F04F829284D3BF900BAD49B /* Brand.swift */,
 				1FD3EC25284EA325006789DA /* Statistics.swift */,
 				1FEF588C28554BE0007A2A95 /* Chat.swift */,
@@ -749,6 +821,7 @@
 			children = (
 				1F816C16283770D300F48CA0 /* DetailedImageViewController.swift */,
 				1F816C18283770F000F48CA0 /* DetailedImagePresenter.swift */,
+				1F4020042887024100E11861 /* DetailedImageAssembler.swift */,
 			);
 			path = DetailedImageModule;
 			sourceTree = "<group>";
@@ -768,6 +841,7 @@
 				1F8CE13C2844022700AA9398 /* View */,
 				1F8CE1362843FD2100AA9398 /* DetailedAdViewController.swift */,
 				1F8CE1382843FD7400AA9398 /* DetailedAdPresenter.swift */,
+				1FC0D5BB288060A000FAB933 /* DetailedAdAssembler.swift */,
 			);
 			path = DetailedAdModule;
 			sourceTree = "<group>";
@@ -786,6 +860,7 @@
 				1F8E6135284631A40040DAE0 /* View */,
 				1F8E6131284631220040DAE0 /* CartViewController.swift */,
 				1F8E6133284631410040DAE0 /* CartPresenter.swift */,
+				1FC0D5B928805D8600FAB933 /* CartAssembler.swift */,
 			);
 			path = CartModule;
 			sourceTree = "<group>";
@@ -829,7 +904,7 @@
 				1F8CE1352843FCF500AA9398 /* DetailedAdModule */,
 				1FB3509B284004EB007200BB /* FavoritesModule */,
 				1F8E6130284631130040DAE0 /* CartModule */,
-				1F3F38272847671E00228983 /* PickSizeModule */,
+				1F3F38272847671E00228983 /* SizePickerModule */,
 				1F69B6A92842556200C75668 /* ProfileModule */,
 			);
 			path = Screens;
@@ -858,6 +933,7 @@
 				1F8FF0C7284BB64900171B83 /* View */,
 				1F8FF0C1284BB00600171B83 /* FillBrandDataViewController.swift */,
 				1F8FF0C5284BB15100171B83 /* FillBrandDataPresenter.swift */,
+				1F2D8F5C2886B657005B7B23 /* FillBrandDataAssembler.swift */,
 			);
 			path = FillBrandDataModule;
 			sourceTree = "<group>";
@@ -875,6 +951,7 @@
 			children = (
 				1F919F0A285515890034B475 /* MessengerViewController.swift */,
 				1F919F0C285515900034B475 /* MessengerPresenter.swift */,
+				1F4020062887028D00E11861 /* MessengerAssembler.swift */,
 			);
 			path = MessengerModule;
 			sourceTree = "<group>";
@@ -885,6 +962,7 @@
 				1F96F5B6282EDF4400C0F460 /* View */,
 				1F96F5B2282EDE6D00C0F460 /* CreateSizeViewController.swift */,
 				1F96F5B4282EDE8E00C0F460 /* CreateSizePresenter.swift */,
+				1F40200E28870D7E00E11861 /* CreateSizeAssembler.swift */,
 			);
 			path = CreateSizeModule;
 			sourceTree = "<group>";
@@ -903,6 +981,7 @@
 				1FA9CF8E285CE315001E671A /* View */,
 				1FA9CF8A285CE151001E671A /* AvailableParametersViewController.swift */,
 				1FA9CF8C285CE176001E671A /* AvailableParametersPresenter.swift */,
+				1F2D8F762886E412005B7B23 /* AvailableParametersAssembler.swift */,
 			);
 			path = AvailableParametersModule;
 			sourceTree = "<group>";
@@ -929,6 +1008,7 @@
 				1F29DE162842D4D000811F48 /* View */,
 				1FB3509C28400524007200BB /* FavoritesViewController.swift */,
 				1FB3509E28400567007200BB /* FavoritesPresenter.swift */,
+				1FC0D5B3287EFFD200FAB933 /* FavoritesAssembler.swift */,
 			);
 			path = FavoritesModule;
 			sourceTree = "<group>";
@@ -939,6 +1019,7 @@
 				1FDAC4ED285BA84B00CD5453 /* View */,
 				1FBAB778285B391300B6B3ED /* SortingFeedViewController.swift */,
 				1FBAB77A285B393D00B6B3ED /* SortingFeedPresenter.swift */,
+				1F5EF17D2878C26E00448FF5 /* SortingAssembler.swift */,
 			);
 			path = SortingFeedModule;
 			sourceTree = "<group>";
@@ -966,6 +1047,7 @@
 				1FBE20D2285DFF7800E03AF0 /* View */,
 				1FBE20CE285DFE0500E03AF0 /* DetailedOrderViewController.swift */,
 				1FBE20D0285DFE3E00E03AF0 /* DetailedOrderPresenter.swift */,
+				1F2D8F722886E04A005B7B23 /* DetailedOrderAssembler.swift */,
 			);
 			path = DetailedOrderModule;
 			sourceTree = "<group>";
@@ -984,6 +1066,7 @@
 				1FBE20DA285E0AAB00E03AF0 /* View */,
 				1FBE20D6285E09DB00E03AF0 /* DetailedProfileViewController.swift */,
 				1FBE20D8285E0A0600E03AF0 /* DetailedProfilePresenter.swift */,
+				1F2D8F702886DDCF005B7B23 /* DetailedProfileAssembler.swift */,
 			);
 			path = DetailedProfileModule;
 			sourceTree = "<group>";
@@ -1002,6 +1085,7 @@
 				1FBE20E4285E3D1D00E03AF0 /* View */,
 				1FBE20E0285E399E00E03AF0 /* SellerOrdersViewController.swift */,
 				1FBE20E2285E39AE00E03AF0 /* SellerOrdersPresenter.swift */,
+				1F2D8F5E2886B8E0005B7B23 /* SellerOrdersAssembler.swift */,
 			);
 			path = SellerOrdersModule;
 			sourceTree = "<group>";
@@ -1029,6 +1113,7 @@
 				1FBE20EF285E55D700E03AF0 /* View */,
 				1FBE20EB285E550900E03AF0 /* ChangeOrderStatusViewController.swift */,
 				1FBE20ED285E554100E03AF0 /* ChangeOrderStatusPresenter.swift */,
+				1F2D8F622886BC84005B7B23 /* ChangeOrderStatusAssembler.swift */,
 			);
 			path = ChangeOrderStatusModule;
 			sourceTree = "<group>";
@@ -1077,6 +1162,7 @@
 				1F8FF0BC284BAAAC00171B83 /* View */,
 				1FDA0ADD284AAE5F00D05D51 /* OnboardingViewController.swift */,
 				1F8FF0BA284BAA2F00171B83 /* OnboardingPresenter.swift */,
+				1F40200A28870BF100E11861 /* OnboardingAssembler.swift */,
 			);
 			path = OnboardingModule;
 			sourceTree = "<group>";
@@ -1103,6 +1189,7 @@
 				1FE32509285A1F97004D8338 /* View */,
 				1FE32503285A1964004D8338 /* SearchViewController.swift */,
 				1FE32505285A1C0E004D8338 /* SearchPresenter.swift */,
+				1F5EF17F2878C3F700448FF5 /* SearchAssembler.swift */,
 			);
 			path = SearchModule;
 			sourceTree = "<group>";
@@ -1121,6 +1208,7 @@
 				1FEB156A284E53FC00DCCBC7 /* View */,
 				1FEB1566284E1A0F00DCCBC7 /* SellerViewController.swift */,
 				1FEB1568284E525A00DCCBC7 /* SellerPresenter.swift */,
+				1F2D8F642886CBB8005B7B23 /* SellerAssembler.swift */,
 			);
 			path = SellerModule;
 			sourceTree = "<group>";
@@ -1160,6 +1248,7 @@
 				1FEF1EEE2864B1AA0069F2B5 /* View */,
 				1FEF1EEA2864B0570069F2B5 /* SubscriptionsViewController.swift */,
 				1FEF1EEC2864B06A0069F2B5 /* SubscriptionsPresenter.swift */,
+				1F8310072879846800E3D1CB /* SubscriptionsAssembler.swift */,
 			);
 			path = SubscriptionsModule;
 			sourceTree = "<group>";
@@ -1186,6 +1275,7 @@
 				1FF6840D283A535700E92481 /* View */,
 				1FF68409283A524B00E92481 /* GuestViewController.swift */,
 				1FF6840B283A526400E92481 /* GuestPresenter.swift */,
+				1F2D8F6A2886D71D005B7B23 /* GuestAssembler.swift */,
 			);
 			path = GuestModule;
 			sourceTree = "<group>";
@@ -1203,6 +1293,7 @@
 			children = (
 				1FF68412283A6F3800E92481 /* TabBarController.swift */,
 				1FF68415283A6FEE00E92481 /* TabBarPresenter.swift */,
+				1F40200C28870CBA00E11861 /* TabBarAssembler.swift */,
 			);
 			path = TabBarModule;
 			sourceTree = "<group>";
@@ -1483,14 +1574,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F2D8F6B2886D71D005B7B23 /* GuestAssembler.swift in Sources */,
 				1F8E6132284631220040DAE0 /* CartViewController.swift in Sources */,
 				1FDA0ADC284AA5D600D05D51 /* SellerCoordinator.swift in Sources */,
+				1F5EF17A2878B23500448FF5 /* FeedService.swift in Sources */,
 				1F816C1B2837D95100F48CA0 /* UIImage + Extension.swift in Sources */,
 				1FEB1569284E525A00DCCBC7 /* SellerPresenter.swift in Sources */,
 				1F1309C1285674F600A03AF7 /* MessagesListViewController.swift in Sources */,
+				1F2D8F772886E412005B7B23 /* AvailableParametersAssembler.swift in Sources */,
 				1FF68411283A53FB00E92481 /* GuestCoordinator.swift in Sources */,
-				1F4781D7285DDFE200047317 /* UserOrderPresenter.swift in Sources */,
+				1F4781D7285DDFE200047317 /* UserOrdersPresenter.swift in Sources */,
 				1F96F5AF282EA35100C0F460 /* Size.swift in Sources */,
+				1F2D8F752886E31E005B7B23 /* UserOrdersAssembler.swift in Sources */,
 				1F8FF0BE284BAAB600171B83 /* WelcomePageView.swift in Sources */,
 				1FDAC4F2285BE40200CD5453 /* TotalCartView.swift in Sources */,
 				1FCEC0A3283163F3000D78AD /* CreateAdCoordinator.swift in Sources */,
@@ -1498,12 +1593,15 @@
 				1FEB1572284E5B7F00DCCBC7 /* AddItemButtonView.swift in Sources */,
 				1FA9CF8D285CE176001E671A /* AvailableParametersPresenter.swift in Sources */,
 				1F8FF0CB284BB80500171B83 /* Constants.swift in Sources */,
+				1F2D8F6D2886DA55005B7B23 /* RegisterAssembler.swift in Sources */,
 				1F05447D286004A60075451E /* SettingsPresenter.swift in Sources */,
 				1F1309C62856779700A03AF7 /* MessagesListView.swift in Sources */,
 				1F8FF0C2284BB00600171B83 /* FillBrandDataViewController.swift in Sources */,
 				1FBAB779285B391300B6B3ED /* SortingFeedViewController.swift in Sources */,
 				1F6986DB2838199A00D953D2 /* RegisterView.swift in Sources */,
+				1F2D8F6F2886DC74005B7B23 /* LoginAssembler.swift in Sources */,
 				1FBE20F1285E55E000E03AF0 /* ChangeOrderStatusView.swift in Sources */,
+				1F40200B28870BF100E11861 /* OnboardingAssembler.swift in Sources */,
 				1F8E612F284630D10040DAE0 /* CartCoordinator.swift in Sources */,
 				1FDAC4EC285B839300CD5453 /* RadioButton.swift in Sources */,
 				1F816C19283770F000F48CA0 /* DetailedImagePresenter.swift in Sources */,
@@ -1512,10 +1610,12 @@
 				1FF68424283AE63A00E92481 /* StorageService.swift in Sources */,
 				1F05447B2860049F0075451E /* SettingsViewController.swift in Sources */,
 				1FCEC09928315F5D000D78AD /* Coordinator.swift in Sources */,
+				1FC0D5BA28805D8600FAB933 /* CartAssembler.swift in Sources */,
 				1F1309CB2856795500A03AF7 /* Conversation.swift in Sources */,
 				1F96F5A5282E7B8900C0F460 /* UIImageView + Extension.swift in Sources */,
 				1FCEC0A1283161DC000D78AD /* FeedCoordinator.swift in Sources */,
 				1F1309C3285674FE00A03AF7 /* MessagesListPresenter.swift in Sources */,
+				1F40200F28870D7E00E11861 /* CreateSizeAssembler.swift in Sources */,
 				1FDA0ADE284AAE5F00D05D51 /* OnboardingViewController.swift in Sources */,
 				1F5D7FCE282E47BA00255E71 /* AppDelegate.swift in Sources */,
 				1FBE20EE285E554100E03AF0 /* ChangeOrderStatusPresenter.swift in Sources */,
@@ -1530,79 +1630,97 @@
 				1FEB1574284E600100DCCBC7 /* SellerHeaderView.swift in Sources */,
 				1FBE20C7285DE30A00E03AF0 /* UserOrdersView.swift in Sources */,
 				1FB350A1284006F4007200BB /* FavoritesCoordinator.swift in Sources */,
+				1F2D8F732886E04A005B7B23 /* DetailedOrderAssembler.swift in Sources */,
 				1FBE20E9285E3E4E00E03AF0 /* SellerOrdersCell.swift in Sources */,
 				1FEB156C284E540300DCCBC7 /* SellerView.swift in Sources */,
 				1FE32506285A1C0E004D8338 /* SearchPresenter.swift in Sources */,
+				1F5EF17C2878B57A00448FF5 /* FeedAssembler.swift in Sources */,
+				1F2D8F712886DDCF005B7B23 /* DetailedProfileAssembler.swift in Sources */,
 				1F8E6137284631AA0040DAE0 /* CartView.swift in Sources */,
 				1FAA83A12850D94D00CFF910 /* SellerFinanceCell.swift in Sources */,
 				1FF6841F283AB77E00E92481 /* AdCell.swift in Sources */,
+				1FC0D5B8288055AD00FAB933 /* Cart.swift in Sources */,
 				1FBE20EC285E550900E03AF0 /* ChangeOrderStatusViewController.swift in Sources */,
 				1F96F5A2282E7B8900C0F460 /* UIButton + Extension.swift in Sources */,
 				1FA9CF91285CE31F001E671A /* AvailableParametersCell.swift in Sources */,
 				1F1E4D9E28383C1E00C9AC05 /* FirestoreService.swift in Sources */,
-				1F08921D284A184B002A2411 /* CartItemCell.swift in Sources */,
+				1F08921D284A184B002A2411 /* CartCell.swift in Sources */,
 				1F69B6B02842561300C75668 /* ProfileView.swift in Sources */,
-				1F3F382B2847673800228983 /* PickSizePresenter.swift in Sources */,
+				1F3F382B2847673800228983 /* SizePickerPresenter.swift in Sources */,
 				1FEB1567284E1A0F00DCCBC7 /* SellerViewController.swift in Sources */,
 				1F96F5A0282E7B8900C0F460 /* UIStackView + Extension.swift in Sources */,
 				1FFFFB3D2835996D00E967E7 /* Item.swift in Sources */,
 				1F8FF0C6284BB15100171B83 /* FillBrandDataPresenter.swift in Sources */,
+				1FC0D5B4287EFFD200FAB933 /* FavoritesAssembler.swift in Sources */,
 				1F766B9128412273001F2E7E /* SettingsService.swift in Sources */,
 				1FBE20CA285DE3C400E03AF0 /* OrderCell.swift in Sources */,
 				1F816C17283770D300F48CA0 /* DetailedImageViewController.swift in Sources */,
 				1FBE20D7285E09DB00E03AF0 /* DetailedProfileViewController.swift in Sources */,
 				1F5D8008282E5F9200255E71 /* FeedViewController.swift in Sources */,
+				1F5E3D7128854F8200770076 /* ProfileAssembler.swift in Sources */,
 				1FD3EC26284EA325006789DA /* Statistics.swift in Sources */,
 				1F96F5A7282E883200C0F460 /* HeaderView + BottomView.swift in Sources */,
+				1F2D8F612886B9F0005B7B23 /* SettingsAssembler.swift in Sources */,
 				1F8FF0BB284BAA2F00171B83 /* OnboardingPresenter.swift in Sources */,
 				1F96F5A9282E8C1A00C0F460 /* TextFieldsView.swift in Sources */,
-				1F3F382E2847683F00228983 /* PickSizeView.swift in Sources */,
+				1F3F382E2847683F00228983 /* SizePickView.swift in Sources */,
+				1F2D8F652886CBB8005B7B23 /* SellerAssembler.swift in Sources */,
 				1F919F0D285515900034B475 /* MessengerPresenter.swift in Sources */,
-				1FDA0AD0284A81A000D05D51 /* CartItem.swift in Sources */,
 				1F96F5A3282E7B8900C0F460 /* UINavigationController + Extension.swift in Sources */,
+				1F2D8F5F2886B8E0005B7B23 /* SellerOrdersAssembler.swift in Sources */,
 				1FEF588D28554BE0007A2A95 /* Chat.swift in Sources */,
 				1F96F5B5282EDE8E00C0F460 /* CreateSizePresenter.swift in Sources */,
 				1FEF1EED2864B06A0069F2B5 /* SubscriptionsPresenter.swift in Sources */,
 				1FBE20D1285DFE3E00E03AF0 /* DetailedOrderPresenter.swift in Sources */,
+				1F40200D28870CBA00E11861 /* TabBarAssembler.swift in Sources */,
 				1FF6840A283A524B00E92481 /* GuestViewController.swift in Sources */,
 				1F1E4DA62838473200C9AC05 /* UserData.swift in Sources */,
 				1F96F5AD282E904C00C0F460 /* SizeCell.swift in Sources */,
+				1F2333752880938C005ED749 /* Date + Extension.swift in Sources */,
 				1FBE20DC285E0AB100E03AF0 /* DetailedProfileView.swift in Sources */,
 				1F96F5A4282E7B8900C0F460 /* UITextField + Extension.swift in Sources */,
 				1F5D7FD0282E47BA00255E71 /* SceneDelegate.swift in Sources */,
 				1F03A5A7282E74F700A6A299 /* CreateAdPresenter.swift in Sources */,
+				1FC0D5B2287EF8E800FAB933 /* FavoritesService.swift in Sources */,
 				1FDAC4EF285BA85400CD5453 /* SortingFeedView.swift in Sources */,
 				1F1E4DA028383D9800C9AC05 /* AuthService.swift in Sources */,
 				1F96F5B3282EDE6D00C0F460 /* CreateSizeViewController.swift in Sources */,
+				1F2D8F672886CFC1005B7B23 /* CreateAdAssembler.swift in Sources */,
 				1F04F82A284D3BF900BAD49B /* Brand.swift in Sources */,
+				1F5EF17E2878C26E00448FF5 /* SortingAssembler.swift in Sources */,
 				1F69B6AD2842557300C75668 /* ProfilePresenter.swift in Sources */,
 				1F8CE1392843FD7400AA9398 /* DetailedAdPresenter.swift in Sources */,
+				1F5E3D6F28854DEB00770076 /* BrandService.swift in Sources */,
 				1F69B6B22842572900C75668 /* ProfileCoordinator.swift in Sources */,
 				1F4781D2285DD5EB00047317 /* Order.swift in Sources */,
 				1F6986D8283818F400D953D2 /* RegisterPresenter.swift in Sources */,
 				1FBE20D4285DFF7E00E03AF0 /* DetailedOrderView.swift in Sources */,
+				1F2D8F5D2886B657005B7B23 /* FillBrandDataAssembler.swift in Sources */,
 				1F6986CE28380EDF00D953D2 /* LoginViewController.swift in Sources */,
 				1F04F82C284D465500BAD49B /* BrandBuilder.swift in Sources */,
 				1F96F5B8282EDF4B00C0F460 /* CreateSizeView.swift in Sources */,
-				1F08921F284A3EEB002A2411 /* UserService.swift in Sources */,
-				1F3F38292847673100228983 /* PickSizeViewController.swift in Sources */,
+				1F4020072887028D00E11861 /* MessengerAssembler.swift in Sources */,
+				1F3F38292847673100228983 /* SizePickerViewController.swift in Sources */,
+				1F5EF1802878C3F700448FF5 /* SearchAssembler.swift in Sources */,
 				1F128C0C282E666400B16BD8 /* FeedPresenter.swift in Sources */,
 				1FB3509D28400524007200BB /* FavoritesViewController.swift in Sources */,
 				1F29DE152842A57C00811F48 /* BaseCoordinator.swift in Sources */,
 				1FF6841A283AB6DD00E92481 /* FeedView.swift in Sources */,
 				1FF6840C283A526400E92481 /* GuestPresenter.swift in Sources */,
-				1F5D8003282E5A6D00255E71 /* DependencyFactory.swift in Sources */,
 				1FF68416283A6FEE00E92481 /* TabBarPresenter.swift in Sources */,
 				1FEB156F284E576B00DCCBC7 /* SellerItemCell.swift in Sources */,
 				1FCEC09F28315FF6000D78AD /* TabCoordinator.swift in Sources */,
 				1FBE20D9285E0A0600E03AF0 /* DetailedProfilePresenter.swift in Sources */,
 				1FBE20E1285E399E00E03AF0 /* SellerOrdersViewController.swift in Sources */,
 				1F29DE1B2842D54600811F48 /* FavoriteCell.swift in Sources */,
+				1FC0D5BC288060A000FAB933 /* DetailedAdAssembler.swift in Sources */,
 				1F96F5AB282E8E0600C0F460 /* ExtraSettingsCell.swift in Sources */,
 				1F03A5A5282E74DD00A6A299 /* CreateAdViewController.swift in Sources */,
 				1F919F0B285515890034B475 /* MessengerViewController.swift in Sources */,
 				1F96F5A1282E7B8900C0F460 /* UILabel + Extension.swift in Sources */,
 				1F1309C9285678A500A03AF7 /* MessageListCell.swift in Sources */,
+				1F2D8F692886D050005B7B23 /* MessagesListAssembler.swift in Sources */,
+				1F5E3D6D28854C6600770076 /* SizePickerAssembler.swift in Sources */,
 				1F227DA72836822100F736F1 /* ImagePickerController.swift in Sources */,
 				1F8FF0C0284BADD100171B83 /* OnboardingCoordinator.swift in Sources */,
 				1FF68413283A6F3800E92481 /* TabBarController.swift in Sources */,
@@ -1617,10 +1735,13 @@
 				1F1309CD2856A76F00A03AF7 /* MessagesCoordinator.swift in Sources */,
 				1F29DE182842D4D900811F48 /* FavoritesView.swift in Sources */,
 				1FBAB77B285B393D00B6B3ED /* SortingFeedPresenter.swift in Sources */,
+				1F402009288703F600E11861 /* ImagePickerAssembler.swift in Sources */,
 				1FD3EC24284EA214006789DA /* SellerChartCell.swift in Sources */,
 				1FBE20E3285E39AE00E03AF0 /* SellerOrdersPresenter.swift in Sources */,
 				1FF6840F283A535D00E92481 /* GuestView.swift in Sources */,
+				1FC0D5B6287F00C000FAB933 /* CartService.swift in Sources */,
 				1FEF1EE8286486CC0069F2B5 /* Review.swift in Sources */,
+				1F4020052887024100E11861 /* DetailedImageAssembler.swift in Sources */,
 				1FBE20CF285DFE0500E03AF0 /* DetailedOrderViewController.swift in Sources */,
 				1FE32508285A1DFF004D8338 /* SearchView.swift in Sources */,
 				1F03A5AF282E7A3200A6A299 /* PhotoCell.swift in Sources */,
@@ -1628,7 +1749,10 @@
 				1FEF1EEB2864B0570069F2B5 /* SubscriptionsViewController.swift in Sources */,
 				1F03A5AC282E760700A6A299 /* CreateAdView.swift in Sources */,
 				1F8E6134284631410040DAE0 /* CartPresenter.swift in Sources */,
+				1F8310082879846800E3D1CB /* SubscriptionsAssembler.swift in Sources */,
 				1F054480286005E30075451E /* SettingsView.swift in Sources */,
+				1F8310062879811500E3D1CB /* UserService.swift in Sources */,
+				1F2D8F632886BC84005B7B23 /* ChangeOrderStatusAssembler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

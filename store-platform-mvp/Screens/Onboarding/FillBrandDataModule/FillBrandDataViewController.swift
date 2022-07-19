@@ -24,7 +24,7 @@ class FillBrandDataViewController: UIViewController {
 extension FillBrandDataViewController: FillBrandDataViewProtocol {
     func configure() {
         title = "Заполните данные"
-        fillBrandView.configureViews()
+        fillBrandView.configure()
         configureButtons()
     }
     

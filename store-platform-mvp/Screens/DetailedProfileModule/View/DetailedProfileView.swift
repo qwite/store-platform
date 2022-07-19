@@ -1,6 +1,8 @@
 import UIKit
 
+// MARK: - DetailedProfileView
 class DetailedProfileView: UIView {
+    // MARK: Properties
     let firstNameTextField = UITextField(placeholder: "Имя", withUnderline: true, keyboardType: .default)
     let lastNameTextField = UITextField(placeholder: "Фамилия", withUnderline: true, keyboardType: .default)
     let emailTextField = UITextField(placeholder: "Почта",  withUnderline: true, keyboardType: .default)
@@ -15,9 +17,9 @@ class DetailedProfileView: UIView {
     let saveDataButton = UIButton(text: "Сохранить данные", preset: .bottom)
 }
 
-// TODO: Public methods
+// MARK: - Public methods
 extension DetailedProfileView {
-    func configure(data: UserData) {
+    public func configure(data: UserData) {
         configureViews()
         
         firstNameTextField.text = data.firstName

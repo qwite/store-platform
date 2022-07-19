@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - MessagesListViewProtocol
 protocol MessagesListViewProtocol: AnyObject {
     func configureViews()
     func configureCollectionView()
@@ -31,7 +32,7 @@ class MessagesListViewController: UIViewController {
     }
 }
 
-// MARK: - MessagesListViewProtocol
+// MARK: - MessagesListViewProtocol Implementation
 extension MessagesListViewController: MessagesListViewProtocol {
     func addConversationsPlaceholder() {
         placeholderLabel.text = "Диалоги не найдены"

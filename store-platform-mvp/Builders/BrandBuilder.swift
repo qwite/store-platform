@@ -1,6 +1,6 @@
 import Foundation
 
-// MARK: - ItemBuilder Protocol
+// MARK: - BrandBuilderProtocol
 protocol BrandBuilderProtocol {
     var brandName: String? { get set }
     var description: String? { get set }
@@ -21,6 +21,7 @@ protocol BrandBuilderProtocol {
     func build() -> Brand
 }
 
+// MARK: - BrandBuilderProtocol Implementation
 final class BrandBuilderImpl: BrandBuilderProtocol {
     deinit {
         debugPrint("[Log] BrandBuilder deinit")

@@ -1,6 +1,9 @@
 import UIKit
 
+// MARK: - CreateSizeView
 class CreateSizeView: UIView {
+    
+    // MARK: Properties
     var segmentedControlSource: [Any] = []
     
     lazy var sizeHeaderLabel = UILabel(text: "Размер",
@@ -32,9 +35,18 @@ class CreateSizeView: UIView {
                                       keyboardType: .numberPad)
     
     lazy var button = UIButton(text: "Добавить товар", preset: .bottom)
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+}
+
+// MARK: - Public methods
+extension CreateSizeView {
+    public func configure() {
+        configureViews()
+    }
+}
+
+// MARK: - Private methods
+extension CreateSizeView {
+    private func configureViews() {
         
         let sizeStack = UIStackView(arrangedSubviews: [sizeHeaderLabel, sizeSegmentedControl])
         sizeStack.axis = .vertical
@@ -68,10 +80,6 @@ class CreateSizeView: UIView {
             make.width.equalTo(200)
             make.height.equalTo(34)
         }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 

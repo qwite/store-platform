@@ -1,5 +1,6 @@
 import Foundation
 
+// MARK: - BaseCoordinator
 class BaseCoordinator: NSObject {
     var childCoordinators: [Coordinator] = []
     
@@ -19,7 +20,6 @@ class BaseCoordinator: NSObject {
             if element === coordinator {
                 childCoordinators.remove(at: index)
                 debugPrint("removed from childs: \(coordinator)")
-//                debugPrint("current childs: \(childCoordinators)")
             }
         }
     }
@@ -30,9 +30,5 @@ class BaseCoordinator: NSObject {
     
     func removeAllPages() {
         childCoordinators.removeAll()
-    }
-    
-    func showAll() {
-        print(childCoordinators)
     }
 }

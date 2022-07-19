@@ -203,7 +203,7 @@ extension FeedViewController {
     }
     
     @objc func subscriptionsItemAction(_ sender: UIBarButtonItem) {
-        presenter.getUserSubscriptions()
+        presenter.getSubscriptionItems()
         hideSubscriptionsItem()
     }
     

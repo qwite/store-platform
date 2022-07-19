@@ -1,48 +1,65 @@
 import Foundation
 
+// MARK: - DetailedAdPresenterProtocol
 protocol DetailedAdPresenterProtocol {
-    init(view: DetailedAdViewProtocol, coordinator: FeedCoordinator, item: Item, service: UserServiceProtocol)
+    init(view: DetailedAdViewProtocol,
+         coordinator: FeedCoordinator,
+         item: Item,
+         service: FeedServiceProtocol,
+         cartService: CartServiceProtocol,
+         userService: UserServiceProtocol)
+    
     func viewDidLoad()
     
-    func increaseItemViews()
+    func increaseViews()
     func showSizePicker()
-    func didAddToCart(item: CartItem)
+    func didAddToCart(item: Cart)
     func createConversation()
     func getReviews()
+    func getCurrentDay() -> MonthlyViews?
     func addToSubscriptions()
 }
 
+// MARK: - DetailedAdPresenterProtocol Implementation
 class DetailedAdPresenter: DetailedAdPresenterProtocol {
-    weak var view: DetailedAdViewProtocol?
-    weak var coordinator: FeedCoordinator?
-    var service: UserServiceProtocol?
     
-    var item: Item
-    
-    required init(view: DetailedAdViewProtocol, coordinator: FeedCoordinator, item: Item, service: UserServiceProtocol) {
+    required init(view: DetailedAdViewProtocol, coordinator: FeedCoordinator, item: Item, service: FeedServiceProtocol, cartService: CartServiceProtocol, userService: UserServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
         self.item = item
+        
         self.service = service
+        self.cartService = cartService
+        self.userService = userService
     }
+    
+    weak var view: DetailedAdViewProtocol?
+    weak var coordinator: FeedCoordinator?
+    
+    var service: FeedServiceProtocol?
+    var cartService: CartServiceProtocol?
+    var userService: UserServiceProtocol?
+    
+    var item: Item
     
     func viewDidLoad() {
         view?.configure(with: item)
-        increaseItemViews()
+        increaseViews()
         getReviews()
     }
     
-    func increaseItemViews() {
-        guard let itemId = item.id else { return }
-        
-        service?.increaseItemViews(itemId: itemId, completion: { result in
-            switch result {
-            case .success(let message):
-                debugPrint(message)
-            case .failure(let error):
-                debugPrint(error)
-            }
+    func increaseViews() {
+        guard let currentDay = getCurrentDay() else { return }
+        service?.increaseItemViews(item: item, views: currentDay, completion: { error in
+            guard error == nil else { return }
         })
+    }
+    
+    func getCurrentDay() -> MonthlyViews? {
+        guard let day = Date.currentDay else { return nil }
+        
+        let views = MonthlyViews(month: Date.currentMonth, day: day)
+        return views
     }
     
     func createConversation() {
@@ -57,17 +74,14 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
     }
     
     func getReviews() {
-        guard let id = item.id else { fatalError() }
-        
-        FirestoreService.sharedInstance.getReviewsFromItem(itemId: id) { [weak self] result in
+        service?.fetchItemReviews(item: item, completion: { [weak self] result in
             switch result {
             case .success(let reviews):
                 self?.view?.configureReviews(reviews: reviews)
-            case .failure(let error):
-                debugPrint(error)
+            case .failure(_):
                 self?.view?.configureReviews(reviews: nil)
             }
-        }
+        })
     }
     
     func showSizePicker() {        
@@ -77,13 +91,14 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
         }
     }
     
-    func didAddToCart(item: CartItem) {
-        service?.addItemToCart(item: item, completion: { result in
+    func didAddToCart(item: Cart) {
+        guard let userId = SettingsService.sharedInstance.userId else { return }
+        cartService?.addItemCart(userId: userId, cartItem: item, completion: { [weak self] result in
             switch result {
             case .success(_):
-                self.view?.showSuccessAlert(message: "Товар в корзине!")
+                self?.view?.showSuccessAlert(message: Constants.Messages.successAddCart)
             case .failure(let error):
-                debugPrint(error)
+                fatalError("\(error)")
             }
         })
     }
@@ -92,15 +107,14 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
         guard let userId = SettingsService.sharedInstance.userId else { return }
         let brandName = item.brandName
         
-        FirestoreService.sharedInstance.getBrandIdByName(brandName: item.brandName) { result in
+        FirestoreService.sharedInstance.getBrandIdByName(brandName: item.brandName) { [weak self] result in
             switch result {
             case .success(let brandId):
-                FirestoreService.sharedInstance.addToSubscriptions(userId: userId, brandId: brandId, brandName: brandName) { [weak self] error in
+                self?.service?.addSubscription(userId: userId, brandId: brandId, brandName: brandName) { [weak self] error in
                     guard error == nil else { print(error!); return}
                     
-                    self?.view?.showSuccessAlert(message: "Бренд добавлен в подписки")
+                    self?.view?.showSuccessAlert(message: Constants.Messages.successAddSubscription)
                 }
-
             case .failure(let error):
                 fatalError("\(error)")
             }

@@ -1,9 +1,11 @@
 import Foundation
 
+// MARK: - AvailableParameterPresenterDelegate
 protocol AvailableParameterPresenterDelegate: AnyObject {
     func insertSelectedParameters(_ selectedItems: [Parameter])
 }
 
+// MARK: - AvailableParametersPresenterProtocol
 protocol AvailableParametersPresenterProtocol {
     init(view: AvailableParametersView, delegate: AvailableParameterPresenterDelegate, type: Parameter.ParameterType)
     func viewDidLoad()
@@ -11,6 +13,7 @@ protocol AvailableParametersPresenterProtocol {
     func shareSelectedItems(selectedItems: [Parameter])
 }
 
+// MARK: - AvailableParametersPresenterProtocol Implementation
 class AvailableParametersPresenter: AvailableParametersPresenterProtocol {
     weak var view: AvailableParametersView?
     weak var delegate: AvailableParameterPresenterDelegate?

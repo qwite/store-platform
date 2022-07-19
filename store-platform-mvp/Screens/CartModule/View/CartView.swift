@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - CartView
 class CartView: UIView {
     enum Section: Int, CaseIterable {
         case cart
@@ -8,7 +9,10 @@ class CartView: UIView {
     enum SupplementaryKinds: String {
         case totalCart = "section-bottom-total-cart"
     }
-    
+}
+
+// MARK: - Public methods
+extension CartView {
     func configureLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .fractionalHeight(1.0))

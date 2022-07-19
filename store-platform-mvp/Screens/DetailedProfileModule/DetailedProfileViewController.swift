@@ -1,12 +1,14 @@
 import UIKit
 import SPAlert
 
+// MARK: - DetailedProfileViewProtocol
 protocol DetailedProfileViewProtocol: AnyObject {
     func configure(data: UserData)
     func configureButtons()
     func showSuccessAlert()
 }
 
+// MARK: - DetailedProfileViewController
 class DetailedProfileViewController: UIViewController {
     var presenter: DetailedProfilePresenterProtocol!
     var detailedProfileView = DetailedProfileView()
@@ -22,6 +24,7 @@ class DetailedProfileViewController: UIViewController {
     }
 }
 
+// MARK: - DetailedProfileViewProtocol Implementation
 extension DetailedProfileViewController: DetailedProfileViewProtocol {
     func showSuccessAlert() {
         SPAlert.present(title: "Успех", message: "Данные сохранены", preset: .done)

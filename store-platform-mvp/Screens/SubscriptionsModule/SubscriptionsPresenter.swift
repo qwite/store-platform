@@ -1,17 +1,21 @@
 import Foundation
 
+// MARK: - SubscriptionsPresenterProtocol
 protocol SubscriptionsPresenterProtocol: AnyObject {
-    init(view: SubscriptionsViewProtocol, coordinator: ProfileCoordinator)
+    init(view: SubscriptionsViewProtocol, coordinator: ProfileCoordinator, service: UserServiceProtocol)
     func viewDidLoad()
 }
 
+// MARK: - SubscriptionsPresenterProtocol
 class SubscriptionsPresenter: SubscriptionsPresenterProtocol {
     weak var view: SubscriptionsViewProtocol?
     weak var coordinator: ProfileCoordinator?
+    var service: UserServiceProtocol?
     
-    required init(view: SubscriptionsViewProtocol, coordinator: ProfileCoordinator) {
+    required init(view: SubscriptionsViewProtocol, coordinator: ProfileCoordinator, service: UserServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
+        self.service = service
     }
     
     func viewDidLoad() {
@@ -24,24 +28,22 @@ class SubscriptionsPresenter: SubscriptionsPresenterProtocol {
     
     func getSubscriptions() {
         guard let userId = SettingsService.sharedInstance.userId else { return }
-        FirestoreService.sharedInstance.getSubscriptions(userId: userId) { [weak self] result in
+        service?.fetchUserSubscriptions(userId: userId) { [weak self] result in
             switch result {
             case .success(let subscriptions):
                 print(subscriptions)
                 self?.view?.insertSubscriptions(items: subscriptions)
             case .failure(let error):
                 print(error)
-                fatalError()
             }
         }
     }
     
     func removeSubscription(brandName: String) {
         guard let userId = SettingsService.sharedInstance.userId else { return }
-        FirestoreService.sharedInstance.removeSubscription(userId: userId, brandName: brandName) { error in
+        service?.removeSubscription(userId: userId, brandName: brandName) { error in
             guard error == nil else { fatalError("\(error!)") }
             
-            debugPrint("подписка удалена")
             self.getSubscriptions()
         }
     }

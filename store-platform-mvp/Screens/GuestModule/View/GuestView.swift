@@ -1,6 +1,8 @@
 import UIKit
 
+// MARK: - GuestView
 class GuestView: UIView {
+    // MARK: Properties
     let imageView = UIImageView()
     lazy var title = UILabel(text: "Требуется авторизация",
                              font: Constants.Fonts.mainTitleFont,
@@ -9,8 +11,18 @@ class GuestView: UIView {
     
     lazy var loginButton = UIButton(text: "Авторизация", preset: .none)
     lazy var registerButton = UIButton(text: "Регистрация", preset: .none)
-    
-    func configureViews() {
+}
+
+// MARK: - Public methods
+extension GuestView {
+    public func configure() {
+        configureViews()
+    }
+}
+
+// MARK: - Private methods
+extension GuestView {
+    private func configureViews() {
         imageView.image = UIImage(named: "guest-illustration")
         
         descriptionLabel.text = "Для этого действия требуется авторизация.\nАвторизуйтесь в системе для использования полного функционала"

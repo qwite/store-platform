@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - SellerOrdersCell
 class SellerOrdersCell: UICollectionViewCell {
     static let reuseId = "SellerOrders"
     let imageView = UIImageView(image: UIImage(named: "clo_test"))
@@ -13,10 +14,10 @@ class SellerOrdersCell: UICollectionViewCell {
     let userFullNameLabel = UILabel(text: nil, font: nil, textColor: .black)
 }
 
+// MARK: - Public methods
 extension SellerOrdersCell {
     func configure(order: Order) {
-        guard let number = order.id,
-              let firstPhotoUrl = order.item.item.photos?.first else { return }
+        guard let number = order.id else { return }
         
         orderNumberLabel.text = "Номер заказа: \(number)"
         dateLabel.text = order.date
@@ -29,10 +30,10 @@ extension SellerOrdersCell {
         
         configureViews()
         configureStatusLabel(status: order.status)
-        configureImageView(photo: firstPhotoUrl)
     }
 }
 
+// MARK: - Private methods
 extension SellerOrdersCell {
     private func configureImageView(photo: String) {
         let photoSize = CGSize(width: 50, height: frame.size.height)
@@ -77,8 +78,6 @@ extension SellerOrdersCell {
         
         
         let childStack = UIStackView(arrangedSubviews: [selectedSizeLabel, paidPriceLabel, shippingAddressLabel, userPhoneNumberLabel, userFullNameLabel], spacing: 5, axis: .vertical, alignment: .fill)
-        
-        
         
         addSubview(childStack)
         childStack.snp.makeConstraints { make in

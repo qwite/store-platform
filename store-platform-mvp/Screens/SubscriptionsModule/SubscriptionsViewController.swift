@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - SubscriptionsViewProtocol
 protocol SubscriptionsViewProtocol: AnyObject {
     func configureCollectionView()
     func configureDataSource()
@@ -8,12 +9,14 @@ protocol SubscriptionsViewProtocol: AnyObject {
     func insertSubscriptions(items: [String])
 }
 
+// MARK: - SubscriptionsViewController
 class SubscriptionsViewController: UIViewController {
     var presenter: SubscriptionsPresenter!
     var collectionView: UICollectionView! = nil
     var dataSource: UICollectionViewDiffableDataSource<Sections, AnyHashable>?
     typealias DataSource = UICollectionViewDiffableDataSource<Sections, AnyHashable>
     
+    //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
@@ -23,6 +26,7 @@ class SubscriptionsViewController: UIViewController {
     }
 }
 
+// MARK: - SubscriptionsViewProtocol Implementation
 extension SubscriptionsViewController: SubscriptionsViewProtocol {
     func configureCollectionView() {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureLayout())
@@ -75,18 +79,19 @@ extension SubscriptionsViewController: SubscriptionsViewProtocol {
 
 }
 
+// MARK: - Sections
 extension SubscriptionsViewController {
     enum Sections: Int, CaseIterable {
         case subscriptions
     }
 }
 
+// MARK: - SubscriptionCellDelegate
 extension SubscriptionsViewController: SubscriptionCellDelegate {
     func didTappedRemoveButton(_ cell: UICollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell),
               let item = dataSource?.itemIdentifier(for: indexPath) as? String else { fatalError() }
         
-        // FIXME: bug
         presenter.removeSubscription(brandName: item)
     }
 }

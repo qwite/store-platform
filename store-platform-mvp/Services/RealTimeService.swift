@@ -3,6 +3,7 @@ import FirebaseDatabase
 import FirebaseFirestoreSwift
 import MessageKit
 
+// MARK: - RealTimeService
 class RealTimeService {
     static let sharedInstance = RealTimeService()
     private init() {}
@@ -215,7 +216,6 @@ extension RealTimeService {
                     return nil
                 }
                 
-                // FIXME: edit
                 let sender = Sender(photoUrl: "", senderId: senderId, displayName: name)
                 let finalKind: MessageKind?
                 
@@ -460,6 +460,7 @@ extension RealTimeService {
     }
 }
 
+// MARK: - Errors
 extension RealTimeService {
     enum RealTimeServiceError: Error {
         case failedToFetchConversations
@@ -468,6 +469,7 @@ extension RealTimeService {
     }
 }
 
+// MARK: - ChatRole
 extension RealTimeService {
     enum ChatRole: String {
         case user = "user"

@@ -2,12 +2,18 @@ import Foundation
 
 // MARK: - FeedPresenterProtocol
 protocol FeedPresenterProtocol: AnyObject {
-    init(view: FeedViewProtocol, coordinator: FeedCoordinator, service: UserServiceProtocol, items: [Item]?)
+    init(view: FeedViewProtocol,
+         coordinator: FeedCoordinator,
+         service: FeedServiceProtocol,
+         userService: UserServiceProtocol,
+         favoritesService: FavoritesServiceProtocol,
+         items: [Item]?)
+    
     func viewDidLoad()
     
     func fetchItems()
     func getItems()
-    func getUserSubscriptions()
+    func getSubscriptionItems()
     func openDetails(item: Item)
     func openSearch()
     func openSortingFeed()
@@ -20,15 +26,24 @@ protocol FeedPresenterProtocol: AnyObject {
 class FeedPresenter: FeedPresenterProtocol {
     weak var view: FeedViewProtocol?
     weak var coordinator: FeedCoordinator?
-    var service: UserServiceProtocol?
+    
+    var service: FeedServiceProtocol?
+    var userService: UserServiceProtocol?
+    var favoritesService: FavoritesServiceProtocol?
     
     var items: [Item]?
     
-    required init(view: FeedViewProtocol, coordinator: FeedCoordinator, service: UserServiceProtocol, items: [Item]?) {
+    required init(view: FeedViewProtocol,
+                  coordinator: FeedCoordinator,
+                  service: FeedServiceProtocol,
+                  userService: UserServiceProtocol,
+                  favoritesService: FavoritesServiceProtocol,
+                  items: [Item]?) {
         self.view = view
         self.coordinator = coordinator
         self.service = service
-        
+        self.userService = userService
+        self.favoritesService = favoritesService
         self.items = items
     }
     
@@ -62,46 +77,55 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     func getItems() {
-        FirestoreService.sharedInstance.fetchAllItems { [weak self] result in
+        service?.fetchAllItems(by: nil, completion: { [weak self] result in
             switch result {
             case .success(let items):
                 self?.view?.insertItems(items: items)
             case .failure(let error):
-                debugPrint(error)
+                fatalError("\(error)")
             }
-        }
+        })
     }
     
-    func getUserSubscriptions() {
+    func getSubscriptionItems() {
         guard let userId = SettingsService.sharedInstance.userId else { return }
-        FirestoreService.sharedInstance.getSubscriptionsItems(userId: userId) { [weak self] result in
+        userService?.fetchUserSubscriptions(userId: userId, completion: { [weak self] result in
             switch result {
-            case .success(let items):
-                self?.view?.insertItems(items: items)
+            case .success(let subscriptionList):
+                self?.service?.fetchSubscriptionItems(subscriptionList: subscriptionList, completion: { [weak self] result in
+                    switch result {
+                    case .success(let items):
+                        self?.view?.insertItems(items: items)
+                    case .failure(let error):
+                        fatalError("\(error)")
+                    }
+                })
             case .failure(let error):
-                print(error)
+                fatalError("\(error)")
             }
-        }
+        })
     }
     
     func addFavorite(item: Item) {
-        service?.addFavoriteItem(item: item, completion: { [weak self] result in
+        guard let userId = SettingsService.sharedInstance.userId else { return }
+        favoritesService?.addFavoriteItem(item: item, userId: userId, completion: { [weak self] result in
             switch result {
             case .success(let item):
                 self?.postNotificationAddFavoriteItem(item)
             case .failure(let error):
-                debugPrint(error)
+                fatalError("\(error)")
             }
         })
     }
     
     func removeFavorite(item: Item) {
-        service?.removeFavoriteItem(item: item, completion: { [weak self] result in
+        guard let userId = SettingsService.sharedInstance.userId else { return }
+        favoritesService?.removeFavoriteItem(item: item, userId: userId, completion: { [weak self] result in
             switch result {
             case .success(_):
                 self?.postNotificationRemoveFavoriteItem(item)
             case .failure(let error):
-                debugPrint(error)
+                fatalError("\(error)")
             }
         })
     }
@@ -111,7 +135,7 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     func searchItems(by brand: String) {
-        FirestoreService.sharedInstance.fetchItemsByBrandName(brand: brand) { result in
+        service?.fetchItemsByBrandName(brand: brand) { result in
             switch result {
             case .success(let items):
                 self.view?.updateDataSource(with: items)

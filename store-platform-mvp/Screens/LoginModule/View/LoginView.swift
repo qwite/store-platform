@@ -1,6 +1,8 @@
 import UIKit
 
+// MARK: - LoginView
 class LoginView: UIView {
+    // MARK: - Properties
     let emailTextField = UITextField(placeholder: "Электронная почта",
                                       withUnderline: true,
                                       keyboardType: .emailAddress)
@@ -11,8 +13,18 @@ class LoginView: UIView {
                                          isSecureTextEntry: true)
     
     let loginButton = UIButton(text: "Войти", preset: .customLarge)
-            
-    func setupViews() {
+}
+
+// MARK: - Public methods
+extension LoginView {
+    public func configure() {
+        setupViews()
+    }
+}
+
+// MARK: - Private methods
+extension LoginView {
+    private func setupViews() {
         backgroundColor = .white
         
         emailTextField.autocapitalizationType = .none

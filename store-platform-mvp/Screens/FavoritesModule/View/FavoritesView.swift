@@ -1,10 +1,14 @@
 import UIKit
 
+// MARK: - FavoritesView
 class FavoritesView: UIView {
     enum Section: Int, CaseIterable {
         case favs
     }
-    
+}
+
+// MARK: - Public methods
+extension FavoritesView {
     func setupLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .fractionalHeight(1.0))

@@ -12,10 +12,15 @@ struct MonthlyViews: Codable, Hashable {
     let month: String
     let day: Int
     let amount: Int
+    
+    init(month: String, day: Int) {
+        self.month = month
+        self.day = day
+        self.amount = 1
+    }
 }
 
-// FIXME: views + item
-struct ItemViews: Hashable {
+struct Views: Hashable {
     let item: Item
     let views: Int
 }

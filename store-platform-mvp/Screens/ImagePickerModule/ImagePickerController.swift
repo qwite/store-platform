@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - ImagePickerViewProtocol
 protocol ImagePickerViewProtocol: AnyObject {}
 
 class ImagePickerController: UIImagePickerController {
@@ -14,17 +15,16 @@ class ImagePickerController: UIImagePickerController {
 
 
 // MARK: - ImagePickerView Protocol
-extension ImagePickerController: ImagePickerViewProtocol {
-}
+extension ImagePickerController: ImagePickerViewProtocol {}
 
 // MARK: - UIImagePickerControllerDelegate & UINavigationControllerDelegate
 extension ImagePickerController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[.originalImage] as? UIImage
-        guard let image = image else {
+        guard let image = image, let pngData = image.pngData() else {
             return
         }
-        // TODO: fix
-        presenter.didClosePicker(with: image.pngData()!)
+        
+        presenter.didClosePicker(with: pngData)
     }
 }

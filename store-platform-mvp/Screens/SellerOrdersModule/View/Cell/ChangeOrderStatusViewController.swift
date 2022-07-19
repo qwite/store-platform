@@ -1,14 +1,18 @@
 import UIKit
 
+// MARK: - ChangeOrderStatusViewProtocol
 protocol ChangeOrderStatusViewProtocol: AnyObject {
     func configure()
     func configureButtons()
 }
 
+// MARK: - ChangeOrderStatusViewController
 class ChangeOrderStatusViewController: UIViewController {
     var presenter: ChangeOrderStatusPresenterProtocol!
     var changeOrderView = ChangeOrderStatusView()
     @objc var preferredHeightInBottomSheet: CGFloat { return 380 }
+    
+    // MARK: Lifecycle
     override func loadView() {
         view = changeOrderView
     }
@@ -19,9 +23,10 @@ class ChangeOrderStatusViewController: UIViewController {
     }
 }
 
+// MARK: - ChangeOrderStatusViewProtocol Implementation
 extension ChangeOrderStatusViewController: ChangeOrderStatusViewProtocol {
     func configure() {
-        changeOrderView.configureViews()
+        changeOrderView.configure()
         changeOrderView.pickerView.dataSource = self
         changeOrderView.pickerView.delegate = self
     }
@@ -37,6 +42,7 @@ extension ChangeOrderStatusViewController: ChangeOrderStatusViewProtocol {
     }
 }
 
+// MARK: - UIPickerViewDelegate, UIPickerViewDataSource
 extension ChangeOrderStatusViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -65,6 +71,4 @@ extension ChangeOrderStatusViewController: UIPickerViewDelegate, UIPickerViewDat
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         return view.bounds.size.width
     }
-    
-    
 }

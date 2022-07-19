@@ -9,6 +9,9 @@ enum Constants {
     
     enum Messages {
         static let successUserLogin = "Успешная авторизация!"
+        static let successAddCart = "Товар в корзине!"
+        static let successAddSubscription = "Бренд добавлен в подписки!"
+        static let logoutMessage = "Вы действительно хотите выйти из системы?"
     }
     
     enum Errors {

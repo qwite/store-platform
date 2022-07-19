@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - OnboardingViewProtocol
 protocol OnboardingViewProtocol: AnyObject {
     func configure()
     func configureButtons()
@@ -9,6 +10,7 @@ protocol OnboardingViewProtocol: AnyObject {
 class OnboardingViewController: UIViewController {
     var welcomeView = WelcomePageView()
     var presenter: OnboardingPresenterProtocol!
+    
     // MARK: Lifecycle
     override func loadView() {
         view = welcomeView
@@ -20,10 +22,11 @@ class OnboardingViewController: UIViewController {
     }
 }
 
+// MARK: - OnboardingViewProtocol Implementation
 extension OnboardingViewController: OnboardingViewProtocol {
     func configure() {
         configureButtons()
-        welcomeView.configureViews()
+        welcomeView.configure()
     }
     
     func configureButtons() {

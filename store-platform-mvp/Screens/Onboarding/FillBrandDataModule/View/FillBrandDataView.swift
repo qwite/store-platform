@@ -1,6 +1,8 @@
 import UIKit
 
+// MARK: - FillBrandDataView
 class FillBrandDataView: UIView {
+    // MARK: Properties
     let aboutBrandTitleLabel = UILabel(text: "Информация о бренде", font: nil, textColor: .black)
     let brandNameTextField = UITextField(placeholder: "Название бренда", withUnderline: true, keyboardType: .default)
     let descriptionTextField = UITextField(placeholder: "Краткое описание", withUnderline: true, keyboardType: .default)
@@ -17,7 +19,13 @@ class FillBrandDataView: UIView {
 }
 
 extension FillBrandDataView {
-    func configureViews() {
+    public func configure() {
+        configureViews()
+    }
+}
+
+extension FillBrandDataView {
+    private func configureViews() {
         backgroundColor = .white
         aboutBrandTitleLabel.font = Constants.Fonts.itemTitleFont
         logoTitleLabel.font = Constants.Fonts.itemTitleFont
@@ -26,10 +34,10 @@ extension FillBrandDataView {
         logoSizeLabel.font = Constants.Fonts.itemDescriptionFont
         
         logoImageView.image = UIImage(systemName: "plus.viewfinder")?.withTintColor(.black, renderingMode: .alwaysOriginal)
-
+        
         let brandTextFieldsStack = UIStackView(arrangedSubviews: [brandNameTextField, descriptionTextField], spacing: 20, axis: .vertical, alignment: .fill)
         brandTextFieldsStack.distribution = .fillEqually
-                
+        
         let brandTextFieldsStackWithTitle = UIStackView(arrangedSubviews: [aboutBrandTitleLabel, brandTextFieldsStack], spacing: 5, axis: .vertical, alignment: .fill)
         
         addSubview(brandTextFieldsStackWithTitle)

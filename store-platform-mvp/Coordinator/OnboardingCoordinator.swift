@@ -2,30 +2,22 @@ import UIKit
 
 class OnboardingCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory?
     weak var delegate: ImagePickerPresenterDelegate?
     var completionHandler: (() -> ())?
     
-    deinit {
-        debugPrint("onboarding deinit")
-    }
-    
     func start() {
-        guard let module = factory?.buildOnboardingModule(coordinator: self) else {
-            return
-        }
+        let module = OnboardingAssembler.buildOnboardingModule(coordinator: self)
     
         self.navigationController.pushViewController(module, animated: false)
     }
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.factory = DependencyFactory()
     }
     
     func showFillBrandData() {
-        guard let module = factory?.buildFillBrandDataModule(coordinator: self) as? FillBrandDataViewController else {
-            fatalError()
+        guard let module = FillBrandDataAssembler.buildFillBrandDataModule(coordinator: self) as? FillBrandDataViewController else {
+            return
         }
         
         self.delegate = module.presenter

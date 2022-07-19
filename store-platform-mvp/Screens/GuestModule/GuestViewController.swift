@@ -30,7 +30,7 @@ class GuestViewController: UIViewController {
 // MARK: - GuestView Protocol implementation
 extension GuestViewController: GuestViewProtocol {
     func configureViews() {
-        guestView.configureViews()
+        guestView.configure()
     }
     
     func configureButtons() {

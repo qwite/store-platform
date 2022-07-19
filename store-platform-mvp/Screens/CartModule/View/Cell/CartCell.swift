@@ -1,45 +1,51 @@
 import UIKit
 
-protocol CartItemCellDelegate: AnyObject {
+// MARK: - CartItemCellDelegate
+protocol CartCellDelegate: AnyObject {
     func didTappedRemoveButton(_ cell: UICollectionViewCell)
 }
 
-class CartItemCell: UICollectionViewCell {
-    static let reuseId = "CartItem"
-    weak var delegate: CartItemCellDelegate?
+// MARK: - CartItemCell
+class CartCell: UICollectionViewCell {
+    static let reuseId = "CartCell"
+    weak var delegate: CartCellDelegate?
     
     let brandNameLabel = UILabel(text: nil, font: .systemFont(ofSize: 18, weight: .medium), textColor: .black)
     let clothingNameLabel = UILabel(text: nil, font: .systemFont(ofSize: 15, weight: .regular), textColor: .black)
     let priceLabel = UILabel(text: nil, font: .systemFont(ofSize: 15, weight: .regular), textColor: .black)
     let colorLabel = UILabel(text: nil, font: .systemFont(ofSize: 13, weight: .light), textColor: .black)
-    let amountItem = UILabel(text: "Количество 1", font: .systemFont(ofSize: 13, weight: .light), textColor: .black)
     let selectedSizeLabel = UILabel(text: nil, font: .systemFont(ofSize: 13, weight: .light), textColor: .black)
     var imageView = UIImageView()
     let removeButton = UIButton(text: nil, preset: .icon, iconName: "xmark")
 }
 
-extension CartItemCell {
-    func configure(cartItem: CartItem) {
-        guard let firstPhoto = cartItem.item.photos?.first else {
+// MARK: - Public methods
+extension CartCell {
+    public func configure(cartItem: Cart, fetchedItem: Item) {
+        guard let firstPhoto = fetchedItem.photos?.first else {
             return
         }
         
-        brandNameLabel.text = cartItem.item.brandName.capitalized
-        clothingNameLabel.text = cartItem.item.clothingName
+        brandNameLabel.text = fetchedItem.brandName.capitalized
+        clothingNameLabel.text = fetchedItem.clothingName
         priceLabel.text = "\(cartItem.selectedPrice) ₽"
-        colorLabel.text = "Цвет \(cartItem.item.color)"
+        colorLabel.text = "Цвет \(fetchedItem.color)"
         selectedSizeLabel.text = "Размер \(cartItem.selectedSize)"
         
         configureViews()
         configureImageView(photo: firstPhoto)
         configureButtons()
     }
+}
+
+// MARK: - Private methods
+extension CartCell {
     
-    func configureViews() {
+    private func configureViews() {
         imageView.contentMode = .scaleAspectFit
         
         let itemStack = UIStackView(arrangedSubviews: [brandNameLabel, clothingNameLabel], spacing: 3, axis: .vertical, alignment: .fill)
-        let selectedInfo = UIStackView(arrangedSubviews: [amountItem, selectedSizeLabel, colorLabel], spacing: 3, axis: .vertical, alignment: .fill)
+        let selectedInfo = UIStackView(arrangedSubviews: [selectedSizeLabel, colorLabel], spacing: 3, axis: .vertical, alignment: .fill)
         
         let bottomStack = UIStackView(arrangedSubviews: [priceLabel], spacing: 0, axis: .vertical, alignment: .fill)
         

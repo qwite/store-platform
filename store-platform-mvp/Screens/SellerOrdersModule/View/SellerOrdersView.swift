@@ -1,11 +1,13 @@
 import UIKit
 
+// MARK: - SellerOrdersView
 class SellerOrdersView: UIView {
     enum Section: String, CaseIterable {
         case orders
     }
 }
 
+// MARK: - Public methods
 extension SellerOrdersView {
     func configureLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),

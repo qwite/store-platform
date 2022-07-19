@@ -1,10 +1,12 @@
 import Foundation
 
+// MARK: - SettingsPresenterProtocol
 protocol SettingsPresenterProtocol {
     init(view: SettingsViewProtocol, coordinator: ProfileCoordinator)
     func viewDidLoad()
 }
 
+// MARK: - SettingsPresenterProtocol Implementation
 class SettingsPresenter: SettingsPresenterProtocol {
     weak var view: SettingsViewProtocol?
     weak var coordinator: ProfileCoordinator?

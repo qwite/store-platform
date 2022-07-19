@@ -3,8 +3,7 @@ import LBBottomSheet
 
 class FeedCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory?
-    var completionHandler: ((CartItem) -> ())?
+    var completionHandler: ((Cart) -> ())?
     var parent: FeedViewController?
     weak var imagePickerDelegate: ImagePickerPresenterDelegate?
 
@@ -13,11 +12,9 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
-        factory = DependencyFactory()
     }
     
-    deinit {
-    }
+    deinit {}
     
     var finish: (() -> ())?
     
@@ -26,27 +23,20 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     }
     
     func showFeed(with items: [Item]? = nil) {
-        guard let module = factory?.buildFeedModule(coordinator: self, with: items) as? FeedViewController else {
-            return
-        }
-        
+        guard let module = FeedAssembler.buildFeedModule(coordinator: self, items: items) as? FeedViewController else { return }
         self.parent = module
         self.navigationController.pushViewController(module, animated: true)
     }
     
     func showSearchFeed() -> UIViewController? {
-        guard let module = factory?.buildFeedModule(coordinator: self, with: nil) as? FeedViewController else {
-            return nil
-        }
-        
+        guard let module = FeedAssembler.buildFeedModule(coordinator: self, items: nil) as? FeedViewController else { return nil }
+
         return module
     }
     
     func showSortingFeed() {
-        guard let parent = self.parent,
-              let module = factory?.buildFeedSortingModule(delegate: parent.presenter, coordinator: self) as? SortingFeedViewController else {
-            return
-        }
+        let service = FeedService()
+        guard let parent = self.parent, let module = SortingAssembler.buildSortingModule(coordinator: self, service: service, delegate: parent.presenter) as? SortingFeedViewController else { return }
         
         self.sortingPresenter = module.presenter
         let navigation = UINavigationController(rootViewController: module)
@@ -61,53 +51,48 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     
     func showColorParameters() {
         guard let navigation = sortingNavigation,
-              let sortingPresenter = self.sortingPresenter,
-              let module = factory?.buildAvailableParametersModule(delegate: sortingPresenter, type: .color) else {
+              let sortingPresenter = self.sortingPresenter else {
             return
         }
+        
+        let module = AvailableParametersAssembler.buildAvailableParametersModule(delegate: sortingPresenter, type: .color)
         
         navigation.pushViewController(module, animated: true)
     }
     
     func showSizeParameters() {
         guard let navigation = sortingNavigation,
-              let sortingPresenter = self.sortingPresenter,
-              let module = factory?.buildAvailableParametersModule(delegate: sortingPresenter, type: .size) else {
+              let sortingPresenter = self.sortingPresenter else {
             return
         }
         
+        let module = AvailableParametersAssembler.buildAvailableParametersModule(delegate: sortingPresenter, type: .size)
         navigation.pushViewController(module, animated: true)
     }
     
-    func showDetailedAd(with item: Item) {
-        guard let module = factory?.buildDetailedAdModule(coordinator: self, with: item) else {
-            return
-        }
+    func showDetailedAd(with item: Item) {        
+        let module = DetailedAdAssembler.buildDetailedAd(coordinator: self, item: item)
         
         self.navigationController.pushViewController(module, animated: true)
     }
     
     func showSearchScreen() {
-        guard let module = factory?.buildSearchModule(coordinator: self) else {
-            return
-        }
+        let module = SearchAssembler.buildSearchModule(coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }
     
 }
 
-extension FeedCoordinator: PickSizeCoordinatorProtocol {
+extension FeedCoordinator: SizePickerCoordinatorProtocol {
     func showSizePicker(for item: Item) {
-        guard let module = factory?.buildSizePickerModule(coordinator: self, item: item) else {
-            return
-        }
+        let module = SizePickerAssembler.buildSizePickerModule(coordinator: self, with: item)
         
         let behavior: BottomSheetController.Behavior = .init(swipeMode: .top)
         self.navigationController.presentAsBottomSheet(module, behavior: behavior)
     }
     
-    func hideSizePicker(with item: CartItem) {
+    func hideSizePicker(with item: Cart) {
         self.navigationController.dismissBottomSheet {
             self.completionHandler?(item)
             self.navigationController.popViewController(animated: true)
@@ -121,18 +106,15 @@ extension FeedCoordinator: MessagesCoordinatorProtocol {
     }
     
     func showMessenger(conversationId: String?, brandId: String?) {
-        guard let module = factory?.buildMessengerModule(conversationId: nil, brandId: brandId, coordinator: self) as? MessengerViewController  else {
-            fatalError()
+        guard let module = MessengerAssembler.buildMessengerModule(conversationId: nil, brandId: brandId, coordinator: self) as? MessengerViewController else {
+            return
         }
         
         self.imagePickerDelegate = module.presenter
-
-        
         self.navigationController.pushViewController(module, animated: true)
     }
     
     func showImagePicker() {
-        // FIXME: remove from arc
         let imagePickerCoordinator = ImagePickerCoordinator(self.navigationController)
         imagePickerCoordinator.delegate = self.imagePickerDelegate
         

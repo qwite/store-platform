@@ -2,10 +2,9 @@ import UIKit
 
 class CreateAdCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    weak var delegate: CreateAdViewPresenterProtocol?
+    weak var delegate: CreateAdPresenterProtocol?
     weak var pickerDelegate: ImagePickerPresenterDelegate?
     
-    var factory: Factory?
     var finishFlow: (() -> ())?
     
     deinit {
@@ -14,11 +13,10 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
-        factory = DependencyFactory()
     }
         
     func start() {
-        guard let module = factory?.buildCreateAdModule(coordinator: self) as? CreateAdViewController else {
+        guard let module = CreateAdAssembler.buildCreateAdModule(coordinator: self) as? CreateAdViewController else {
             return
         }
         
@@ -28,9 +26,7 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
     }
     
     func openCreateSize(with item: Size? = nil) {
-        guard let module = factory?.buildCreateSizeModule(coordinator: self, with: item) else {
-            return
-        }
+        let module = CreateSizeAssembler.buildCreateSizeModule(coordinator: self, model: item)
         
         self.navigationController.present(module, animated: true)
     }
@@ -75,9 +71,7 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
     }
     
     func openDetailedImage(data: Data) {
-        guard let module = factory?.buildDetailedImageModule(image: data) else {
-            return
-        }
+        let module = DetailedImageAssembler.buildDetailedImageModule(image: data)
         
         self.navigationController.pushViewController(module, animated: true)
     }

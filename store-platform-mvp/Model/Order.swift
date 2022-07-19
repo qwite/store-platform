@@ -7,7 +7,7 @@ struct Order: Codable, Hashable {
     let userPhoneNumber: String
     let userFullName: String
     let brandId: String
-    let item: CartItem
+    let item: Cart
     let status: Status.RawValue
     let date: String
     

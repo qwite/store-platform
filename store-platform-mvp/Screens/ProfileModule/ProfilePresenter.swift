@@ -1,9 +1,11 @@
 import Foundation
 
+// MARK: - ProfilePresenterDelegate
 protocol ProfilePresenterDelegate: AnyObject {
     func didTappedLogoutButton()
 }
 
+// MARK: - ProfilePresenterProtocol
 protocol ProfilePresenterProtocol {
     init(view: ProfileViewProtocol, service: UserServiceProtocol, coordinator: ProfileCoordinator)
     func viewDidLoad()
@@ -18,6 +20,7 @@ protocol ProfilePresenterProtocol {
     func didShowSubscriptions()
 }
 
+// MARK: - ProfilePresenterProtocol Implementation
 class ProfilePresenter: ProfilePresenterProtocol {
     weak var view: ProfileViewProtocol?
     var service: UserServiceProtocol?
@@ -26,8 +29,8 @@ class ProfilePresenter: ProfilePresenterProtocol {
     required init(view: ProfileViewProtocol, service: UserServiceProtocol, coordinator: ProfileCoordinator) {
         self.view = view
         self.service = service
-        // MARK: fix
         self.coordinator = coordinator
+        
         coordinator.delegate = self
     }
     
@@ -42,7 +45,7 @@ class ProfilePresenter: ProfilePresenterProtocol {
     
     func getFullName() {
         guard let userId = SettingsService.sharedInstance.userId else { return }
-        FirestoreService.sharedInstance.fetchUserData(by: userId) { result in
+        service?.fetchUserData(by: userId) { result in
             switch result {
             case .success(let userData):
                 guard let firstName = userData.firstName,
@@ -81,6 +84,7 @@ class ProfilePresenter: ProfilePresenterProtocol {
     }
 }
 
+// MARK: - ProfilePresenterDelegate
 extension ProfilePresenter: ProfilePresenterDelegate {
     func didTappedLogoutButton() {
         service?.logout(completion: { error in

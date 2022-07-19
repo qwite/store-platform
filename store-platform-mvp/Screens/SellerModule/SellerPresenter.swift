@@ -1,8 +1,9 @@
 import Foundation
 import FLCharts
 
+// MARK: - SellerPresenterProtocol
 protocol SellerPresenterProtocol {
-    init (view: SellerViewProtocol, coordinator: SellerCoordinator, service: UserServiceProtocol)
+    init (view: SellerViewProtocol, coordinator: SellerCoordinator, service: BrandServiceProtocol)
     func viewDidLoad()
     func viewWillAppear()
     
@@ -21,12 +22,13 @@ protocol SellerPresenterProtocol {
     func saveLocalBrand()
 }
 
+// MARK: - SellerPresenterProtocol Implementation
 class SellerPresenter: SellerPresenterProtocol {
     weak var view: SellerViewProtocol?
     weak var coordinator: SellerCoordinator?
-    var service: UserServiceProtocol?
+    var service: BrandServiceProtocol?
     
-    required init(view: SellerViewProtocol, coordinator: SellerCoordinator, service: UserServiceProtocol) {
+    required init(view: SellerViewProtocol, coordinator: SellerCoordinator, service: BrandServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
         self.service = service
@@ -47,17 +49,19 @@ class SellerPresenter: SellerPresenterProtocol {
     }
     
     func saveLocalBrand() {
-        if SettingsService.sharedInstance.brandName == nil {
-            service?.getBrandName(completion: { result in
-                switch result {
-                case .success(let brandName):
-                    SettingsService.sharedInstance.brandName = brandName
-                    print(SettingsService.sharedInstance.brandName)
-                case .failure(let error):
-                    fatalError()
-                }
-            })
+        guard SettingsService.sharedInstance.brandName == nil,
+        let userId = SettingsService.sharedInstance.userId else {
+            return
         }
+        
+        service?.getBrandName(by: userId, completion: { result in
+            switch result {
+            case .success(let brandName):
+                SettingsService.sharedInstance.brandName = brandName
+            case .failure(let error):
+                print(error)
+            }
+        })
     }
     
     func showMessagesList() {
@@ -72,59 +76,64 @@ class SellerPresenter: SellerPresenterProtocol {
         coordinator?.showSellerOrders()
     }
     
-    // Item + views count
     func getItemsFromBrand() {
-        debugPrint("[get items from brand]")
-        service?.getItemsFromBrand(completion: { [weak self] result in
-            guard let items = try? result.get() else {
-                self?.view?.insertEmptyItems(); return
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return
+        }
+        
+        service?.fetchItems(by: userId, completion: { [weak self] result in
+            switch result {
+            case .success(let items):
+                self?.convertToItemViews(items: items, completion: { views in
+                    self?.view?.insertSellerItems(items: views)
+                })
+                
+            case .failure(_):
+                self?.view?.insertEmptyItems()
             }
-            
-            self?.convertToItemViews(items: items, completion: { itemViews in
-                self?.view?.insertSellerItems(items: itemViews)
-            })
-            
         })
     }
     
     func getDailyData() {
-        service?.getItemViewsBrand(completion: { [weak self] result in
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return
+        }
+        
+        let currentMonth = Date.currentMonth
+        
+        service?.fetchMonthlyViews(by: userId, month: currentMonth, completion: { [weak self] result in
             switch result {
             case .success(let views):
-//                debugPrint(views)
                 self?.view?.insertSellerViews(views: views)
             case .failure(let error):
-//                fatalError("\(error)")
+                debugPrint(error)
                 self?.view?.insertEmptySellerViews()
             }
         })
     }
     
     func getSales() {
-        service?.getItemSalesFromBrand(completion: { [weak self] result in
-            print("fetching sales...")
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return
+        }
+        
+        service?.fetchSales(by: userId, completion: { [weak self] result in
             switch result {
             case .success(let items):
-//                print(items)
                 let names = items.map({ $0.clothingName })
-                let prices = items.map( {$0.sizes!.first!.price!} )
+                let prices = items.compactMap( {$0.sizes!.first!.price} )
                 let totalPrice = prices.reduce(0, +)
                 
                 guard let sales = self?.convertToSales(data: names),
                       let salesPrice = self?.convertToSalesPrice(data: prices) else {
                     fatalError()
                 }
-                
-                debugPrint(salesPrice)
-                
+                                
                 self?.view?.insertSellerSales(sales: sales)
                 self?.view?.insertSellerSalesPrice(salesPrice: salesPrice)
                 self?.view?.insertFinance(finance: Finance(totalPrice: totalPrice))
-                
             case .failure(let error):
-                self?.view?.insertEmptyFinance()
-                print("sales not found!")
-
+                debugPrint(error)
             }
         })
     }
@@ -154,8 +163,6 @@ class SellerPresenter: SellerPresenterProtocol {
         
         debugPrint("graphData: \(graphData)")
         
-        //        return graphData.sorted(by: {$0.maxValue > $1.maxValue})
-
         return graphData.sorted(by: {$0.maxValue < $1.maxValue})
     }
     
@@ -187,33 +194,35 @@ class SellerPresenter: SellerPresenterProtocol {
         return sales
     }
     
-    // FIXME: rewrite
-    func convertToItemViews(items: [Item], completion: @escaping ([ItemViews]) -> ()){
-        var itemViews: [ItemViews] = []
+    func convertToItemViews(items: [Item], completion: @escaping ([Views]) -> ()){
+        var itemViews: [Views] = []
+        let currentMonth = Date.currentMonth
         for item in items {
-            FirestoreService.sharedInstance.getViewsAmountFromItem(itemId: item.id!) { result in
-                if let views = try? result.get() {
+            guard let itemId = item.id else { return }
+            service?.fetchMonthlyViewsItem(by: itemId, month: currentMonth, completion: { result in
+                switch result {
+                case .success(let views):
                     let newViews = views.map({$0.amount})
                     let totalViews = newViews.reduce(0, +)
-                    let value = ItemViews(item: item, views: totalViews)
+                    let value = Views(item: item, views: totalViews)
                     itemViews.append(value)
-                } else {
-                    let zeroViews = ItemViews(item: item, views: 0)
+                case .failure(_):
+                    let zeroViews = Views(item: item, views: 0)
                     itemViews.append(zeroViews)
                 }
                 
                 if itemViews.count == items.count {
                     completion(itemViews.sorted(by: { $0.views > $1.views }))
                 }
-            }
+            })
         }
     }
     
     func convertToSalesPrice(data: [Int]) -> [SalesPrice] {
         var salesPrice: [SalesPrice] = []
-        
+        let currentMonth = Date.currentMonth
         data.forEach { value in
-            let item = SalesPrice(month: "Jun", price: value)
+            let item = SalesPrice(month: currentMonth, price: value)
             salesPrice.append(item)
         }
         

@@ -16,8 +16,7 @@ class LoginViewController: UIViewController {
     var loginView = LoginView()
     var presenter: LoginPresenterProtocol!
    
-    //MARK: - Lifecycle
-    
+    //MARK: Lifecycle
     override func loadView() {
         view = loginView
     }
@@ -35,7 +34,7 @@ class LoginViewController: UIViewController {
 // MARK: - LoginView Implementation
 extension LoginViewController: LoginViewProtocol {
     func configure() {
-        loginView.setupViews()
+        loginView.configure()
         configureLoginButton()
     }
     

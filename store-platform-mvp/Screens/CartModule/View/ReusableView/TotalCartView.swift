@@ -1,23 +1,30 @@
 import UIKit
 
+// MARK: - TotalCartViewDelegate
 protocol TotalCartViewDelegate: AnyObject {
     func updateTotalPrice(price: Int)
 }
 
+// MARK: - TotalCartView
 class TotalCartView: UICollectionReusableView {
+    // MARK: Properies
     static let reuseId = "TotalCart"
     weak var delegate: CartViewDelegate?
     let separator = UIView()
     let totalPriceDescriptionLabel = UILabel(text: nil, font: nil, textColor: .black)
     let totalPriceLabel = UILabel(text: nil, font: nil, textColor: .black)
     let totalButton = UIButton(text: "Перейти к оформлению", preset: .bottom)
-    
-    func configure() {
+}
+
+// MARK: - Public methods
+extension TotalCartView {
+    public func configure() {
         configureViews()
         configureButtons()
     }
 }
 
+// MARK: - Private methods
 extension TotalCartView {
     private func configureViews() {
         totalPriceDescriptionLabel.text = "Общая стоимость"
@@ -64,6 +71,7 @@ extension TotalCartView {
     }
 }
 
+// MARK: - TotalCartViewDelegate
 extension TotalCartView: TotalCartViewDelegate {
     func updateTotalPrice(price: Int) {
         self.totalPriceLabel.text = "\(price) ₽"

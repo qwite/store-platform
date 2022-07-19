@@ -1,20 +1,23 @@
 import UIKit
 
-protocol PickSizeViewProtocol: AnyObject {
+// MARK: - SizePickerViewProtocol
+protocol SizePickerViewProtocol: AnyObject {
     func configure()
     func getRowsCount() -> Int
     func getComponentCount() -> Int
     func selectIndex(index: Int)
 }
 
-class PickSizeViewController: UIViewController {
+// MARK: - SizePickerViewController
+class SizePickerViewController: UIViewController {
     @objc var preferredHeightInBottomSheet: CGFloat { return 340 }
-    var presenter: PickSizePresenterProtocol!
-    var pickSizeView = PickSizeView()
-    // MARK: - Lifecycle
+    var presenter: SizePickerPresenterProtocol!
+    var sizePickView = SizePickView()
+    
+    // MARK: Lifecycle
     
     override func loadView() {
-        view = pickSizeView
+        view = sizePickView
     }
     
     override func viewDidLoad() {
@@ -27,14 +30,14 @@ class PickSizeViewController: UIViewController {
     }
 }
 
-extension PickSizeViewController: PickSizeViewProtocol {
+// MARK: - SizePickerViewProtocol Implementation
+extension SizePickerViewController: SizePickerViewProtocol {
     func configure() {
-        pickSizeView.configureViews()
-        pickSizeView.configureButtons()
+        sizePickView.configure()
         
-        pickSizeView.delegate = self
-        pickSizeView.pickerView.dataSource = self
-        pickSizeView.pickerView.delegate = self
+        sizePickView.delegate = self
+        sizePickView.pickerView.dataSource = self
+        sizePickView.pickerView.delegate = self
     }
     
     func getRowsCount() -> Int {
@@ -51,11 +54,13 @@ extension PickSizeViewController: PickSizeViewProtocol {
 }
 
 
-extension PickSizeViewController: UIPickerViewDelegate {
+// MARK: - UIPickerViewDelegate
+extension SizePickerViewController: UIPickerViewDelegate {
     
 }
 
-extension PickSizeViewController: UIPickerViewDataSource {
+// MARK: - UIPickerViewDataSource
+extension SizePickerViewController: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -63,13 +68,7 @@ extension PickSizeViewController: UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return getRowsCount()
     }
-    
-//    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-//        let size = presenter.getAvailableSizes()
-//        
-//        debugPrint("\(size[row].size!) selected")
-//    }
-    
+        
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 44.0
     }
@@ -85,7 +84,6 @@ extension PickSizeViewController: UIPickerViewDataSource {
         
         let priceLabel = UILabel()
         
-        // TODO: - Optimize
         if row == 0 || (row > 0 && size[row].price != size[row - 1].price) {
             priceLabel.text = "\(size[row].price!) ₽"
         } else {
@@ -113,7 +111,6 @@ extension PickSizeViewController: UIPickerViewDataSource {
         parentView.addSubview(priceLabel)
         parentView.addSubview(sizeLabel)
 
-        
         priceLabel.snp.makeConstraints { make in
             make.left.equalTo(parentView.snp.left).offset(20)
             make.centerY.equalTo(parentView.snp.centerY)
@@ -128,7 +125,7 @@ extension PickSizeViewController: UIPickerViewDataSource {
     }
 }
 
-extension PickSizeViewController: PickSizeViewDelegate {
+extension SizePickerViewController: SizePickViewDelegate {
     func didTappedAddButton(selectedIndex: Int) {
         selectIndex(index: selectedIndex)
     }

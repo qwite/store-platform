@@ -1,6 +1,7 @@
 import Foundation
 import MessageKit
 
+// MARK: - MessengerPresenterProtocol
 protocol MessengerPresenterProtocol: ImagePickerPresenterDelegate {
     init(view: MessengerViewProtocol, service: UserServiceProtocol, conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol)
     func viewDidAppear()
@@ -21,10 +22,12 @@ protocol MessengerPresenterProtocol: ImagePickerPresenterDelegate {
     func convertFromDate(date: Date) -> String
 }
 
+// MARK: - MessengerPresenterProtocol Implementation
 class MessengerPresenter: MessengerPresenterProtocol {
     weak var view: MessengerViewProtocol?
     weak var coordinator: MessagesCoordinatorProtocol?
     var service: UserServiceProtocol?
+    
     var messages: [Message]! = nil
     
     var conversationId: String?
@@ -59,9 +62,7 @@ class MessengerPresenter: MessengerPresenterProtocol {
         self.brandId = brandId
     }
     
-    func viewDidLoad() {
-        
-    }
+    func viewDidLoad() {}
     
     func viewDidAppear() {
         listenMessages()
@@ -83,9 +84,7 @@ class MessengerPresenter: MessengerPresenterProtocol {
         }
     }
     
-    func getRecipientId() {
-        
-    }
+    func getRecipientId() {}
     
     func didShowImagePicker() {
         coordinator?.showImagePicker()
@@ -112,15 +111,15 @@ class MessengerPresenter: MessengerPresenterProtocol {
         
         let message = Message(sender: sender, sentDate: Date(), kind: .text(text))
         
-        FirestoreService.sharedInstance.getBrandName(brandId: brandId) { result in
+        FirestoreService.sharedInstance.getBrandName(brandId: brandId) { [weak self] result in
             switch result {
             case .success(let brandName):
                 RealTimeService.sharedInstance.createNewConversation(with: brandId, brandName: brandName, firstMessage: message) { result in
                     switch result {
                     case .success(let conversationId):
-                        self.conversationId = conversationId
+                        self?.conversationId = conversationId
                         debugPrint("message sended")
-                        self.listenMessages()
+                        self?.listenMessages()
                     case .failure(let error):
                         fatalError("\(error)")
                     }
@@ -210,6 +209,7 @@ extension MessengerPresenter {
     }
 }
 
+// MARK: - ImagePickerPresenterDelegate
 extension MessengerPresenter: ImagePickerPresenterDelegate {
     func didCloseImagePicker(with imageData: Data) {
         self.sendAttachment(image: imageData)

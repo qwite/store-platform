@@ -1,14 +1,8 @@
 import Foundation
 
-protocol CreateSizeViewProtocol: AnyObject {
-    func setSegmentedControlSource(items: [String])
-    func didCloseScreen()
-    func loadSavedValues(item: Size)
-}
-
 protocol CreateSizeViewPresenterProtocol: AnyObject {
     init(view: CreateSizeViewProtocol, coordinator: CreateAdCoordinator, model: Size?)
-    func didLoad()
+    func viewDidLoad()
     func addSizeItem(sizeIndex: Int, price: Int?, amount: Int?)
     func editSizeItem(sizeIndex: Int, price: Int?, amount: Int?)
     func checkModel()
@@ -27,7 +21,8 @@ class CreateSizePresenter: CreateSizeViewPresenterProtocol {
         self.editMode = nil
     }
     
-    func didLoad() {
+    func viewDidLoad() {
+        view?.configure()
         view?.setSegmentedControlSource(items: Size.AvailableSizes.allCases.map({$0.rawValue}))
         checkModel()
     }

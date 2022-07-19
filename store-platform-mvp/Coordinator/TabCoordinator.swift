@@ -8,17 +8,15 @@ protocol TabCoordinatorDelegate: AnyObject {
 // MARK: - TabCoordinator
 class TabCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory?
     var tabController: UITabBarController?
     
     required init(_ navigationController: UINavigationController) {
-        self.factory = DependencyFactory()
         self.navigationController = navigationController
     }
     
     func start() {
         // Building a controller
-        guard let tabController = factory?.buildTabBarModule(coordinator: self) else { fatalError() }
+        let tabController = TabBarAssembler.buildTabBarModule(coordinator: self)
         self.tabController = tabController
         
         setTabBarAppearance()

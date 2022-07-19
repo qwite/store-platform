@@ -1,6 +1,7 @@
 import UIKit
 import SPAlert
 
+// MARK: - SellerOrdersViewProtocol
 protocol SellerOrdersViewProtocol: AnyObject {
     func configureCollectionView()
     func configureDataSource()
@@ -10,7 +11,10 @@ protocol SellerOrdersViewProtocol: AnyObject {
     func insertItems(items: [Order])
 }
 
+// MARK: - SellerOrdersViewController
 class SellerOrdersViewController: UIViewController {
+    
+    // MARK: Properties
     var presenter: SellerOrdersPresenterProtocol!
     var collectionView: UICollectionView! = nil
     var sellerOrdersView = SellerOrdersView()
@@ -30,6 +34,7 @@ class SellerOrdersViewController: UIViewController {
     }
 }
 
+// MARK: - SellerOrdersViewProtocol Implementation
 extension SellerOrdersViewController: SellerOrdersViewProtocol {
     func configureCollectionView() {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: sellerOrdersView.configureLayout())
@@ -71,6 +76,7 @@ extension SellerOrdersViewController: SellerOrdersViewProtocol {
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension SellerOrdersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource?.itemIdentifier(for: indexPath) else { return }
