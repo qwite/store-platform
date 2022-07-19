@@ -39,11 +39,7 @@ class LoginPresenter: LoginPresenterProtocol {
     }
     
     func getUserInfo(id: String) {
-        guard let userId = SettingsService.sharedInstance.userId else {
-            return
-        }
-        
-        service?.fetchUserData(by: userId, completion: { [weak self] result in
+        service?.fetchUserData(by: id, completion: { [weak self] result in
             switch result {
             case .success(let user):
                 self?.saveUser(user)
