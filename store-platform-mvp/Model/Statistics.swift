@@ -20,8 +20,7 @@ struct MonthlyViews: Codable, Hashable {
     }
 }
 
-// FIXME: views + item
-struct ItemViews: Hashable {
+struct Views: Hashable {
     let item: Item
     let views: Int
 }

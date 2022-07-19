@@ -1,6 +1,7 @@
 import UIKit
 import FirebaseAuth
 
+// MARK: - AuthServiceError
 enum AuthServiceError: Error {
     case signInError
     case createAccountError
@@ -8,12 +9,14 @@ enum AuthServiceError: Error {
     case emptyFieldsError
 }
 
+// MARK: - AuthServiceProtocol
 protocol AuthServiceProtocol {
     func login(email: String?, password: String?, completion: @escaping (Result<User, AuthServiceError>) -> ())
     func register(email: String?, password: String?, completion: @escaping (Result<User, AuthServiceError>) -> ())
     func logout(completion: @escaping (AuthServiceError?) -> ())
 }
 
+// MARK: - AuthServiceProtocol Implementation
 final class AuthService: AuthServiceProtocol {
     static let sharedInstance = AuthService()
     private init() {}

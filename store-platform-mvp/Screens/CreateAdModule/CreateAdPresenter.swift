@@ -1,7 +1,8 @@
 import Foundation
 
-protocol CreateAdViewPresenterProtocol: AnyObject {
-    init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator, service: TOUserServiceProtocol)
+// MARK: - CreateAdPresenterProtocol
+protocol CreateAdPresenterProtocol: AnyObject {
+    init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator, service: BrandServiceProtocol)
     func viewDidLoad()
     
     func createSize(size: Size, completion: @escaping((Result<Size, Error>) -> Void))
@@ -11,34 +12,32 @@ protocol CreateAdViewPresenterProtocol: AnyObject {
     func setClothingName(_ name: String)
     func setDescription(_ description: String)
     func addImage(image: Data)
-    func popScreen()
     var photos: [Data]? { get set }
 }
 
-class CreateAdPresenter: CreateAdViewPresenterProtocol {
+// MARK: - CreateAdPresenterProtocol Implementation
+class CreateAdPresenter: CreateAdPresenterProtocol {
     var photos: [Data]?
     
     weak var view: CreateAdViewProtocol?
-    var itemBuilder: ItemBuilderProtocol
-    var service: TOUserServiceProtocol?
+    var itemBuilder: ItemBuilderProtocol?
+    var service: BrandServiceProtocol?
     weak var coordinator: CreateAdCoordinator?
     
-    required init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator, service: TOUserServiceProtocol) {
+    required init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator, service: BrandServiceProtocol) {
         self.view = view
         self.itemBuilder = itemBuilder
         self.coordinator = coordinator
-        self.coordinator?.delegate = self
         self.service = service
     }
     
     func viewDidLoad() {
-        print("create ad loaded")
         view?.configureCollectionView()
         view?.configureDataSource()
     }
     
     func createSize(size: Size, completion: @escaping ((Result<Size, Error>) -> Void)) {
-        guard let result = itemBuilder.addSize(size) else {
+        guard let result = itemBuilder?.addSize(size) else {
             return completion(.failure(ItemBuilder.ItemBuilderError.sizeExistError))
         }
         
@@ -47,7 +46,7 @@ class CreateAdPresenter: CreateAdViewPresenterProtocol {
     }
     
     func editSize(size: Size, completion: @escaping ((Result<Size, Error>) -> Void)) {
-        guard let result = itemBuilder.editSize(item: size) else {
+        guard let result = itemBuilder?.editSize(item: size) else {
             return completion(.failure(ItemBuilder.ItemBuilderError.indexNotFoundError))
         }
         
@@ -64,11 +63,11 @@ class CreateAdPresenter: CreateAdViewPresenterProtocol {
     }
     
     func setCategory(_ category: String) {
-        itemBuilder.setCategory(category)
+        itemBuilder?.setCategory(category)
     }
     
     func setColor(_ color: String) {
-        itemBuilder.setColor(color)
+        itemBuilder?.setColor(color)
     }
     
     func showImagePicker() {
@@ -86,53 +85,54 @@ class CreateAdPresenter: CreateAdViewPresenterProtocol {
     }
     
     func setClothingName(_ name: String) {
-        itemBuilder.setClothingName(name)
+        itemBuilder?.setClothingName(name)
     }
     
     func setDescription(_ description: String) {
-        itemBuilder.setDescription(description)
+        itemBuilder?.setDescription(description)
     }
     
     func buildProduct() {
-        guard let photos = self.photos else {
-            return debugPrint("Photos not added")
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return
         }
         
-        service?.getBrandName(completion: { result in
+        guard let photos = self.photos else {
+            debugPrint("Photos not added"); return
+        }
+        
+        service?.getBrandName(by: userId, completion: { [weak self] result in
             switch result {
             case .success(let brandName):
-                self.itemBuilder.setBrandName(brandName)
-                var item = self.itemBuilder.build()
+                self?.itemBuilder?.setBrandName(brandName)
+                var item = self?.itemBuilder?.build()
                 
-                StorageService.sharedInstance.uploadItemImages(with: photos) { result in
+                self?.service?.uploadImages(with: photos, completion: { result in
                     switch result {
                     case .success(let urls):
-                        item.photos = urls
-                        self.service?.addItemToBrand(item: item, completion: { result in
-                            switch result {
-                            case .success(_):
-                                self.view?.showSuccessAlert()
-                                self.coordinator?.finish()
-                            case .failure(let error):
-                                self.view?.showErrorAlert("\(error)")
-                            }
+                        item?.photos = urls
+                        guard let item = item else {
+                            return
+                        }
+                        
+                        self?.service?.createNewAd(with: item, userId: userId, completion: { error in
+                            guard error == nil else { self?.view?.showErrorAlert("\(error!)"); return }
+                            
+                            self?.view?.showSuccessAlert()
+                            self?.coordinator?.finish()
                         })
                     case .failure(let error):
-                        fatalError()
+                        self?.view?.showErrorAlert("\(error)")
                     }
-                }
+                })
             case .failure(let error):
-                fatalError()
+                self?.view?.showErrorAlert("\(error)")
             }
         })
     }
     
     func showImage(data: Data) {
         coordinator?.openDetailedImage(data: data)
-    }
-    
-    func popScreen() {
-        debugPrint("test")
     }
 }
 

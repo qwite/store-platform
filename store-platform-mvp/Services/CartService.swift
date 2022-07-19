@@ -87,6 +87,7 @@ class CartService: CartServiceProtocol {
     }
 }
 
+// MARK: - CartServiceErrors Errors
 extension CartService {
     private enum CartServiceErrors: Error {
         case itemEncodingError

@@ -6,7 +6,7 @@ protocol SellerViewProtocol: AnyObject {
     func configureDataSource()
     func configureViews()
     
-    func insertSellerItems(items: [ItemViews])
+    func insertSellerItems(items: [Views])
     func insertSellerViews(views: [MonthlyViews])
     func insertSellerSales(sales: [Sales])
     func insertSellerSalesPrice(salesPrice: [SalesPrice])
@@ -66,7 +66,7 @@ extension SellerViewController: SellerViewProtocol {
                     fatalError("dequeueReusableCell error for \(SellerItemCell.reuseId)")
                 }
                 
-                guard let item = itemIdentifier as? ItemViews else {
+                guard let item = itemIdentifier as? Views else {
                     cell.itemsNotExist(); return cell
                 }
                 
@@ -161,10 +161,10 @@ extension SellerViewController: SellerViewProtocol {
         dataSource?.apply(snapshot!)
     }
     
-    func insertSellerItems(items: [ItemViews]) {
+    func insertSellerItems(items: [Views]) {
         var snapshot = dataSource?.snapshot()
         snapshot?.deleteItems([AnyHashable(101)])
-        snapshot?.itemIdentifiers.forEach({ if $0 is ItemViews { snapshot?.deleteItems([$0])}})
+        snapshot?.itemIdentifiers.forEach({ if $0 is Views { snapshot?.deleteItems([$0])}})
         snapshot?.appendItems(items, toSection: .items)
         dataSource?.apply(snapshot!)
     }

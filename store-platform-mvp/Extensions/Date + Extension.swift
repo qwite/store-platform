@@ -1,5 +1,6 @@
 import Foundation
 
+// MARK: - Date Extension
 extension Date {
     static let currentMonth: String = {
         let formatter = DateFormatter()

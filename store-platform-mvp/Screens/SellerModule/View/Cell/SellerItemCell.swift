@@ -11,7 +11,7 @@ class SellerItemCell: UICollectionViewCell {
 }
 
 extension SellerItemCell {
-    func configure(itemViews: ItemViews) {
+    func configure(itemViews: Views) {
         guard let sizes = itemViews.item.sizes,
               let firstPhotoUrl = itemViews.item.photos?.first else {
             fatalError("sizes not exist")

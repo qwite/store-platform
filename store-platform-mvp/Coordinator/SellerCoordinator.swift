@@ -34,9 +34,7 @@ class SellerCoordinator: BaseCoordinator, Coordinator {
     }
     
     private func runSellerFlow() {
-        guard let module = factory?.buildSellerModule(coordinator: self) else {
-            fatalError()
-        }
+        let module = SellerAssembler.buildSellerModule(coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }
@@ -60,15 +58,15 @@ class SellerCoordinator: BaseCoordinator, Coordinator {
     }
     
     public func showSellerOrders() {
-        guard let module = factory?.buildSellerOrdersModule(coordinator: self) else { return }
+        let module = SellerOrdersAssembler.buildSellerOrdersModule(coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }
     
     public func changeOrderStatus(order: Order) {
-        guard let module = factory?.buildChangeOrderStatusModule(coordinator: self, order: order) else { return }
-        let behavior: BottomSheetController.Behavior = .init(swipeMode: .top)
+        let module = ChangeOrderStatusAssembler.buildChangeOrderStatusModule(coordinator: self, order: order)
         
+        let behavior: BottomSheetController.Behavior = .init(swipeMode: .top)
         self.navigationController.presentAsBottomSheet(module, behavior: behavior)
     }
     
@@ -108,9 +106,7 @@ extension SellerCoordinator: MessagesCoordinatorProtocol {
     }
     
     func showListMessages() {
-        guard let module = factory?.buildListMessagesModule(role: .brand, coordinator: self) else {
-            fatalError()
-        }
+        let module = MessagesListAssembler.buildMessagesListModule(role: .brand, coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }

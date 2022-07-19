@@ -32,10 +32,17 @@
 		1F227DA02836682D00F736F1 /* ImagePickerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F227D9F2836682D00F736F1 /* ImagePickerCoordinator.swift */; };
 		1F227DA72836822100F736F1 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F227DA62836822100F736F1 /* ImagePickerController.swift */; };
 		1F227DA92836824200F736F1 /* ImagePickerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F227DA82836824200F736F1 /* ImagePickerPresenter.swift */; };
-		1F2333752880938C005ED749 /* String + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2333742880938C005ED749 /* String + Extension.swift */; };
+		1F2333752880938C005ED749 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2333742880938C005ED749 /* Date + Extension.swift */; };
 		1F29DE152842A57C00811F48 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F29DE142842A57C00811F48 /* BaseCoordinator.swift */; };
 		1F29DE182842D4D900811F48 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F29DE172842D4D900811F48 /* FavoritesView.swift */; };
 		1F29DE1B2842D54600811F48 /* FavoriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F29DE1A2842D54600811F48 /* FavoriteCell.swift */; };
+		1F2D8F5D2886B657005B7B23 /* FillBrandDataAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F5C2886B657005B7B23 /* FillBrandDataAssembler.swift */; };
+		1F2D8F5F2886B8E0005B7B23 /* SellerOrdersAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F5E2886B8E0005B7B23 /* SellerOrdersAssembler.swift */; };
+		1F2D8F612886B9F0005B7B23 /* SettingsAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F602886B9F0005B7B23 /* SettingsAssembler.swift */; };
+		1F2D8F632886BC84005B7B23 /* ChangeOrderStatusAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F622886BC84005B7B23 /* ChangeOrderStatusAssembler.swift */; };
+		1F2D8F652886CBB8005B7B23 /* SellerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F642886CBB8005B7B23 /* SellerAssembler.swift */; };
+		1F2D8F672886CFC1005B7B23 /* CreateAdAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F662886CFC1005B7B23 /* CreateAdAssembler.swift */; };
+		1F2D8F692886D050005B7B23 /* MessagesListAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F682886D050005B7B23 /* MessagesListAssembler.swift */; };
 		1F3F38292847673100228983 /* SizePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F38282847673100228983 /* SizePickerViewController.swift */; };
 		1F3F382B2847673800228983 /* SizePickerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F382A2847673800228983 /* SizePickerPresenter.swift */; };
 		1F3F382E2847683F00228983 /* SizePickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F382D2847683F00228983 /* SizePickView.swift */; };
@@ -238,10 +245,17 @@
 		1F227D9F2836682D00F736F1 /* ImagePickerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerCoordinator.swift; sourceTree = "<group>"; };
 		1F227DA62836822100F736F1 /* ImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerController.swift; sourceTree = "<group>"; };
 		1F227DA82836824200F736F1 /* ImagePickerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerPresenter.swift; sourceTree = "<group>"; };
-		1F2333742880938C005ED749 /* String + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String + Extension.swift"; sourceTree = "<group>"; };
+		1F2333742880938C005ED749 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
 		1F29DE142842A57C00811F48 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
 		1F29DE172842D4D900811F48 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 		1F29DE1A2842D54600811F48 /* FavoriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCell.swift; sourceTree = "<group>"; };
+		1F2D8F5C2886B657005B7B23 /* FillBrandDataAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillBrandDataAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F5E2886B8E0005B7B23 /* SellerOrdersAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerOrdersAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F602886B9F0005B7B23 /* SettingsAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F622886BC84005B7B23 /* ChangeOrderStatusAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeOrderStatusAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F642886CBB8005B7B23 /* SellerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F662886CFC1005B7B23 /* CreateAdAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAdAssembler.swift; sourceTree = "<group>"; };
+		1F2D8F682886D050005B7B23 /* MessagesListAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesListAssembler.swift; sourceTree = "<group>"; };
 		1F3F38282847673100228983 /* SizePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePickerViewController.swift; sourceTree = "<group>"; };
 		1F3F382A2847673800228983 /* SizePickerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePickerPresenter.swift; sourceTree = "<group>"; };
 		1F3F382D2847683F00228983 /* SizePickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePickView.swift; sourceTree = "<group>"; };
@@ -440,6 +454,7 @@
 				1F03A5AA282E75F500A6A299 /* View */,
 				1F03A5A4282E74DD00A6A299 /* CreateAdViewController.swift */,
 				1F03A5A6282E74F700A6A299 /* CreateAdPresenter.swift */,
+				1F2D8F662886CFC1005B7B23 /* CreateAdAssembler.swift */,
 			);
 			path = CreateAdModule;
 			sourceTree = "<group>";
@@ -448,8 +463,9 @@
 			isa = PBXGroup;
 			children = (
 				1F1E4D9F28383D9800C9AC05 /* AuthService.swift */,
-				1F5EF1792878B23500448FF5 /* FeedService.swift */,
+				1F5E3D6E28854DEB00770076 /* BrandService.swift */,
 				1F1E4D9D28383C1E00C9AC05 /* FirestoreService.swift */,
+				1F5EF1792878B23500448FF5 /* FeedService.swift */,
 				1FF68423283AE63A00E92481 /* StorageService.swift */,
 				1F766B9028412273001F2E7E /* SettingsService.swift */,
 				1F08921E284A3EEB002A2411 /* TOUserService.swift */,
@@ -457,7 +473,6 @@
 				1F8310052879811500E3D1CB /* UserService.swift */,
 				1FC0D5B1287EF8E800FAB933 /* FavoritesService.swift */,
 				1FC0D5B5287F00C000FAB933 /* CartService.swift */,
-				1F5E3D6E28854DEB00770076 /* BrandService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -501,6 +516,7 @@
 				1F05447E286005DE0075451E /* View */,
 				1F05447A2860049F0075451E /* SettingsViewController.swift */,
 				1F05447C286004A60075451E /* SettingsPresenter.swift */,
+				1F2D8F602886B9F0005B7B23 /* SettingsAssembler.swift */,
 			);
 			path = SettingsModule;
 			sourceTree = "<group>";
@@ -532,7 +548,7 @@
 				1F96F59E282E7B8900C0F460 /* UITextField + Extension.swift */,
 				1F816C1A2837D95100F48CA0 /* UIImage + Extension.swift */,
 				1FDAC4EB285B839300CD5453 /* RadioButton.swift */,
-				1F2333742880938C005ED749 /* String + Extension.swift */,
+				1F2333742880938C005ED749 /* Date + Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -543,6 +559,7 @@
 				1F1309C42856778C00A03AF7 /* View */,
 				1F1309C0285674F600A03AF7 /* MessagesListViewController.swift */,
 				1F1309C2285674FE00A03AF7 /* MessagesListPresenter.swift */,
+				1F2D8F682886D050005B7B23 /* MessagesListAssembler.swift */,
 			);
 			path = MessagesListModule;
 			sourceTree = "<group>";
@@ -899,6 +916,7 @@
 				1F8FF0C7284BB64900171B83 /* View */,
 				1F8FF0C1284BB00600171B83 /* FillBrandDataViewController.swift */,
 				1F8FF0C5284BB15100171B83 /* FillBrandDataPresenter.swift */,
+				1F2D8F5C2886B657005B7B23 /* FillBrandDataAssembler.swift */,
 			);
 			path = FillBrandDataModule;
 			sourceTree = "<group>";
@@ -1045,6 +1063,7 @@
 				1FBE20E4285E3D1D00E03AF0 /* View */,
 				1FBE20E0285E399E00E03AF0 /* SellerOrdersViewController.swift */,
 				1FBE20E2285E39AE00E03AF0 /* SellerOrdersPresenter.swift */,
+				1F2D8F5E2886B8E0005B7B23 /* SellerOrdersAssembler.swift */,
 			);
 			path = SellerOrdersModule;
 			sourceTree = "<group>";
@@ -1072,6 +1091,7 @@
 				1FBE20EF285E55D700E03AF0 /* View */,
 				1FBE20EB285E550900E03AF0 /* ChangeOrderStatusViewController.swift */,
 				1FBE20ED285E554100E03AF0 /* ChangeOrderStatusPresenter.swift */,
+				1F2D8F622886BC84005B7B23 /* ChangeOrderStatusAssembler.swift */,
 			);
 			path = ChangeOrderStatusModule;
 			sourceTree = "<group>";
@@ -1165,6 +1185,7 @@
 				1FEB156A284E53FC00DCCBC7 /* View */,
 				1FEB1566284E1A0F00DCCBC7 /* SellerViewController.swift */,
 				1FEB1568284E525A00DCCBC7 /* SellerPresenter.swift */,
+				1F2D8F642886CBB8005B7B23 /* SellerAssembler.swift */,
 			);
 			path = SellerModule;
 			sourceTree = "<group>";
@@ -1605,11 +1626,14 @@
 				1F5E3D7128854F8200770076 /* ProfileAssembler.swift in Sources */,
 				1FD3EC26284EA325006789DA /* Statistics.swift in Sources */,
 				1F96F5A7282E883200C0F460 /* HeaderView + BottomView.swift in Sources */,
+				1F2D8F612886B9F0005B7B23 /* SettingsAssembler.swift in Sources */,
 				1F8FF0BB284BAA2F00171B83 /* OnboardingPresenter.swift in Sources */,
 				1F96F5A9282E8C1A00C0F460 /* TextFieldsView.swift in Sources */,
 				1F3F382E2847683F00228983 /* SizePickView.swift in Sources */,
+				1F2D8F652886CBB8005B7B23 /* SellerAssembler.swift in Sources */,
 				1F919F0D285515900034B475 /* MessengerPresenter.swift in Sources */,
 				1F96F5A3282E7B8900C0F460 /* UINavigationController + Extension.swift in Sources */,
+				1F2D8F5F2886B8E0005B7B23 /* SellerOrdersAssembler.swift in Sources */,
 				1FEF588D28554BE0007A2A95 /* Chat.swift in Sources */,
 				1F96F5B5282EDE8E00C0F460 /* CreateSizePresenter.swift in Sources */,
 				1FEF1EED2864B06A0069F2B5 /* SubscriptionsPresenter.swift in Sources */,
@@ -1617,7 +1641,7 @@
 				1FF6840A283A524B00E92481 /* GuestViewController.swift in Sources */,
 				1F1E4DA62838473200C9AC05 /* UserData.swift in Sources */,
 				1F96F5AD282E904C00C0F460 /* SizeCell.swift in Sources */,
-				1F2333752880938C005ED749 /* String + Extension.swift in Sources */,
+				1F2333752880938C005ED749 /* Date + Extension.swift in Sources */,
 				1FBE20DC285E0AB100E03AF0 /* DetailedProfileView.swift in Sources */,
 				1F96F5A4282E7B8900C0F460 /* UITextField + Extension.swift in Sources */,
 				1F5D7FD0282E47BA00255E71 /* SceneDelegate.swift in Sources */,
@@ -1626,6 +1650,7 @@
 				1FDAC4EF285BA85400CD5453 /* SortingFeedView.swift in Sources */,
 				1F1E4DA028383D9800C9AC05 /* AuthService.swift in Sources */,
 				1F96F5B3282EDE6D00C0F460 /* CreateSizeViewController.swift in Sources */,
+				1F2D8F672886CFC1005B7B23 /* CreateAdAssembler.swift in Sources */,
 				1F04F82A284D3BF900BAD49B /* Brand.swift in Sources */,
 				1F5EF17E2878C26E00448FF5 /* SortingAssembler.swift in Sources */,
 				1F69B6AD2842557300C75668 /* ProfilePresenter.swift in Sources */,
@@ -1635,6 +1660,7 @@
 				1F4781D2285DD5EB00047317 /* Order.swift in Sources */,
 				1F6986D8283818F400D953D2 /* RegisterPresenter.swift in Sources */,
 				1FBE20D4285DFF7E00E03AF0 /* DetailedOrderView.swift in Sources */,
+				1F2D8F5D2886B657005B7B23 /* FillBrandDataAssembler.swift in Sources */,
 				1F6986CE28380EDF00D953D2 /* LoginViewController.swift in Sources */,
 				1F04F82C284D465500BAD49B /* BrandBuilder.swift in Sources */,
 				1F96F5B8282EDF4B00C0F460 /* CreateSizeView.swift in Sources */,
@@ -1659,6 +1685,7 @@
 				1F919F0B285515890034B475 /* MessengerViewController.swift in Sources */,
 				1F96F5A1282E7B8900C0F460 /* UILabel + Extension.swift in Sources */,
 				1F1309C9285678A500A03AF7 /* MessageListCell.swift in Sources */,
+				1F2D8F692886D050005B7B23 /* MessagesListAssembler.swift in Sources */,
 				1F5E3D6D28854C6600770076 /* SizePickerAssembler.swift in Sources */,
 				1F227DA72836822100F736F1 /* ImagePickerController.swift in Sources */,
 				1F8FF0C0284BADD100171B83 /* OnboardingCoordinator.swift in Sources */,
@@ -1689,6 +1716,7 @@
 				1F8310082879846800E3D1CB /* SubscriptionsAssembler.swift in Sources */,
 				1F054480286005E30075451E /* SettingsView.swift in Sources */,
 				1F8310062879811500E3D1CB /* UserService.swift in Sources */,
+				1F2D8F632886BC84005B7B23 /* ChangeOrderStatusAssembler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

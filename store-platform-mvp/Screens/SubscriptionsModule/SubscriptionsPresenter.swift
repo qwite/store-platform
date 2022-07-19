@@ -1,10 +1,12 @@
 import Foundation
 
+// MARK: - SubscriptionsPresenterProtocol
 protocol SubscriptionsPresenterProtocol: AnyObject {
     init(view: SubscriptionsViewProtocol, coordinator: ProfileCoordinator, service: UserServiceProtocol)
     func viewDidLoad()
 }
 
+// MARK: - SubscriptionsPresenterProtocol
 class SubscriptionsPresenter: SubscriptionsPresenterProtocol {
     weak var view: SubscriptionsViewProtocol?
     weak var coordinator: ProfileCoordinator?

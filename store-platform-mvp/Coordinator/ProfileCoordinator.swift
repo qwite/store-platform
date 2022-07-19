@@ -51,7 +51,7 @@ class ProfileCoordinator: BaseCoordinator, Coordinator {
     }
     
     func showSettings() {
-        guard let module = factory?.buildSettingsModule(coordinator: self) else { fatalError() }
+        let module = SettingsAssembler.buildSettingsModule(coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }
@@ -103,10 +103,8 @@ extension ProfileCoordinator: MessagesCoordinatorProtocol {
     }
     
     func showListMessages() {
-        guard let module = factory?.buildListMessagesModule(role: .user, coordinator: self) else {
-            fatalError()
-        }
-        
+        let module = MessagesListAssembler.buildMessagesListModule(role: .user, coordinator: self)
+
         self.navigationController.pushViewController(module, animated: true)
     }
     

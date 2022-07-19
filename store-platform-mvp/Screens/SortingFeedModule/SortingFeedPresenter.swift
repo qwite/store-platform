@@ -22,7 +22,7 @@ protocol SortingFeedPresenterProtocol: AvailableParameterPresenterDelegate {
     func getPopularItems()
     func showResults()
     func applyFilters(items: [Item]) -> [Item]
-    func preparePopularItems(items: [Int : [String : Any]], completion: @escaping (([ItemViews]) -> ()))
+    func preparePopularItems(items: [Int : [String : Any]], completion: @escaping (([Views]) -> ()))
     func clearSortSettings()
     func closeSortingWindow()
 }
@@ -152,7 +152,7 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
     
     // MARK: - refactor
     func getPopularItems() {
-        FirestoreService.sharedInstance.getPopularItems { [weak self] result in
+        service?.fetchPopularItems(completion: { [weak self] result in
             switch result {
             case .success(let items):
                 self?.preparePopularItems(items: items, completion: { itemsViews in
@@ -162,10 +162,11 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
                     self?.delegate?.insertPopularItems(items: filteredItems)
                     self?.closeSortingWindow()
                 })
+                
             case .failure(let error):
                 fatalError("\(error)")
             }
-        }
+        })
     }
     
     func getItemsByPrice(sorting: Item.Sorting) {
@@ -181,8 +182,8 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
         }
     }
     
-    func preparePopularItems(items: [Int : [String : Any]], completion: @escaping (([ItemViews]) -> ())) {
-        var itemViews: [ItemViews] = []
+    func preparePopularItems(items: [Int : [String : Any]], completion: @escaping (([Views]) -> ())) {
+        var itemViews: [Views] = []
         
         for value in items.values {
             guard let views = value["views"] as? [MonthlyViews],
@@ -194,7 +195,7 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
                 monthly.amount + partialResult
             }
             
-            itemViews.append(ItemViews(item: item, views: summaryViews))
+            itemViews.append(Views(item: item, views: summaryViews))
         }
         
         completion(itemViews)

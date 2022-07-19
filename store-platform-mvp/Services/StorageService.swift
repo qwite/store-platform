@@ -21,7 +21,6 @@ final class StorageService {
         var urls: [Int: String] = [:]
         var counter = 0 // Need for completion
         
-        // TODO: add order
         for item in data {
             let fileName = "\(UUID().uuidString).png"
             let reference = self.storageReference.child("items_images/\(fileName)")

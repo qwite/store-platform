@@ -1,6 +1,8 @@
 import UIKit
 
+// MARK: - SettingsView
 class SettingsView: UIView {
+    // MARK: Properties
     let oldPasswordTextField = UITextField(placeholder: "Введите данные",  withUnderline: true, keyboardType: .default, isSecureTextEntry: true)
     let newPasswordTextField = UITextField(placeholder: "Введите данные", withUnderline: true, keyboardType: .default, isSecureTextEntry: true)
     let repeatNewPasswordTextField = UITextField(placeholder: "Введите данные", withUnderline: true, keyboardType: .default, isSecureTextEntry: true)
@@ -9,14 +11,16 @@ class SettingsView: UIView {
 
 }
 
+// MARK: - Public methods
 extension SettingsView {
-    func configure() {
+    public func configure() {
         self.configureViews()
     }
 }
 
+// MARK: - Private methods
 extension SettingsView {
-    func configureViews() {
+    private func configureViews() {
         backgroundColor = .white
         
         let profileHintFont: UIFont = .systemFont(ofSize: 12, weight: .regular)
@@ -47,7 +51,5 @@ extension SettingsView {
             make.width.equalTo(170)
             make.centerX.equalTo(snp.centerX)
         }
-        
-        
     }
 }

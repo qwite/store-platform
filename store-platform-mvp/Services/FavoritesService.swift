@@ -112,6 +112,7 @@ class FavoritesService: FavoritesServiceProtocol {
     }
 }
 
+// MARK: - FavoritesService Errors
 extension FavoritesService {
     private enum FavoritesServiceErrors: Error {
         case documentsNotFound

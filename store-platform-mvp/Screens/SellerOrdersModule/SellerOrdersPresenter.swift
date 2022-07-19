@@ -1,18 +1,22 @@
 import Foundation
 
+// MARK: - SellerOrdersPresenterProtocol
 protocol SellerOrdersPresenterProtocol {
-    init(view: SellerOrdersViewProtocol, coordinator: SellerCoordinator)
+    init(view: SellerOrdersViewProtocol, coordinator: SellerCoordinator, service: BrandServiceProtocol)
     func viewDidLoad()
     func showChangeStatus(order: Order)
 }
 
+// MARK: - SellerOrdersPresenterProtocol Implementation
 class SellerOrdersPresenter: SellerOrdersPresenterProtocol {
     weak var view: SellerOrdersViewProtocol?
     weak var coordinator: SellerCoordinator?
+    var service: BrandServiceProtocol?
     
-    required init(view: SellerOrdersViewProtocol, coordinator: SellerCoordinator) {
+    required init(view: SellerOrdersViewProtocol, coordinator: SellerCoordinator, service: BrandServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
+        self.service = service
     }
     
     func viewDidLoad() {
@@ -21,7 +25,6 @@ class SellerOrdersPresenter: SellerOrdersPresenterProtocol {
         view?.configureViews()
         
         fetchItems()
-        
     }
     
     func fetchItems() {

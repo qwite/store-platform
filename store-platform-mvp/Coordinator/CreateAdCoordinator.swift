@@ -2,7 +2,7 @@ import UIKit
 
 class CreateAdCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    weak var delegate: CreateAdViewPresenterProtocol?
+    weak var delegate: CreateAdPresenterProtocol?
     weak var pickerDelegate: ImagePickerPresenterDelegate?
     
     var factory: Factory?
@@ -18,7 +18,7 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
     }
         
     func start() {
-        guard let module = factory?.buildCreateAdModule(coordinator: self) as? CreateAdViewController else {
+        guard let module = CreateAdAssembler.buildCreateAdModule(coordinator: self) as? CreateAdViewController else {
             return
         }
         

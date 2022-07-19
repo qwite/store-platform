@@ -1,7 +1,7 @@
 import Foundation
 
 protocol MessagesListPresenterProtocol {
-    init(view: MessagesListViewProtocol, role: RealTimeService.ChatRole, service: TOUserServiceProtocol, coordinator: MessagesCoordinatorProtocol)
+    init(view: MessagesListViewProtocol, role: RealTimeService.ChatRole, service: BrandServiceProtocol, coordinator: MessagesCoordinatorProtocol)
     
     func viewDidLoad()
     func showMessenger(with id: String)
@@ -10,10 +10,10 @@ protocol MessagesListPresenterProtocol {
 class MessagesListPresenter: MessagesListPresenterProtocol {
     weak var view: MessagesListViewProtocol?
     var role: RealTimeService.ChatRole
-    var service: TOUserServiceProtocol?
+    var service: BrandServiceProtocol?
     weak var coordinator: MessagesCoordinatorProtocol?
     
-    required init(view: MessagesListViewProtocol, role: RealTimeService.ChatRole, service: TOUserServiceProtocol, coordinator: MessagesCoordinatorProtocol) {
+    required init(view: MessagesListViewProtocol, role: RealTimeService.ChatRole, service: BrandServiceProtocol, coordinator: MessagesCoordinatorProtocol) {
         self.view = view
         self.role = role
         self.service = service
@@ -51,7 +51,11 @@ class MessagesListPresenter: MessagesListPresenterProtocol {
     }
     
     func fetchBrandConversations(completion: @escaping ([Conversation]?) -> ()) {
-        service?.getBrandId(completion: { result in
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return
+        }
+        
+        service?.getBrandId(by: userId, completion: { result in
             guard let brandId = try? result.get() else {
                 fatalError()
             }
@@ -85,11 +89,15 @@ class MessagesListPresenter: MessagesListPresenterProtocol {
     }
     
     func showMessenger(with id: String) {
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return
+        }
+        
         switch role {
         case .user:
             self.coordinator?.showMessenger(conversationId: id, brandId: nil)
         case .brand:
-            service?.getBrandId(completion: { [weak self] result in
+            service?.getBrandId(by: userId, completion: { [weak self] result in
                 guard let brandId = try? result.get() else {
                     fatalError()
                 }

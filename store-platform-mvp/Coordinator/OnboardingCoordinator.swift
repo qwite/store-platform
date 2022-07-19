@@ -6,10 +6,6 @@ class OnboardingCoordinator: BaseCoordinator, Coordinator {
     weak var delegate: ImagePickerPresenterDelegate?
     var completionHandler: (() -> ())?
     
-    deinit {
-        debugPrint("onboarding deinit")
-    }
-    
     func start() {
         guard let module = factory?.buildOnboardingModule(coordinator: self) else {
             return
@@ -24,8 +20,8 @@ class OnboardingCoordinator: BaseCoordinator, Coordinator {
     }
     
     func showFillBrandData() {
-        guard let module = factory?.buildFillBrandDataModule(coordinator: self) as? FillBrandDataViewController else {
-            fatalError()
+        guard let module = FillBrandDataAssembler.buildFillBrandDataModule(coordinator: self) as? FillBrandDataViewController else {
+            return
         }
         
         self.delegate = module.presenter

@@ -1,8 +1,10 @@
 import Foundation
 
+// MARK: - FillBrandDataPresenterProtocol
 protocol FillBrandDataPresenterProtocol: ImagePickerPresenterDelegate {
-    init(view: FillBrandDataViewProtocol, coordinator: OnboardingCoordinator, service: TOUserServiceProtocol)
+    init(view: FillBrandDataViewProtocol, coordinator: OnboardingCoordinator, service: BrandServiceProtocol, builder: BrandBuilderProtocol)
     func viewDidLoad()
+    
     func showImagePicker()
     func setBrandData(_ brandName: String, _ desc: String, _ city: String, _ firstName: String, _ lastName: String, _ patronymic: String)
     func createBrand(brand: Brand)
@@ -10,18 +12,19 @@ protocol FillBrandDataPresenterProtocol: ImagePickerPresenterDelegate {
     func finish()
 }
 
+// MARK: - FillBrandDataPresenterProtocol Implementation
 class FillBrandDataPresenter: FillBrandDataPresenterProtocol {
     weak var view: FillBrandDataViewProtocol?
     weak var coordinator: OnboardingCoordinator?
-    var service: TOUserServiceProtocol?
-    //TODO: fix builder init
-    var builder = BrandBuilderImpl()
+    var service: BrandServiceProtocol?
+    var builder: BrandBuilderProtocol?
     
-    required init(view: FillBrandDataViewProtocol, coordinator: OnboardingCoordinator, service: TOUserServiceProtocol) {
+    required init(view: FillBrandDataViewProtocol, coordinator: OnboardingCoordinator, service: BrandServiceProtocol, builder: BrandBuilderProtocol) {
         self.view = view
         self.coordinator = coordinator
         self.service = service
-        coordinator.delegate = self
+        self.builder = builder
+//        coordinator.delegate = self
     }
     
     func viewDidLoad() {
@@ -33,37 +36,39 @@ class FillBrandDataPresenter: FillBrandDataPresenterProtocol {
     }
     
     func setBrandData(_ brandName: String, _ desc: String, _ city: String, _ firstName: String, _ lastName: String, _ patronymic: String) {
-        builder.setBrandName(brandName)
-        builder.setDescription(desc)
-        builder.setCity(city)
-        builder.setFirstName(firstName)
-        builder.setLastName(lastName)
-        builder.setPatronymic(patronymic)
+        builder?.setBrandName(brandName)
+        builder?.setDescription(desc)
+        builder?.setCity(city)
+        builder?.setFirstName(firstName)
+        builder?.setLastName(lastName)
+        builder?.setPatronymic(patronymic)
         
-        let brand = builder.build()
+        guard let brand = builder?.build() else { return }
         self.createBrand(brand: brand)
     }
     
     func createBrand(brand: Brand) {
-        service?.createBrand(brand: brand, completion: { [weak self] result in
-            switch result {
-            case .success(let message):
-                debugPrint("action complete with message: \(message)")
-                self?.finish()
-            case .failure(let error):
-                fatalError("\(error)")
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return
+        }
+        
+        service?.createBrand(brand: brand, userId: userId, completion: { [weak self] error in
+            guard error == nil else {
+                print(error!); return
             }
+            
+            self?.finish()
         })
     }
     
     func addLogo(image: Data) {
-        service?.uploadBrandLogoImage(data: image, completion: { [weak self] result in
+        service?.uploadBrandImage(data: image, completion: { [weak self] result in
             switch result {
             case .success(let logoUrl):
-                self?.builder.setLogo(logoUrl)
+                self?.builder?.setLogo(logoUrl)
                 self?.view?.reloadLogoImage(image: image)
             case .failure(let error):
-                fatalError("\(error)")
+                print(error)
             }
         })
     }

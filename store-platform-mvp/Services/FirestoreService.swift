@@ -132,22 +132,6 @@ extension FirestoreService {
 // MARK: - Item/Ads Public methods
 extension FirestoreService {
     
-    /// done
-    /// Creating ad with item. Returns documentId
-    func createAd(item: Item, completion: @escaping (Result<String, Error>) -> ()) {
-        let documentItemId = try? itemsReference.addDocument(from: item, completion: { error in
-            guard error == nil else {
-                completion(.failure(error!)); return
-            }
-        }).documentID
-        
-        guard let documentItemId = documentItemId else {
-            completion(.failure(FirestoreServiceError.itemAddError)); return
-        }
-        
-        completion(.success(documentItemId))
-    }
-    
     // TODO: refactor
 //    func createOrder(userId: String, item: CartItem, date: String, completion: @escaping (Error?) -> ()) {
 //        self.fetchUserData(by: userId) { result in
@@ -216,97 +200,7 @@ extension FirestoreService {
 //            }
 //        }
 //    }
-    
-    func changeOrderStatus(orderId: String, status: Order.Status, completion: @escaping (Error?) -> ()) {
-        let stringStatus = status.rawValue
-        ordersReference.document(orderId).updateData(["status": stringStatus]) { error in
-            guard error == nil else {
-                completion(error!); return
-            }
-            
-            completion(nil)
-        }
-    }
-    
-    /// done
-    func getPopularItems(completion: @escaping (Result<[Int: [String: Any]], Error>) -> ()) {
-        itemsReference.getDocuments { querySnapshot, error in
-            guard let snapshot = querySnapshot,
-                  !snapshot.isEmpty else {
-                return completion(.failure(FirestoreServiceError.documentNotFound))
-            }
-            
-            let group = DispatchGroup()
-            /*
-             Result:
-             "itemId":
-             "item": Item,
-             "views": [
-             monthlyData,
-             monthlyData,
-             ...
-             ]
-             
-             */
-            
-            // get items where collection monthly_views not empty
-            // sort items by views
-            // return these items
-            
-            let documents = snapshot.documents
-            var resultDictionary: [Int: [String: Any]] = [:]
-            var counter = 0
-            for document in documents {
-                group.enter()
-                document.reference.collection("monthly_views").getDocuments { querySnapshot, error in
-                    defer { group.leave() }
-                    guard let snapshot = querySnapshot, snapshot.isEmpty != true else {
-                        counter += 1; return
-                    }
-                    
-                    guard let item = try? document.data(as: Item.self) else {
-                        return
-                    }
-                    
-                    // item monthly documents
-                    let monthlyDocuments = snapshot.documents
-                    
-                    let summaryMonthlyViews: [MonthlyViews] = monthlyDocuments.compactMap { documentSnapshot in
-                        guard let monthly = try? documentSnapshot.data(as: MonthlyViews.self) else {
-                            return nil
-                        }
-                        
-                        return monthly
-                    }
-                    
-                    resultDictionary[counter] = [
-                        "item": item,
-                        "views": summaryMonthlyViews
-                    ]
-                    
-                    counter += 1
-                }
-            }
-            
-            group.notify(queue: .main) {
-                if documents.count == counter {
-                    completion(.success(resultDictionary))
-                    return
-                }
-            }
-        }
-    }
-    
-    func putItemIdInBrand(brandId: String, itemId: String, completion: @escaping (Error?) -> ()) {
-        brandsReference.document(brandId).collection("items").addDocument(data: ["item_id": itemId]) { error in
-            guard error == nil else {
-                completion(error!); return
-            }
-            
-            completion(nil)
-        }
-    }
-    
+        
     func getUserOrders(userId: String, completion: @escaping (Result<[Order], Error>) -> ()) {
         usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
             guard let snapshot = querySnapshot,
@@ -439,36 +333,6 @@ extension FirestoreService {
         }
     }
     
-    
-    func createBrand(userId: String, brand: Brand, completion: @escaping (Result<[String: String], Error>) -> ()) {
-        guard let brandDocumentId = try? brandsReference.addDocument(from: brand, completion: { error in
-            guard error == nil else {
-                return completion(.failure(FirestoreServiceError.brandCreatingError))
-            }
-        }).documentID else {
-            return completion(.failure(FirestoreServiceError.brandCreatingError))
-        }
-        
-        self.usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
-            guard let snapshot = querySnapshot else {
-                return completion(.failure(error!))
-            }
-            
-            guard let userReference = snapshot.documents.first?.reference else {
-                return completion(.failure(FirestoreServiceError.userDocumentNotFound))
-            }
-            
-            userReference.collection("brand").addDocument(data: ["brand_id": brandDocumentId]) { error in
-                guard error == nil else {
-                    return completion(.failure(error!))
-                }
-                
-                let dict: [String: String] = ["brand_id": brandDocumentId, "brand_name": brand.brandName.lowercased()]
-                completion(.success(dict))
-            }
-        }
-    }
-    
     func getSellerStatus(userId: String, completion: @escaping (Result<Bool, Error>) -> ()) {
         usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
             guard let snapshot = querySnapshot else {
@@ -490,30 +354,6 @@ extension FirestoreService {
                 }
                 
                 completion(.success(true))
-            }
-        }
-    }
-    
-    func getBrandId(userId: String, completion: @escaping (Result<String, Error>) -> ()) {
-        usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
-            guard let snapshot = querySnapshot else {
-                return completion(.failure(error!))
-            }
-            
-            guard let userReference = snapshot.documents.first?.reference else {
-                return completion(.failure(FirestoreServiceError.userDocumentNotFound))
-            }
-            
-            userReference.collection("brand").getDocuments { querySnapshot, error in
-                guard let snapshot = querySnapshot else {
-                    return completion(.failure(FirestoreServiceError.documentNotFound))
-                }
-                
-                guard let brandId = snapshot.documents.first?.get("brand_id") as? String else {
-                    fatalError()
-                }
-                
-                completion(.success(brandId))
             }
         }
     }
@@ -556,92 +396,6 @@ extension FirestoreService {
         }
     }
     
-    func getItemIdsFromBrandSales(brandId: String, completion: @escaping (Result<[String], Error>) -> ()) {
-        // get item ids
-        brandsReference.document(brandId).collection("orders").getDocuments { querySnapshot, error in
-            guard let snapshot = querySnapshot else {
-                return completion(.failure(error!))
-            }
-            
-            guard snapshot.isEmpty != true else {
-                return completion(.failure(FirestoreServiceError.documentNotFound))
-            }
-            
-            let documents = snapshot.documents
-            var resultIds: [String] = []
-            for document in documents {
-                let data = document.get("item_id") as! String
-                resultIds.append(data)
-                
-                if documents.count == resultIds.count {
-                    completion(.success(resultIds))
-                }
-            }
-        }
-    }
-    
-    func getViewsAmountFromItem(itemId: String, completion: @escaping (Result<[MonthlyViews], Error>) -> ()) {
-        var views: [MonthlyViews] = []
-        let reference = itemsReference.document(itemId).collection("monthly_views")
-        reference.whereField("month", isEqualTo: "Jun").getDocuments { querySnapshot, error in
-            guard let snapshot = querySnapshot else {
-                return completion(.failure(error!))
-            }
-            
-            guard snapshot.isEmpty != true else {
-                return completion(.failure(FirestoreServiceError.documentNotFound))
-            }
-            
-            let documents = snapshot.documents
-            for document in documents {
-                guard let data = try? document.data(as: MonthlyViews.self) else {
-                    fatalError()
-                }
-                
-                views.append(data)
-                if views.count == documents.count {
-                    completion(.success(views))
-                }
-            }
-        }
-    }
-    
-    func getViewsAmountFromItems(items: [String], completion: @escaping (Result<[MonthlyViews], Error>) -> ()) {
-        var monthlyViews: [MonthlyViews] = []
-        let group = DispatchGroup()
-        
-        for item in items {
-            group.enter()
-            let reference = itemsReference.document(item).collection("monthly_views")
-            reference.whereField("month", isEqualTo: "Jun").getDocuments { querySnapshot, error in
-                defer { group.leave() }
-                guard let snapshot = querySnapshot else {
-                    return completion(.failure(error!))
-                }
-                
-                // return completion(.failure(FirestoreServiceError.viewsDocumentNotExist))
-                guard snapshot.isEmpty != true else {
-                    return
-                }
-                
-                let documents = snapshot.documents
-                for document in documents {
-                    guard let data = try? document.data(as: MonthlyViews.self) else {
-                        fatalError()
-                    }
-                    
-                    monthlyViews.append(data)
-                }
-            }
-        }
-        
-        group.notify(queue: .main) {
-            if monthlyViews.count > 0 {
-                completion(.success(monthlyViews))
-            }
-        }
-    }
-        
     func addReviewToItem(itemId: String, review: Review, completion: @escaping (Error?) -> ()) {
         guard let documentReference = try? reviewsReference.addDocument(from: review, completion: { error in
             guard error == nil else { completion(error!); return }
