@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 
+// MARK: - SearchPresenterProtocol
 protocol SearchPresenterProtocol {
     init(view: SearchViewProtocol, coordinator: FeedCoordinator, service: FeedServiceProtocol)
     func viewDidLoad()
@@ -9,6 +10,7 @@ protocol SearchPresenterProtocol {
     func showResultsScreen(items: [Item])
 }
 
+// MARK: - SearchPresenterProtocol Implementation
 class SearchPresenter: SearchPresenterProtocol {
     weak var view: SearchViewProtocol?
     weak var coordinator: FeedCoordinator?
@@ -47,6 +49,4 @@ class SearchPresenter: SearchPresenterProtocol {
     func showResultsScreen(items: [Item]) {
         coordinator?.showFeed(with: items)
     }
-    
-    // TODO: Arc fixes
 }

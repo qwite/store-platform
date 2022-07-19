@@ -150,7 +150,6 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
         return filteredItems
     }
     
-    // MARK: - refactor
     func getPopularItems() {
         service?.fetchPopularItems(completion: { [weak self] result in
             switch result {

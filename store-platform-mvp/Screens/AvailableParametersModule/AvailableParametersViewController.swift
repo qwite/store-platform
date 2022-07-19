@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - AvailableParametersView
 protocol AvailableParametersView: AnyObject {
     func configureTableView()
     func configureDataSource()
@@ -9,6 +10,7 @@ protocol AvailableParametersView: AnyObject {
     func getSelectedItems()
 }
 
+// MARK: - AvailableParametersViewController
 class AvailableParametersViewController: UIViewController {
     var tableView: UITableView! = nil
     var presenter: AvailableParametersPresenter!
@@ -27,11 +29,13 @@ class AvailableParametersViewController: UIViewController {
     }
 }
 
+// MARK: - AvailableParametersView Implementation
 extension AvailableParametersViewController: AvailableParametersView {
     func configureTableView() {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.register(AvailableParametersCell.self, forCellReuseIdentifier: AvailableParametersCell.reuseId)
         tableView.delegate = self
+        
         self.tableView = tableView
     }
     
@@ -73,7 +77,6 @@ extension AvailableParametersViewController: AvailableParametersView {
     
     func clearSelectedItems() {
         guard let snapshot = dataSource?.snapshot() else { return }
-        let items = snapshot.itemIdentifiers
         dataSource?.apply(snapshot)
     }
     
@@ -118,6 +121,5 @@ extension AvailableParametersViewController: UITableViewDelegate {
         }
         
         dataSource?.apply(snapshot, animatingDifferences: false)
-        
     }
 }

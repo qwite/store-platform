@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - MessageListCell
 class MessageListCell: UICollectionViewCell {
     static let reuseId = "MessageList"
     
@@ -9,6 +10,7 @@ class MessageListCell: UICollectionViewCell {
     let dateLabel = UILabel(text: nil, font: nil, textColor: .systemGray)
 }
 
+// MARK: - Public methods
 extension MessageListCell {
     func configure(messageListItem: Conversation) {
         self.recipientNameLabel.text = messageListItem.recipientName.capitalized
@@ -17,9 +19,12 @@ extension MessageListCell {
         configureTime(date: messageListItem.date)
         configureViews()
     }
-    
+}
+
+// MARK: - Private methods
+extension MessageListCell {
     // FIXME: make a dateformatter static manager
-    func configureTime(date: String) {
+    private func configureTime(date: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .medium
@@ -37,7 +42,7 @@ extension MessageListCell {
         dateLabel.text = "\(dateFormatter.string(from: fetchedDate)),"
     }
     
-    func configureViews() {
+    private func configureViews() {
         self.recipientNameLabel.font = Constants.Fonts.itemTitleFont
         self.lastMessageLabel.font = Constants.Fonts.itemDescriptionFont
         

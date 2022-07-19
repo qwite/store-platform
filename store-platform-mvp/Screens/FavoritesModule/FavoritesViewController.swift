@@ -1,6 +1,7 @@
 import UIKit
 import SPAlert
 
+// MARK: - FavoritesViewProtocol
 protocol FavoritesViewProtocol: AnyObject {
     func configureCollectionView()
     func configureDataSource()
@@ -12,6 +13,7 @@ protocol FavoritesViewProtocol: AnyObject {
     func showSuccessAlert()
 }
 
+// MARK: - FavoritesViewController
 class FavoritesViewController: UIViewController {
     var presenter: FavoritesPresenter!
     var favoritesView = FavoritesView()
@@ -21,8 +23,7 @@ class FavoritesViewController: UIViewController {
     var dataSource: UICollectionViewDiffableDataSource<FavoritesView.Section, Item>?
     typealias DataSource = UICollectionViewDiffableDataSource<FavoritesView.Section, Item>
    
-    //MARK: - Lifecycle
-    
+    //MARK: Lifecycle
     override func loadView() {
         view = favoritesView
     }
@@ -34,6 +35,7 @@ class FavoritesViewController: UIViewController {
     }
 }
 
+// MARK: - FavoritesViewProtocol Implementation
 extension FavoritesViewController: FavoritesViewProtocol {
     func configureCollectionView() {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: favoritesView.setupLayout())
@@ -105,6 +107,7 @@ extension FavoritesViewController: FavoritesViewProtocol {
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension FavoritesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource?.itemIdentifier(for: indexPath) as? Item else {
@@ -115,6 +118,7 @@ extension FavoritesViewController: UICollectionViewDelegate {
     }
 }
 
+// MARK: - FavoriteCellDelegate
 extension FavoritesViewController: FavoriteCellDelegate {
     func didTappedAddButton(_ favoriteCell: FavoriteCell) {
         guard let indexPath = collectionView.indexPath(for: favoriteCell),

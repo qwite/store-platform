@@ -107,10 +107,10 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
         guard let userId = SettingsService.sharedInstance.userId else { return }
         let brandName = item.brandName
         
-        FirestoreService.sharedInstance.getBrandIdByName(brandName: item.brandName) { result in
+        FirestoreService.sharedInstance.getBrandIdByName(brandName: item.brandName) { [weak self] result in
             switch result {
             case .success(let brandId):
-                FirestoreService.sharedInstance.addToSubscriptions(userId: userId, brandId: brandId, brandName: brandName) { [weak self] error in
+                self?.service?.addSubscription(userId: userId, brandId: brandId, brandName: brandName) { [weak self] error in
                     guard error == nil else { print(error!); return}
                     
                     self?.view?.showSuccessAlert(message: Constants.Messages.successAddSubscription)

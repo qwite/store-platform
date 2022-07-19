@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - LoginPresenter Protocol
 protocol LoginPresenterProtocol {
-    init(view: LoginViewProtocol, coordinator: GuestCoordinator)
+    init(view: LoginViewProtocol, coordinator: GuestCoordinator, service: UserServiceProtocol)
     func viewDidLoad()
     
     func login(email: String, password: String)
@@ -15,10 +15,12 @@ protocol LoginPresenterProtocol {
 class LoginPresenter: LoginPresenterProtocol {
     weak var view: LoginViewProtocol?
     weak var coordinator: GuestCoordinator?
+    var service: UserServiceProtocol?
     
-    required init(view: LoginViewProtocol, coordinator: GuestCoordinator) {
+    required init(view: LoginViewProtocol, coordinator: GuestCoordinator, service: UserServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
+        self.service = service
     }
     
     func viewDidLoad() {
@@ -37,17 +39,22 @@ class LoginPresenter: LoginPresenterProtocol {
     }
     
     func getUserInfo(id: String) {
-        FirestoreService.sharedInstance.fetchUserData(by: id) { [weak self] result in
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return
+        }
+        
+        service?.fetchUserData(by: userId, completion: { [weak self] result in
             switch result {
             case .success(let user):
                 self?.saveUser(user)
                 self?.view?.showSuccessMessage(message: Constants.Messages.successUserLogin)
                 self?.coordinator?.finishFlow()
             case .failure(let error):
-                debugPrint(error)
+                print(error)
             }
-        }
+        })
     }
+    
     
     func saveUser(_ user: UserData) {
         guard let firstName = user.firstName,
@@ -59,8 +66,6 @@ class LoginPresenter: LoginPresenterProtocol {
         let userFullName = ["firstName": firstName, "lastName": lastName]
         
         SettingsService.sharedInstance.saveUserData(userId: userId, userFullName: userFullName)
-        
-        debugPrint("\(user) saved")
     }
     
     func handleError(error: AuthServiceError) {

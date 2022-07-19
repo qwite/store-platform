@@ -1,23 +1,26 @@
 import UIKit
 import SPAlert
 
+// MARK: - RegisterViewProtocol
 protocol RegisterViewProtocol: AnyObject {
+    func configure()
     func configureRegisterButton()
     func didTappedRegisterButton()
     func showSuccessRegister()
 }
 
+// MARK: - RegisterViewController
 class RegisterViewController: UIViewController {
     var registerView = RegisterView()
     var presenter: RegisterPresenter!
-    //MARK: - Lifecycle
     
+    //MARK: Lifecycle
     override func loadView() {
         view = registerView
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        registerView.setupViews()
         presenter.viewDidLoad()
     }
     
@@ -26,7 +29,13 @@ class RegisterViewController: UIViewController {
     }
 }
 
+// MARK: - RegisterViewProtocol Implementation
 extension RegisterViewController: RegisterViewProtocol {
+    func configure() {
+        registerView.configure()
+        configureRegisterButton()
+    }
+    
     func showSuccessRegister() {
         SPAlert.present(message: "Успешная регистрация!", haptic: .success)
     }

@@ -45,7 +45,7 @@ class ProfilePresenter: ProfilePresenterProtocol {
     
     func getFullName() {
         guard let userId = SettingsService.sharedInstance.userId else { return }
-        FirestoreService.sharedInstance.fetchUserData(by: userId) { result in
+        service?.fetchUserData(by: userId) { result in
             switch result {
             case .success(let userData):
                 guard let firstName = userData.firstName,
@@ -84,6 +84,7 @@ class ProfilePresenter: ProfilePresenterProtocol {
     }
 }
 
+// MARK: - ProfilePresenterDelegate
 extension ProfilePresenter: ProfilePresenterDelegate {
     func didTappedLogoutButton() {
         service?.logout(completion: { error in

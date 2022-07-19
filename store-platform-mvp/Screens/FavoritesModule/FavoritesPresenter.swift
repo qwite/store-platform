@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - FavoritesPresenterProtocol
 protocol FavoritesPresenterProtocol {
-    init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator, service: FavoritesServiceProtocol)
+    init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator, service: FavoritesServiceProtocol, cartService: CartServiceProtocol)
     func viewDidLoad()
     func addFavoriteItemsObserver ()
     func insertFavoriteItems()
@@ -11,21 +11,25 @@ protocol FavoritesPresenterProtocol {
     func removeFavoriteItemFromView(_ item: Item)
     func openDetailed(with item: Item)
     func openSizePicker(item: Item)
-//    func didAddToCart(item: CartItem)
+    func didAddToCart(item: Cart)
 }
 
+// MARK: - FavoritesPresenterProtocol Implementation
 class FavoritesPresenter: FavoritesPresenterProtocol {
     weak var view: FavoritesViewProtocol?
     weak var coordinator: FavoritesCoordinator?
     var service: FavoritesServiceProtocol?
+    var cartService: CartServiceProtocol?
     
-    required init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator, service: FavoritesServiceProtocol) {
+    required init(view: FavoritesViewProtocol, coordinator: FavoritesCoordinator, service: FavoritesServiceProtocol, cartService: CartServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
         self.service = service
+        self.cartService = cartService
     }
     
     deinit {
+        
         // Removing Notification Center
         let notificationName = Notification.Name("addFavoriteItem")
         NotificationCenter.default.removeObserver(self, name: notificationName, object: nil)
@@ -107,21 +111,23 @@ class FavoritesPresenter: FavoritesPresenterProtocol {
     func openSizePicker(item: Item) {
         coordinator?.showSizePicker(for: item)
         coordinator?.completionHandler = { [weak self] item in
-            print("test")
-//            self?.didAddToCart(item: item)
+            self?.didAddToCart(item: item)
         }
     }
     
-//    TODO: Remake
-//    func didAddToCart(item: CartItem) {
-//        service?.addItemToCart(item: item, completion: { [weak self] result in
-//            switch result {
-//            case .success(_):
-//                self?.view?.showSuccessAlert()
-//            case .failure(let error):
-//                debugPrint(error)
-//            }
-//        })
-//    }
+    func didAddToCart(item: Cart) {
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return
+        }
+        
+        cartService?.addItemCart(userId: userId, cartItem: item, completion: { [weak self] result in
+            switch result {
+            case .success(_):
+                self?.view?.showSuccessAlert()
+            case .failure(let error):
+                debugPrint(error)
+            }
+        })
+    }
 
 }

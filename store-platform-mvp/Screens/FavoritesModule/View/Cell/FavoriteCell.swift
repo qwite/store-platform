@@ -1,16 +1,15 @@
 import UIKit
 
+// MARK: - FavoriteCellDelegate
 protocol FavoriteCellDelegate: AnyObject {
     func didTappedAddButton(_ favoriteCell: FavoriteCell)
     func didTappedRemoveButton(_ favoriteCell: FavoriteCell)
 }
 
+// MARK: - FavoriteCell
 class FavoriteCell: UICollectionViewCell {
     
-    deinit {
-        debugPrint("favorite cell deinit")
-    }
-    
+    // MARK: Properties
     weak var delegate: FavoriteCellDelegate?
     static let reuseId: String = "Favorite"
     lazy var scrollView = UIScrollView()
@@ -22,7 +21,7 @@ class FavoriteCell: UICollectionViewCell {
     var likeState: LikeState?
 }
 
-// MARK: - Helpers func
+// MARK: - Public methods
 extension FavoriteCell {
     func configure(with item: Item) {
         self.brandNameLabel.text = item.brandName.capitalized
@@ -37,7 +36,10 @@ extension FavoriteCell {
         configureViews()
         configureButtons()
     }
-    
+}
+
+// MARK: - Private methods
+extension FavoriteCell {
     private func configureViews() {
         backgroundColor = .white
         brandNameLabel.lineBreakMode = .byWordWrapping
@@ -68,21 +70,18 @@ extension FavoriteCell {
         removeButton.addTarget(self, action: #selector(removeButtonAction), for: .touchUpInside)
     }
     
-    @objc func addToCartButtonAction() {
+    @objc private func addToCartButtonAction() {
         delegate?.didTappedAddButton(self)
     }
     
-    @objc func removeButtonAction() {
+    @objc private func removeButtonAction() {
         delegate?.didTappedRemoveButton(self)
     }
     
-    
-    func configureScrollView(photos: [String], size: CGSize) {
+    private func configureScrollView(photos: [String], size: CGSize) {
         addSubview(scrollView)
         scrollView.isPagingEnabled = false
         scrollView.showsHorizontalScrollIndicator = false
-        
-//        StorageService.sharedInstance.fetchImagesFromUrls(urls: photos)
         
         StorageService.sharedInstance.getImagesFromUrls(images: photos, size: size) { [weak self] result in
             switch result {
@@ -106,6 +105,7 @@ extension FavoriteCell {
     }
 }
 
+// MARK: - LikeState
 extension FavoriteCell {
     enum LikeState {
         case none

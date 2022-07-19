@@ -31,6 +31,7 @@ class MessengerViewController: MessagesViewController {
     }
 }
 
+// MARK: - MessengerViewProtocol Implementation
 extension MessengerViewController: MessengerViewProtocol {
     func loadFirstMessages() {
         messagesCollectionView.refreshControl?.beginRefreshing()
@@ -43,6 +44,7 @@ extension MessengerViewController: MessengerViewProtocol {
     }
 }
 
+// MARK: - MessagesDisplayDelegate
 extension MessengerViewController: MessagesDisplayDelegate {
     func configureMessenger() {
         messagesCollectionView.messagesDataSource = self

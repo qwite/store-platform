@@ -25,8 +25,8 @@ class CartViewController: UIViewController {
     typealias DataSource = UICollectionViewDiffableDataSource<CartView.Section, Cart>
     
     weak var delegate: TotalCartViewDelegate?
+   
     //MARK: Lifecycle
-    
     override func loadView() {
         view = cartView
     }
@@ -158,7 +158,6 @@ extension CartViewController: CartCellDelegate {
 // MARK: - CartViewDelegate
 extension CartViewController: CartViewDelegate {
     func didTappedTotalButton() {
-        print("pressed")
-//        presenter.createOrder()
+        presenter.createOrder()
     }
 }

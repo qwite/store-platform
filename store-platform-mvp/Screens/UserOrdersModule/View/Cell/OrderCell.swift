@@ -1,6 +1,7 @@
 import UIKit
 import SPAlert
 
+// MARK: - OrderCell
 class OrderCell: UICollectionViewCell {
     static let reuseId = "Order"
     let imageView = UIImageView()
@@ -12,21 +13,20 @@ class OrderCell: UICollectionViewCell {
     let statusLabel = UILabel(text: nil, font: nil, textColor: .black)
 }
 
+// MARK: - Public methods
 extension OrderCell {
     public func configure(order: Order) {
-//        guard let firstPhotoUrl = order.item.item.photos?.first else { return }
-        
         orderNumberLabel.text = "\(order.id ?? "null") "
         dateOrderLabel.text = "Заказ от \(order.date)"
     
         configureStatusLabel(status: order.status)
         configureDateLabel(date: order.date)
-//        configureImageView(photo: firstPhotoUrl)
         configureViews()
         
     }
 }
 
+// MARK: - Private methods
 extension OrderCell {
     private func configureViews() {
         imageView.contentMode = .scaleAspectFit

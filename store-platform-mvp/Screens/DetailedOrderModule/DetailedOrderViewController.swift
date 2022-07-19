@@ -1,6 +1,7 @@
 import UIKit
 import SPAlert
 
+// MARK: - DetailedOrderViewProtocol
 protocol DetailedOrderViewProtocol: AnyObject {
     func configure(order: Order)
     func configureButtons()
@@ -8,6 +9,7 @@ protocol DetailedOrderViewProtocol: AnyObject {
     func showError()
 }
 
+// MARK: - DetailedOrderViewController
 class DetailedOrderViewController: UIViewController {
     @objc var preferredHeightInBottomSheet: CGFloat { return 600.0 }
     var presenter: DetailedOrderPresenterProtocol!
@@ -20,12 +22,11 @@ class DetailedOrderViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        title = "Информация о заказе"
-        
         presenter.viewDidLoad()
     }
 }
 
+// MARK: - DetailedOrderViewProtocol Implementation
 extension DetailedOrderViewController: DetailedOrderViewProtocol {
     func showSuccess() {
         SPAlert.present(title: "", message: "Отзыв добавлен!", preset: .done, haptic: .success)

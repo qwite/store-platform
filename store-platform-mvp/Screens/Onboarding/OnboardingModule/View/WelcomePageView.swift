@@ -1,6 +1,9 @@
 import UIKit
 
-class WelcomePageView: UIView {    
+// MARK: - WelcomePageView
+class WelcomePageView: UIView {
+    
+    // MARK: Properties
     let onboardingImage = UIImageView(image: UIImage(named: "person-raising-money"))
     let titleLabel = UILabel(text: "Создай свой бренд", font: nil, textColor: .black)
     
@@ -16,8 +19,16 @@ class WelcomePageView: UIView {
     let button = UIButton(text: "Продолжить", preset: .bottom)
 }
 
+// MARK: - Public methods
 extension WelcomePageView {
-    func configureViews() {
+    func configure() {
+        configureViews()
+    }
+}
+
+// MARK: - Private methods
+extension WelcomePageView {
+    private func configureViews() {
         backgroundColor = .white
         
         addSubview(onboardingImage)

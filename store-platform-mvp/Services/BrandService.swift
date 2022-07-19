@@ -4,7 +4,8 @@ import FirebaseFirestoreSwift
 
 // MARK: - BrandServiceProtocol
 protocol BrandServiceProtocol {
-    func getBrandId(by userId: String, completion: @escaping (Result<String, Error>) -> ()) 
+    func getBrandId(by userId: String, completion: @escaping (Result<String, Error>) -> ())
+    func getBrandIdByName(brandName: String, completion: @escaping (Result<String, Error>) -> ())
     func createBrand(brand: Brand, userId: String, completion: @escaping (Error?) -> ())
     func uploadBrandImage(data: Data, completion: @escaping (Result<String, Error>) -> ())
     func uploadImages(with data: [Data], completion: @escaping (Result<[String], Error>) -> ())
@@ -74,6 +75,19 @@ class BrandService: BrandServiceProtocol {
             case .failure(let error):
                 completion(.failure(error))
             }
+        }
+    }
+    
+    func getBrandIdByName(brandName: String, completion: @escaping (Result<String, Error>) -> ()) {
+        brandsReference.whereField("brand_name", isEqualTo: brandName).getDocuments { querySnapshot, error in
+            guard let snapshot = querySnapshot,
+                  !snapshot.isEmpty,
+                  let brandDocument = snapshot.documents.first else {
+                return completion(.failure(BrandServiceErrors.documentsNotExist))
+            }
+            
+            let documentId = brandDocument.documentID
+            completion(.success(documentId))
         }
     }
     

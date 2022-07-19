@@ -1,10 +1,14 @@
 import UIKit
 
+// MARK: - MessagesListView
 class MessagesListView: UIView {
     enum Section: Int, CaseIterable {
         case list
     }
-    
+}
+
+// MARK: - Public methods
+extension MessagesListView {
     func configureLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .absolute(50))

@@ -1,10 +1,20 @@
 import UIKit
 
+// MARK: - CreateSizeViewProtocol
+protocol CreateSizeViewProtocol: AnyObject {
+    func configure()
+    func configureButtons()
+    func setSegmentedControlSource(items: [String])
+    func didCloseScreen()
+    func loadSavedValues(item: Size)
+}
+
+// MARK: - CreateSizeViewController
 class CreateSizeViewController: UIViewController {
     let createSizeView = CreateSizeView()
     var presenter: CreateSizePresenter!
     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override func loadView() {
         view = createSizeView
         view.backgroundColor = .white
@@ -12,17 +22,22 @@ class CreateSizeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter.didLoad()
+        presenter.viewDidLoad()
+    }
+
+}
+
+// MARK: - CreateSizeViewProtocol Implementation
+extension CreateSizeViewController: CreateSizeViewProtocol {
+    func configure() {
         configureButtons()
+        createSizeView.configure()
     }
     
-    // MARK: - Configure Buttons in CreateSizeView
     func configureButtons() {
         createSizeView.button.addTarget(self, action: #selector(self.didCloseScreen), for: .touchUpInside)
     }
-}
-
-extension CreateSizeViewController: CreateSizeViewProtocol {
+    
     func loadSavedValues(item: Size) {
         guard let size = item.size,
               let amount = item.amount,
@@ -40,10 +55,14 @@ extension CreateSizeViewController: CreateSizeViewProtocol {
     // TODO: Add Error handling
     @objc func didCloseScreen() {
         let sizeIndex = createSizeView.sizeSegmentedControl.selectedSegmentIndex
-        let price = Int(createSizeView.priceTextField.text!)
-        let amount = Int(createSizeView.amountTextField.text!)
+        guard let priceTextFieldValue = createSizeView.priceTextField.text,
+              let amountTextFieldValue = createSizeView.amountTextField.text else {
+            return
+        }
         
-        // TODO: Fix this I fell like stupid
+        let price = Int(priceTextFieldValue)
+        let amount = Int(amountTextFieldValue)
+        
         guard let editMode = presenter.editMode else {
             return presenter.addSizeItem(sizeIndex: sizeIndex, price: price, amount: amount)
         }
@@ -58,21 +77,3 @@ extension CreateSizeViewController: CreateSizeViewProtocol {
     }
 }
 
-// MARK: - SwiftUI
-import SwiftUI
-struct CreateSize: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<CreateSize.ContainerView>)
-        -> CreateSizeViewController {
-            return CreateSizeViewController()
-        }
-        
-        func updateUIViewController(_ uiViewController: CreateSize.ContainerView.UIViewControllerType,
-                                    context: UIViewControllerRepresentableContext<CreateSize.ContainerView>) {}
-    }
-}

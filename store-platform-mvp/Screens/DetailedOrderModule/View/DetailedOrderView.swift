@@ -1,7 +1,10 @@
 import UIKit
 import Cosmos
 
+// MARK: - DetailedOrderView
 class DetailedOrderView: UIView {
+    
+    // MARK: Properties
     let statusLabel = UILabel(text: nil, font: nil, textColor: .black)
     let userFullNameLabel = UILabel(text: nil, font: nil, textColor: .black)
     let userPhoneNumberLabel = UILabel(text: nil, font: nil, textColor: .black)
@@ -17,6 +20,7 @@ class DetailedOrderView: UIView {
     let addReviewButton = UIButton(text: "Добавить отзыв", preset: .bottom)
 }
 
+// MARK: - DetailedOrderView Public methods
 extension DetailedOrderView {
     func configure(order: Order) {
         configureStatusLabel(status: order.status)
@@ -24,14 +28,14 @@ extension DetailedOrderView {
         userPhoneNumberLabel.text = order.userPhoneNumber
         userDeliveryAddressLabel.text = order.userShippingAddress
         priceLabel.text = "\(order.item.selectedPrice) ₽"
+        
         self.configureStars()
         self.configureViews()
-        
-        
         self.showRatingFields()
     }
 }
 
+// MARK: - Private methods
 extension DetailedOrderView {
     private func configureStars() {
         cosmosView.settings.fillMode = .full
@@ -45,7 +49,7 @@ extension DetailedOrderView {
         cosmosView.rating = 0
     }
     
-    public func showRatingFields() {
+    private func showRatingFields() {
         addSubview(addReviewButton)
         addReviewButton.snp.makeConstraints { make in
             make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-20)

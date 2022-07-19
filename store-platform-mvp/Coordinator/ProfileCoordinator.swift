@@ -1,8 +1,8 @@
 import UIKit
 
+// MARK: - ProfileCoordinator
 class ProfileCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory?
     
     weak var delegate: ProfilePresenterDelegate?
     weak var tabDelegate: TabCoordinatorDelegate?
@@ -18,11 +18,10 @@ class ProfileCoordinator: BaseCoordinator, Coordinator {
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.factory = DependencyFactory()
     }
     
     func showLogoutAlert() {
-        let alert = UIAlertController(title: "Выход", message: "Вы действительно хотите выйти из аккаунта?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Выход", message: Constants.Messages.logoutMessage, preferredStyle: .alert)
         let logoutAction = UIAlertAction(title: "Выход", style: .destructive) { alert in
             self.delegate?.didTappedLogoutButton()
         }
@@ -39,13 +38,13 @@ class ProfileCoordinator: BaseCoordinator, Coordinator {
     }
     
     func showUserOrders() {
-        guard let module = factory?.buildUserOrdersModule(coordinator: self) else { fatalError() }
+        let module = UserOrdersAssembler.buildUserOrdersModule(coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }
     
     func showDetailedProfile() {
-        guard let module = factory?.buildDetailedProfileModule(coordinator: self) else { fatalError() }
+        let module = DetailedProfileAssembler.buildDetailedProfileModule(coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }
@@ -63,7 +62,7 @@ class ProfileCoordinator: BaseCoordinator, Coordinator {
     }
     
     func showDetailedOrder(order: Order) {
-        guard let module = factory?.buildDetailedOrderModule(coordinator: self, order: order) else { fatalError() }
+        let module = DetailedOrderAssembler.buildDetailedOrderModule(coordinator: self, order: order)
         
         self.navigationController.presentAsBottomSheet(module)
     }
@@ -80,11 +79,10 @@ class ProfileCoordinator: BaseCoordinator, Coordinator {
     }
 }
 
+// MARK: - MessagesCoordinatorProtocol
 extension ProfileCoordinator: MessagesCoordinatorProtocol {
     func showImageDetail(image: Data) {
-        guard let module = factory?.buildDetailedImageModule(image: image) else {
-            fatalError()
-        }
+        let module = DetailedImageAssembler.buildDetailedImageModule(image: image)
         
         self.navigationController.pushViewController(module, animated: true)
     }
@@ -109,8 +107,8 @@ extension ProfileCoordinator: MessagesCoordinatorProtocol {
     }
     
     func showMessenger(conversationId: String?, brandId: String?) {
-        guard let module = factory?.buildMessengerModule(conversationId: conversationId, brandId: brandId, coordinator: self) as? MessengerViewController else {
-            fatalError()
+        guard let module = MessengerAssembler.buildMessengerModule(conversationId: conversationId, brandId: brandId, coordinator: self) as? MessengerViewController else {
+            return
         }
         
         self.imagePickerDelegate = module.presenter

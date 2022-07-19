@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - SizePickerAssembler
 class SizePickerAssembler {
     static func buildSizePickerModule(coordinator: SizePickerCoordinatorProtocol, with item: Item) -> UIViewController {
         let view = SizePickerViewController()

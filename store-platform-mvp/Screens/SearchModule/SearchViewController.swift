@@ -1,19 +1,20 @@
 import UIKit
 import SPAlert
 
+// MARK: - SearchViewProtocol
 protocol SearchViewProtocol: AnyObject {
     func configureViews()
     func configureSearchController(parent: FeedViewController)
     func showErrorAlert()
 }
 
+// MARK: - SearchViewController
 class SearchViewController: UIViewController {
     private var searchController: UISearchController?
     let searchView = SearchView()
     var presenter: SearchPresenterProtocol!
     
     // MARK: Lifecycle
-    
     override func loadView() {
         view = searchView
     }
@@ -29,6 +30,7 @@ class SearchViewController: UIViewController {
     }
 }
 
+// MARK: - SearchViewProtocol Implementation
 extension SearchViewController: SearchViewProtocol {
     func configureViews() {
         title = "Поиск"
@@ -49,12 +51,14 @@ extension SearchViewController: SearchViewProtocol {
     }
 }
 
+// MARK: - SearchViewDelegate
 extension SearchViewController: SearchViewDelegate {
     func didTappedCategoryButton(_ category: String) {
         presenter.searchItems(by: category)
     }
 }
 
+// MARK: - UISearchBarDelegate
 extension SearchViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
     }

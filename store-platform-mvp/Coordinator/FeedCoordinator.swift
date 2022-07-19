@@ -3,7 +3,6 @@ import LBBottomSheet
 
 class FeedCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory?
     var completionHandler: ((Cart) -> ())?
     var parent: FeedViewController?
     weak var imagePickerDelegate: ImagePickerPresenterDelegate?
@@ -13,11 +12,9 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
-        factory = DependencyFactory()
     }
     
-    deinit {
-    }
+    deinit {}
     
     var finish: (() -> ())?
     
@@ -54,21 +51,22 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     
     func showColorParameters() {
         guard let navigation = sortingNavigation,
-              let sortingPresenter = self.sortingPresenter,
-              let module = factory?.buildAvailableParametersModule(delegate: sortingPresenter, type: .color) else {
+              let sortingPresenter = self.sortingPresenter else {
             return
         }
+        
+        let module = AvailableParametersAssembler.buildAvailableParametersModule(delegate: sortingPresenter, type: .color)
         
         navigation.pushViewController(module, animated: true)
     }
     
     func showSizeParameters() {
         guard let navigation = sortingNavigation,
-              let sortingPresenter = self.sortingPresenter,
-              let module = factory?.buildAvailableParametersModule(delegate: sortingPresenter, type: .size) else {
+              let sortingPresenter = self.sortingPresenter else {
             return
         }
         
+        let module = AvailableParametersAssembler.buildAvailableParametersModule(delegate: sortingPresenter, type: .size)
         navigation.pushViewController(module, animated: true)
     }
     
@@ -108,13 +106,11 @@ extension FeedCoordinator: MessagesCoordinatorProtocol {
     }
     
     func showMessenger(conversationId: String?, brandId: String?) {
-        guard let module = factory?.buildMessengerModule(conversationId: nil, brandId: brandId, coordinator: self) as? MessengerViewController  else {
-            fatalError()
+        guard let module = MessengerAssembler.buildMessengerModule(conversationId: nil, brandId: brandId, coordinator: self) as? MessengerViewController else {
+            return
         }
         
         self.imagePickerDelegate = module.presenter
-
-        
         self.navigationController.pushViewController(module, animated: true)
     }
     

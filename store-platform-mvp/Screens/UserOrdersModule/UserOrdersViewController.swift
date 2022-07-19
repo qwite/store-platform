@@ -12,6 +12,7 @@ protocol UserOrdersViewProtocol: AnyObject {
     func showErrorAlert()
 }
 
+// MARK: - UserOrdersViewController
 class UserOrdersViewController: UIViewController {
     var presenter: UserOrdersPresenterProtocol!
     
@@ -33,6 +34,7 @@ class UserOrdersViewController: UIViewController {
     }
 }
 
+// MARK: - UserOrdersViewProtocol Implementation
 extension UserOrdersViewController: UserOrdersViewProtocol {
     func configureCollectionView() {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: userOrdersView.configureLayout())
@@ -79,6 +81,7 @@ extension UserOrdersViewController: UserOrdersViewProtocol {
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension UserOrdersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource?.itemIdentifier(for: indexPath) else { return }

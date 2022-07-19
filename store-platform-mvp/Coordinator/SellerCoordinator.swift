@@ -3,7 +3,6 @@ import LBBottomSheet
 
 class SellerCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory?
     weak var delegate: ImagePickerPresenterDelegate?
     
     func start() {
@@ -19,7 +18,6 @@ class SellerCoordinator: BaseCoordinator, Coordinator {
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.factory = DependencyFactory()
     }
     
     private func runOnboardingFlow() {
@@ -40,9 +38,7 @@ class SellerCoordinator: BaseCoordinator, Coordinator {
     }
     
     public func showMessenger(with id: String, brandId: String) {
-        guard let module = factory?.buildMessengerModule(conversationId: id, brandId: brandId, coordinator: self) else {
-            fatalError()
-        }
+        let module = MessengerAssembler.buildMessengerModule(conversationId: id, brandId: brandId, coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }
@@ -75,17 +71,15 @@ class SellerCoordinator: BaseCoordinator, Coordinator {
     }
 }
 
+// MARK: - MessagesCoordinatorProtocol
 extension SellerCoordinator: MessagesCoordinatorProtocol {
     func showImageDetail(image: Data) {
-        guard let module = factory?.buildDetailedImageModule(image: image) else {
-            fatalError()
-        }
+        let module = DetailedImageAssembler.buildDetailedImageModule(image: image)
         
         self.navigationController.pushViewController(module, animated: true)
     }
     
     func showImagePicker() {
-        // FIXME: remove from arc
         let imagePickerCoordinator = ImagePickerCoordinator(self.navigationController)
         imagePickerCoordinator.delegate = self.delegate
         imagePickerCoordinator.finish = { 
@@ -97,8 +91,8 @@ extension SellerCoordinator: MessagesCoordinatorProtocol {
     }
     
     func showMessenger(conversationId: String?, brandId: String?) {
-        guard let module = factory?.buildMessengerModule(conversationId: conversationId, brandId: brandId, coordinator: self) as? MessengerViewController else {
-            fatalError()
+        guard let module = MessengerAssembler.buildMessengerModule(conversationId: conversationId, brandId: brandId, coordinator: self) as? MessengerViewController else {
+            return
         }
         
         self.delegate = module.presenter
@@ -115,11 +109,13 @@ extension SellerCoordinator: MessagesCoordinatorProtocol {
 
 extension SellerCoordinator {
     func checkSellerStatus(completion: @escaping (Bool) -> ()) {
-        let service = TOUserService()
-        service.getSellerStatus { result in
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return
+        }
+        
+        FirestoreService.sharedInstance.getSellerStatus(userId: userId) { result in
             guard let _ = try? result.get() else {
-                debugPrint("not seller")
-                return completion(false)
+                completion(false); return
             }
             
             completion(true)

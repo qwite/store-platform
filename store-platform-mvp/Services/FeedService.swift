@@ -8,6 +8,7 @@ protocol FeedServiceProtocol {
     func fetchAllItems(by sort: Item.Sorting?, completion: @escaping (Result<[Item], Error>) -> ())
     func fetchItemsByCategory(category: String, completion: @escaping (Result<[Item], Error>) -> ())
     func fetchItemsByBrandName(brand: String, completion: @escaping (Result<[Item], Error>) -> ())
+    func addSubscription(userId: String, brandId: String, brandName: String, completion: @escaping (Error?) -> ())
     func fetchPopularItems(completion: @escaping (Result<[Int: [String: Any]], Error>) -> ())
     func fetchSubscriptionItems(subscriptionList: [String], completion: @escaping (Result<[Item], Error>) -> ())
     func fetchItemReviews(item: Item, completion: @escaping (Result<[Review], Error>) -> ())
@@ -18,6 +19,11 @@ protocol FeedServiceProtocol {
 // MARK: - FeedServiceProtocol Implementation
 class FeedService: FeedServiceProtocol {
     private let firebaseDb = Firestore.firestore()
+    
+    /// Users reference
+    private var usersReference: CollectionReference {
+        return firebaseDb.collection("users")
+    }
     
     /// Items reference
     private var itemsReference: CollectionReference {
@@ -148,6 +154,22 @@ class FeedService: FeedServiceProtocol {
                     completion(.success(resultDictionary))
                     return
                 }
+            }
+        }
+    }
+    
+    func addSubscription(userId: String, brandId: String, brandName: String, completion: @escaping (Error?) -> ()) {
+        usersReference.whereField("id", isEqualTo: userId).getDocuments { querySnapshot, error in
+            guard let snapshot = querySnapshot,
+                  !snapshot.isEmpty else {
+                return
+            }
+            
+            guard let reference = snapshot.documents.first?.reference else { return }
+            reference.collection("subscriptions").addDocument(data: ["brand_id": brandId, "brand_name": brandName]) { error in
+                guard error == nil else { completion(error!); return }
+                
+                completion(nil)
             }
         }
     }

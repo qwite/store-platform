@@ -1,16 +1,18 @@
 import UIKit
 
+// MARK: - ProfileViewProtocol
 protocol ProfileViewProtocol: AnyObject {
     func configure(with fullName: [String : String])
     func configureViews()
     func configureButtons()
 }
 
+// MARK: - ProfileViewController
 class ProfileViewController: UIViewController {
     var presenter: ProfilePresenterProtocol!
     var profileView = ProfileView()
-    // MARK: - Lifecycle
     
+    // MARK: Lifecycle
     override func loadView() {
         view = profileView
     }
@@ -26,6 +28,7 @@ class ProfileViewController: UIViewController {
     }
 }
 
+// MARK: - ProfileViewProtocol Implementation
 extension ProfileViewController: ProfileViewProtocol {
     func configure(with fullName: [String : String]) {
         guard let firstName = fullName["firstName"],
@@ -35,7 +38,7 @@ extension ProfileViewController: ProfileViewProtocol {
     }
     
     func configureViews() {
-        profileView.configureViews()
+        profileView.configure()
     }
     
     func configureButtons() {
@@ -44,6 +47,7 @@ extension ProfileViewController: ProfileViewProtocol {
         profileView.userOrdersButton.addTarget(self, action: #selector(userOrdersButtonAction), for: .touchUpInside)
         profileView.settingsButton.addTarget(self, action: #selector(settingsButtonAction), for: .touchUpInside)
         profileView.subscriptionsButton.addTarget(self, action: #selector(subscriptionsButtonAction), for: .touchUpInside)
+       
         // gesture
         profileView.labelStack.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(profileInfoAction)))
     }

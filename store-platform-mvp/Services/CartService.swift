@@ -8,10 +8,23 @@ protocol CartServiceProtocol {
     func removeItemCart(userId: String, cartItem: Cart, completion: @escaping (Error?) -> ())
     func fetchItemsCart(userId: String, completion: @escaping (Result<[Cart], Error>) -> ())
     func fetchItem(by id: String, completion: @escaping (Result<Item, Error>) -> ())
+    func createOrder(userId: String, items: [Cart], date: String, userData: UserData, complection: @escaping (Error?) -> ())
 }
 
 // MARK: - CartServiceProtocol Implementation
 class CartService: CartServiceProtocol {
+    private let firebaseDb = Firestore.firestore()
+    
+    /// Brands reference
+    private var brandsReference: CollectionReference {
+        return firebaseDb.collection("brands")
+    }
+    
+    /// Orders reference
+    private var ordersReference: CollectionReference {
+        return firebaseDb.collection("orders")
+    }
+    
     func addItemCart(userId: String, cartItem: Cart, completion: @escaping (Result<Cart, Error>) -> ()) {
         FirestoreService.sharedInstance.getUserDocumentSnapshot(by: userId) { result in
             switch result {
@@ -83,6 +96,25 @@ class CartService: CartServiceProtocol {
             case .failure(let error):
                 completion(.failure(error))
             }
+        }
+    }
+    
+    // TODO: 
+    func createOrder(userId: String, items: [Cart], date: String, userData: UserData, complection: @escaping (Error?) -> ()) {}
+}
+
+// MARK: - Private helpers
+extension CartService {
+    func getBrandId(brandName: String, completion: @escaping (Result<String, Error>) -> ()) {
+        brandsReference.whereField("brand_name", isEqualTo: brandName).getDocuments { snapshot, error in
+            guard let snapshot = snapshot,
+                  !snapshot.isEmpty,
+                  let document = snapshot.documents.first else {
+                completion(.failure(CartServiceErrors.documentsNotExist)); return
+            }
+            
+            // Success action
+            completion(.success(document.documentID))
         }
     }
 }

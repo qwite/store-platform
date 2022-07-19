@@ -1,11 +1,13 @@
 import Foundation
 
+// MARK: - GuestPresenterProtocol
 protocol GuestPresenterProtocol {
     init(view: GuestViewProtocol, coordinator: GuestCoordinator)
     func openLogin()
     func openRegister()
 }
 
+// MARK: - GuestPresenterProtocol Implementation
 class GuestPresenter: GuestPresenterProtocol {
     weak var view: GuestViewProtocol?
     weak var coordinator: GuestCoordinator?

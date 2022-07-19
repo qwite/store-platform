@@ -1,5 +1,6 @@
 import Foundation
 
+// MARK: - MessagesListPresenterProtocol
 protocol MessagesListPresenterProtocol {
     init(view: MessagesListViewProtocol, role: RealTimeService.ChatRole, service: BrandServiceProtocol, coordinator: MessagesCoordinatorProtocol)
     
@@ -7,6 +8,7 @@ protocol MessagesListPresenterProtocol {
     func showMessenger(with id: String)
 }
 
+// MARK: - MessagesListPresenterProtocol Implementation
 class MessagesListPresenter: MessagesListPresenterProtocol {
     weak var view: MessagesListViewProtocol?
     var role: RealTimeService.ChatRole

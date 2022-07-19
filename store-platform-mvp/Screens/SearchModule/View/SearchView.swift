@@ -1,10 +1,13 @@
 import UIKit
 
+// MARK: - SearchViewDelegate
 protocol SearchViewDelegate: AnyObject {
     func didTappedCategoryButton(_ category: String)
 }
 
+// MARK: - SearchView
 class SearchView: UIView {
+    // MARK: Properties
     weak var delegate: SearchViewDelegate?
     
     let tshirtButton = UIButton(text: "Футболка", preset: .profile)
@@ -19,12 +22,16 @@ class SearchView: UIView {
     let stack = UIStackView()
 }
 
+// MARK: - SearchView Public methods
 extension SearchView {
     public func configure() {
         configureViews()
         configureButtons()
     }
-    
+}
+
+// MARK: - Private methods
+extension SearchView {
     private func configureViews() {
         backgroundColor = .white
         addStack()

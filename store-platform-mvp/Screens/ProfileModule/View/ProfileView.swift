@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - ProfileView
 class ProfileView: UIView {
     let profileNameLabel = UILabel(text: "...", font: nil, textColor: .black)
     let profileNameDescription = UILabel(text: "Обзор профиля", font: nil, textColor: .black)
@@ -12,8 +13,16 @@ class ProfileView: UIView {
     let logoutButton = UIButton(text: "Выход", preset: .profile)
 }
 
+// MARK: - Public methods
 extension ProfileView {
-    func configureViews() {
+    public func configure() {
+        configureViews()
+    }
+}
+
+// MARK: - Private methods
+extension ProfileView {
+    private func configureViews() {
         backgroundColor = .white
         profileNameLabel.font = Constants.Fonts.itemTitleFont
         profileNameDescription.font = Constants.Fonts.itemDescriptionFont

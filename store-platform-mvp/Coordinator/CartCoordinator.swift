@@ -2,7 +2,6 @@ import UIKit
 
 class CartCoordinator: Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory?
     
     func start() {
         let module = CartAssembler.buildCartModule()
@@ -13,6 +12,5 @@ class CartCoordinator: Coordinator {
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.factory = DependencyFactory()
     }
 }

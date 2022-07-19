@@ -1,25 +1,26 @@
 import UIKit
 
+// MARK: - DetailedImageViewProtocol
 protocol DetailedImageViewProtocol: AnyObject {
     func setImage(_ image: Data)
+    func configureViews()
 }
 
+// MARK: - DetailedImageViewController
 class DetailedImageViewController: UIViewController {
     var presenter: DetailedImagePresenter!
     lazy var imageView = UIImageView(image: nil, contentMode: .scaleAspectFit, clipToBounds: true)
     
-    //MARK: - Lifecycle
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViews()
         presenter.viewDidLoad()
     }
 }
 
-// MARK: - Private Methods
-
-extension DetailedImageViewController {
-    private func setupViews() {
+// MARK: - DetailedImageViewProtocol Implementation
+extension DetailedImageViewController: DetailedImageViewProtocol {
+    func configureViews() {
         view.backgroundColor = .white
         view.addSubview(imageView)
         imageView.snp.makeConstraints { make in
@@ -29,11 +30,7 @@ extension DetailedImageViewController {
             make.height.equalTo(500)
         }
     }
-}
-
-// MARK: - DetailedImageView Protocol
-
-extension DetailedImageViewController: DetailedImageViewProtocol {
+    
     func setImage(_ image: Data) {
         let image = UIImage(data: image)
         imageView.image = image

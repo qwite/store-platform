@@ -7,6 +7,7 @@ protocol SizePickViewDelegate: AnyObject {
 
 // MARK: - SizePickView
 class SizePickView: UIView {
+    // MARK: Properties
     weak var delegate: SizePickViewDelegate?
     let pickerView = UIPickerView()
     let label = UILabel(text: nil,

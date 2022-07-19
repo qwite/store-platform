@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - CartPresenterProtocol
 protocol CartPresenterProtocol {
-    init(view: CartViewProtocol, service: CartServiceProtocol)
+    init(view: CartViewProtocol, service: CartServiceProtocol, userService: UserServiceProtocol)
     func viewDidAppear()
     func viewDidLoad()
     
@@ -10,13 +10,14 @@ protocol CartPresenterProtocol {
     func removeItem(item: Cart)
     func getItem(id: String, completion: @escaping (Item) -> ())
 
-//    func createOrder()
+    func createOrder()
 }
 
 // MARK: - CartPresenterProtocol Implementation
 class CartPresenter: CartPresenterProtocol {
     weak var view: CartViewProtocol?
     var service: CartServiceProtocol?
+    var userService: UserServiceProtocol?
     
     // TODO: make more safety
     private let dateFormatter: DateFormatter = {
@@ -28,9 +29,10 @@ class CartPresenter: CartPresenterProtocol {
         return formatter
     }()
     
-    required init(view: CartViewProtocol, service: CartServiceProtocol) {
+    required init(view: CartViewProtocol, service: CartServiceProtocol, userService: UserServiceProtocol) {
         self.view = view
         self.service = service
+        self.userService = userService
     }
     
     func viewDidAppear() {
@@ -86,31 +88,21 @@ class CartPresenter: CartPresenterProtocol {
             guard error == nil else { fatalError("\(error!)") }
         })
     }
-//    TODO: rewrite
-//    func createOrder() {
-//        guard let userId = SettingsService.sharedInstance.userId,
-//              let items = view?.getItemsCart() else { return }
-//        let currentDateString = dateFormatter.string(from: Date())
-//        let group = DispatchGroup()
-//        var counter = 0
-//        for item in items {
-//            group.enter()
-//            FirestoreService.sharedInstance.createOrder(userId: userId, item: item, date: currentDateString) { error in
-//                defer { group.leave() }
-//
-//                guard error == nil else { fatalError("\(error!)") }
-//
-//                print("order created")
-//                counter += 1
-//            }
-//        }
-//
-//        // update cart
-//        group.notify(queue: .main) {
-//            if counter == items.count {
-//                print("updating cart..")
-//                self.getCartItems()
-//            }
-//        }
-//    }
+    
+    func createOrder() {
+        guard let userId = SettingsService.sharedInstance.userId,
+              let itemsInCart = view?.getItemsCart() else {
+            return
+        }
+        
+        userService?.fetchUserData(by: userId, completion: { result in
+            switch result {
+            case .success(_):
+                break
+            case .failure(let error):
+                print(error)
+            }
+        })
+        
+    }
 }

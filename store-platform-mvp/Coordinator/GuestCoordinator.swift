@@ -2,30 +2,27 @@ import UIKit
 
 class GuestCoordinator: Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory?
     weak var delegate: TabCoordinatorDelegate?
     var finish: (() -> ())?
 
+    required init(_ navigationController: UINavigationController) {
+        self.navigationController = navigationController
+    }
+    
     func start() {
-        guard let module = factory?.buildGuestModule(coordinator: self) else {
-            fatalError()
-        }
+        let module = GuestAssembler.buildGuestModule(coordinator: self)
         
         self.navigationController.pushViewController(module, animated: true)
     }
     
     func openLogin() {
-        guard let module = factory?.buildLoginModule(coordinator: self) else {
-            fatalError()
-        }
+        let module = LoginAssembler.buildLoginModule(coordinator: self)
         
         self.navigationController.present(module, animated: true)
     }
     
-    func openRegister() {
-        guard let module = factory?.buildRegisterModule(coordinator: self) as? RegisterViewController else {
-            fatalError()
-        }
+    func openRegister() {        
+        let module = RegisterAssembler.buildRegisterModule(coordinator: self)
         
         self.navigationController.present(module, animated: true)
     }
@@ -54,10 +51,5 @@ class GuestCoordinator: Coordinator {
     
     func remove() {
         self.navigationController.popViewController(animated: true)
-    }
-    
-    required init(_ navigationController: UINavigationController) {
-        self.navigationController = navigationController
-        self.factory = DependencyFactory()
     }
 }

@@ -2,6 +2,7 @@ import UIKit
 import SPAlert
 import MultiSlider
 
+// MARK: - SortingFeedViewProtocol
 protocol SortingFeedViewProtocol {    
     func configureViews()
     func configureButtons()
@@ -12,6 +13,7 @@ protocol SortingFeedViewProtocol {
     func updatePrice(price: [Float])
 }
 
+// MARK: - SortingFeedViewController
 class SortingFeedViewController: UIViewController {
     var presenter: SortingFeedPresenterProtocol!
     var sortingFeedView = SortingFeedView()
@@ -30,10 +32,10 @@ class SortingFeedViewController: UIViewController {
     }
 }
 
+// MARK: - SortingFeedViewProtocol Implementation
 extension SortingFeedViewController: SortingFeedViewProtocol {
     func updateColors(colors: [String]) {
         if colors.count > 2 {
-            // FIXME: lol
             sortingFeedView.selectedColorLabel.text = "\(colors[0]), \(colors[1]), ..."
         } else {
             sortingFeedView.selectedColorLabel.text = colors.joined(separator: ", ")
@@ -54,7 +56,6 @@ extension SortingFeedViewController: SortingFeedViewProtocol {
         sortingFeedView.slider.addTarget(self, action: #selector(sliderDragEnded(_:)), for: .touchUpInside)
     }
     
-
     func configureButtons() {
         sortingFeedView.newItemsRadioButton.delegate = self
         sortingFeedView.newItemsRadioButton.type = .newItems
@@ -108,6 +109,7 @@ extension SortingFeedViewController: SortingFeedViewProtocol {
     }
 }
 
+// MARK: - RadioButtonDelegate
 extension SortingFeedViewController: RadioButtonDelegate {
     func didButtonPressed(_ sender: UIView) {
         guard let currentRadioButton = sender as? RadioButton,

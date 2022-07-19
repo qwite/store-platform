@@ -35,17 +35,15 @@ class SubscriptionsPresenter: SubscriptionsPresenterProtocol {
                 self?.view?.insertSubscriptions(items: subscriptions)
             case .failure(let error):
                 print(error)
-                fatalError()
             }
         }
     }
     
     func removeSubscription(brandName: String) {
         guard let userId = SettingsService.sharedInstance.userId else { return }
-        FirestoreService.sharedInstance.removeSubscription(userId: userId, brandName: brandName) { error in
+        service?.removeSubscription(userId: userId, brandName: brandName) { error in
             guard error == nil else { fatalError("\(error!)") }
             
-            debugPrint("подписка удалена")
             self.getSubscriptions()
         }
     }

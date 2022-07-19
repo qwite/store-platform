@@ -6,7 +6,6 @@ protocol ImagePickerCoordinatorDelegate: AnyObject {
 
 class ImagePickerCoordinator: Coordinator {
     var navigationController: UINavigationController
-    var factory: Factory?
     var finish: (() -> ())?
     
     weak var delegate: ImagePickerPresenterDelegate?
@@ -21,14 +20,14 @@ class ImagePickerCoordinator: Coordinator {
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.factory = DependencyFactory()
     }
     
     func showPicker(with source: UIImagePickerController.SourceType) {
-        guard let delegate = delegate,
-              let module = factory?.buildImagePickerModule(coordinator: self, delegate: delegate) else {
+        guard let delegate = delegate else {
             return
         }
+        
+        let module = ImagePickerAssembler.buildImagePickerModule(coordinator: self, delegate: delegate)
         
         module.sourceType = source
         module.allowsEditing = false
