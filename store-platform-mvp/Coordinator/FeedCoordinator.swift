@@ -47,6 +47,8 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     
     func hideSortingFeed() {
         self.navigationController.dismissBottomSheet()
+        self.sortingPresenter = nil
+        self.sortingNavigation = nil
     }
     
     func showColorParameters() {

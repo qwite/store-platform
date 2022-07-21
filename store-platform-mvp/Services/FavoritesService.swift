@@ -8,6 +8,7 @@ protocol FavoritesServiceProtocol {
     func fetchFavoritesItems(userId: String, completion: @escaping (Result<[Item], Error>) -> ())
     func addFavoriteItem(item: Item, userId: String, completion: @escaping (Result<Item, Error>) -> ())
     func removeFavoriteItem(item: Item, userId: String, completion: @escaping (Result<Item, Error>) -> ())
+    func fetchFavoriteState(item: Item, userId: String, completion: @escaping (Result<Bool, Error>) -> ())
 }
 
 // MARK: - FavoritesServiceProtocol Implementation
@@ -110,6 +111,33 @@ class FavoritesService: FavoritesServiceProtocol {
             }
         }
     }
+    
+    func fetchFavoriteState(item: Item, userId: String, completion: @escaping (Result<Bool, Error>) -> ()) {
+        guard let itemId = item.id else {
+            completion(.failure(FavoritesServiceErrors.itemError)); return
+        }
+        
+        FirestoreService.sharedInstance.getUserDocumentSnapshot(by: userId) { result in
+            switch result {
+            case .success(let document):
+                let favoritesCollection = document.reference.collection("favorites")
+                favoritesCollection.whereField("item_id", isEqualTo: itemId).getDocuments { snapshot, error in
+                    guard let snapshot = snapshot,
+                          !snapshot.isEmpty,
+                          let _ = snapshot.documents.first else {
+                        completion(.success(false)); return
+                    }
+                    
+                    // Success action
+                    completion(.success(true))
+                }
+                
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+        
+    }
 }
 
 // MARK: - FavoritesService Errors
@@ -117,5 +145,6 @@ extension FavoritesService {
     private enum FavoritesServiceErrors: Error {
         case documentsNotFound
         case favoriteItemAlreadyExists
+        case itemError
     }
 }

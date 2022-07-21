@@ -12,6 +12,7 @@ protocol FeedViewProtocol: AnyObject {
     func removeSearchBar(category: String)
     func searchFilter(text: String)
     func updateDataSource(with items: [Item])
+    func setFavoriteState(state: Bool, item: Item)
 }
 
 // MARK: - FeedViewController
@@ -46,21 +47,24 @@ extension FeedViewController: FeedViewProtocol {
         collectionView.backgroundColor = .white
         collectionView.delegate = self
         collectionView.register(AdCell.self, forCellWithReuseIdentifier: AdCell.reuseId)
+        
         self.collectionView = collectionView
     }
-    
+        
     func configureDataSource() {
         dataSource = DataSource(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
             let section = FeedView.Section.allCases[indexPath.section]
             switch section {
             case .ads:
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCell.reuseId, for: indexPath) as? AdCell, let strongSelf = self else {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCell.reuseId, for: indexPath) as? AdCell,
+                      let strongSelf = self else {
                     fatalError("dequeueReusableCell error with AdCell")
                 }
                 
-                // fix allocations
+                let item = itemIdentifier
                 cell.delegate = strongSelf
-                cell.configure(with: itemIdentifier)
+                cell.configure(with: item)
+                
                 return cell
             }
         })
@@ -122,6 +126,20 @@ extension FeedViewController: FeedViewProtocol {
         snapshot.appendItems(items)
         dataSource?.apply(snapshot, animatingDifferences: true)
     }
+    
+    func setFavoriteState(state: Bool, item: Item) {
+        guard let indexPath = dataSource?.indexPath(for: item),
+              let cell = collectionView.cellForItem(at: indexPath) as? AdCell else {
+            return
+        }
+        
+        switch state {
+        case true:
+            cell.favoriteState = .liked
+        case false:
+            cell.favoriteState = .unliked
+        }
+    }
 }
 
 // MARK: - UICollectionViewDelegate
@@ -137,6 +155,10 @@ extension FeedViewController: UICollectionViewDelegate {
 
 // MARK: - AdCellDelegate
 extension FeedViewController: AdCellDelegate {
+    func didFetchFavoriteState(item: Item) {
+        presenter.fetchFavoriteState(item: item)
+    }
+    
     func didTappedLikeButton(_ adCell: AdCell) {
         guard let indexPath = collectionView.indexPath(for: adCell),
               let item = dataSource?.itemIdentifier(for: indexPath) else {
