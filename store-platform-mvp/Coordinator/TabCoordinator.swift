@@ -141,8 +141,7 @@ extension TabCoordinator {
             case .feed:
                 return "Лента"
             case .seller:
-                //TODO: fix
-                return ""
+                return "Управление товарами"
             case .favs:
                 return "Избранное"
             case .bag:

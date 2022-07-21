@@ -40,11 +40,10 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
     }
     
     func addNewSizeItem(_ item: Size) {
-        delegate?.createSize(size: item, completion: { result in
+        delegate?.createSize(size: item, completion: { [weak self] result in
             switch result {
             case .success(_):
-                // maybe memory leak -> TODO: fix
-                self.closeCreateSize()
+                self?.closeCreateSize()
             case .failure(let error):
                 debugPrint(error)
             }
@@ -52,13 +51,12 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
     }
     
     func editSizeItem(_ item: Size) {
-        delegate?.editSize(size: item, completion: { result in
+        delegate?.editSize(size: item, completion: { [weak self] result in
             switch result {
             case .success(_):
-                debugPrint("[CreateAdCoordinator] success action")
-                self.closeCreateSize()
-            case .failure(_):
-                debugPrint("")
+                self?.closeCreateSize()
+            case .failure(let error):
+                debugPrint(error)
             }
         })
     }

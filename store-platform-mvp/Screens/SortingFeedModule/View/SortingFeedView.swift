@@ -1,8 +1,10 @@
 import UIKit
 import MultiSlider
 
+// MARK: - SortingFeedView
 class SortingFeedView: UIView {
     
+    // MARK: Properties
     let sortTitleLabel = UILabel(text: nil, font: nil, textColor: .black)
     let filterTitleLabel = UILabel(text: nil, font: nil, textColor: .black)
     
@@ -24,8 +26,24 @@ class SortingFeedView: UIView {
     let clearButton = UIButton(text: "Очистить", preset: .clearButton)
 }
 
+// MARK: - Public methods
 extension SortingFeedView {
-    func configureSlider() {
+    public func configure() {
+        configureSlider()
+        configureViews()
+    }
+    
+    public func showSlider() {
+        UIView.transition(with: slider, duration: 0.4, options: .transitionCrossDissolve) {
+            self.slider.isHidden = false
+        }
+    }
+    
+}
+
+// MARK: - Private methods
+extension SortingFeedView {
+    private func configureSlider() {
         slider.isHidden = true
         
         slider.minimumValue = 1000
@@ -48,14 +66,8 @@ extension SortingFeedView {
             imageView.widthAnchor.constraint(equalToConstant: 15).isActive = true
         }
     }
-    
-    func showSlider() {
-        UIView.transition(with: slider, duration: 0.4, options: .transitionCrossDissolve) {
-            self.slider.isHidden = false
-        }
-    }
-    
-    func configureViews() {
+        
+    private func configureViews() {
         sortTitleLabel.text = "Сортировка"
         sortTitleLabel.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
         
@@ -126,7 +138,6 @@ extension SortingFeedView {
             make.right.equalTo(snp.right).offset(-20)
             make.width.equalTo(80)
             make.height.equalTo(20)
-            
         }
     }
 }

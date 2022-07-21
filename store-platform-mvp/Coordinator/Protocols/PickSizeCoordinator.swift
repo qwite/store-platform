@@ -1,5 +1,6 @@
 import Foundation
 
+// MARK: - SizePickerCoordinatorProtocol
 protocol SizePickerCoordinatorProtocol: AnyObject {
     var completionHandler: ((Cart) -> Void)? { get set }
     

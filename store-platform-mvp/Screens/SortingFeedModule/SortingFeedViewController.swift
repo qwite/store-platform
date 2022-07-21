@@ -27,8 +27,6 @@ class SortingFeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
-        view.backgroundColor = .white
-
     }
 }
 
@@ -51,8 +49,8 @@ extension SortingFeedViewController: SortingFeedViewProtocol {
     }
     
     func configureViews() {
-        sortingFeedView.configureViews()
-        sortingFeedView.configureSlider()
+        view.backgroundColor = .white
+        sortingFeedView.configure()
         sortingFeedView.slider.addTarget(self, action: #selector(sliderDragEnded(_:)), for: .touchUpInside)
     }
     
@@ -102,7 +100,6 @@ extension SortingFeedViewController: SortingFeedViewProtocol {
         let floatValues: [Float] = slider.value.map({ Float($0) })
         presenter.setSelectedPrice(price: floatValues)
     }
-    
     
     func showErrorAlert() {
         SPAlert.present(message: "Для этого действия нужно выбрать параметры", haptic: .error)
