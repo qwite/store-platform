@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - AppCoordinator
 class AppCoordinator: Coordinator {
     var navigationController: UINavigationController
     

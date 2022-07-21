@@ -87,6 +87,21 @@ class FeedPresenter: FeedPresenterProtocol {
         })
     }
     
+    func fetchFavoriteState(item: Item) {
+        guard let userId = SettingsService.sharedInstance.userId else {
+            return
+        }
+        
+        favoritesService?.fetchFavoriteState(item: item, userId: userId, completion: { [weak self] result in
+            switch result {
+            case .success(let bool):
+                self?.view?.setFavoriteState(state: bool, item: item)
+            case .failure(_):
+                self?.view?.setFavoriteState(state: false, item: item)
+            }
+        })
+    }
+    
     func getSubscriptionItems() {
         guard let userId = SettingsService.sharedInstance.userId else { return }
         userService?.fetchUserSubscriptions(userId: userId, completion: { [weak self] result in
@@ -101,7 +116,7 @@ class FeedPresenter: FeedPresenterProtocol {
                     }
                 })
             case .failure(let error):
-                fatalError("\(error)")
+                print(error)
             }
         })
     }
@@ -125,7 +140,7 @@ class FeedPresenter: FeedPresenterProtocol {
             case .success(_):
                 self?.postNotificationRemoveFavoriteItem(item)
             case .failure(let error):
-                fatalError("\(error)")
+                print(error)
             }
         })
     }

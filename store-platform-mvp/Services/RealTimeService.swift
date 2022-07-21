@@ -49,9 +49,6 @@ extension RealTimeService {
         }
     }
     
-    
-    
-    
     /// new conversation with user and brand
     public func createNewConversation(with brandId: String, brandName: String, firstMessage: Message, completion: @escaping (Result<String, Error>) -> ()) {
         guard let userId = SettingsService.sharedInstance.userId,
@@ -460,7 +457,7 @@ extension RealTimeService {
     }
 }
 
-// MARK: - Errors
+// MARK: - RealTimeService Errors
 extension RealTimeService {
     enum RealTimeServiceError: Error {
         case failedToFetchConversations

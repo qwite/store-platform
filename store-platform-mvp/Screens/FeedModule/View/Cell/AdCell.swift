@@ -2,6 +2,7 @@ import UIKit
 
 // MARK: - AdCellDelegate Protocol
 protocol AdCellDelegate: AnyObject {
+    func didFetchFavoriteState(item: Item)
     func didTappedLikeButton(_ adCell: AdCell)
     func didUntappedLikeButton(_ adCell: AdCell)
 }
@@ -11,19 +12,31 @@ class AdCell: UICollectionViewCell {
     static let reuseId: String = "AdCell"
     weak var delegate: AdCellDelegate?
     
+    // MARK: Properties
     lazy var scrollView = UIScrollView()
     lazy var brandNameLabel = UILabel(text: "", font: UIFont.systemFont(ofSize: 18, weight: .semibold), textColor: .black)
     lazy var clothingNameLabel = UILabel(text: "", font: UIFont.systemFont(ofSize: 15, weight: .regular), textColor: .black)
     lazy var priceLabel = UILabel(text: "", font: UIFont.systemFont(ofSize: 15, weight: .regular), textColor: .black)
-    lazy var heartButton = UIButton(text: nil, preset: .icon, iconName: "heart", selectedIconName: "heart.fill")
-    var likeState: LikeState?
+    lazy var favoriteButton = UIButton(text: nil, preset: .icon, iconName: "heart", selectedIconName: "heart.fill")
     
+    var favoriteState: FavoriteState? {
+        didSet {
+            guard let favoriteState = favoriteState else {
+                return
+            }
+            
+            configureFavoriteButton(state: favoriteState)
+        }
+    }
+    
+    // MARK: prepareForReuse
     override func prepareForReuse() {
         super.prepareForReuse()
         self.brandNameLabel.text = nil
         self.clothingNameLabel.text = nil
         self.priceLabel.text = nil
         self.scrollView.subviews.forEach({ $0.removeFromSuperview() })
+        self.favoriteState = nil
     }
 }
 
@@ -44,6 +57,8 @@ extension AdCell {
         
         configureViews()
         configureButtons()
+        
+        delegate?.didFetchFavoriteState(item: item)
     }
 }
 
@@ -69,7 +84,6 @@ extension AdCell {
         }
     }
     
-    
     private func configureScrollView(photos: [String], size: CGSize) {
         addSubview(scrollView)
         scrollView.isPagingEnabled = true
@@ -84,7 +98,7 @@ extension AdCell {
             }
         }
         
-        addSubview(heartButton)
+        addSubview(favoriteButton)
         
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(snp.top)
@@ -92,7 +106,7 @@ extension AdCell {
             make.height.equalTo(170)
         }
         
-        heartButton.snp.makeConstraints { make in
+        favoriteButton.snp.makeConstraints { make in
             make.top.equalTo(snp.top)
             make.right.equalTo(snp.right)
         }
@@ -101,18 +115,29 @@ extension AdCell {
                                         height: scrollView.frame.height)
     }
     
-    private func configureButtons() {
-        heartButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+    private func configureFavoriteButton(state: FavoriteState) {
+        switch state {
+        case .none:
+            break
+        case .liked:
+            favoriteButton.isSelected = true
+        case .unliked:
+            favoriteButton.isSelected = false
+        }
     }
     
-    @objc private func likeButtonTapped() {
-        if heartButton.isSelected {
-            heartButton.isSelected = false
-            likeState = .unliked
+    private func configureButtons() {
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func favoriteButtonTapped() {
+        if favoriteButton.isSelected {
+            favoriteButton.isSelected = false
+            favoriteState = .unliked
             delegate?.didUntappedLikeButton(self)
         } else {
-            heartButton.isSelected = true
-            likeState = .liked
+            favoriteButton.isSelected = true
+            favoriteState = .liked
             delegate?.didTappedLikeButton(self)
         }
     }
@@ -120,7 +145,7 @@ extension AdCell {
 
 // MARK: - LikeState
 extension AdCell {
-    enum LikeState {
+    enum FavoriteState {
         case none
         case liked
         case unliked
