@@ -142,10 +142,3 @@ extension CreateAdPresenter: ImagePickerDelegate {
         self.addImage(image: image)
     }
 }
-
-//// MARK: - ImagePickerPresenterDelegate
-//extension CreateAdPresenter: ImagePickerPresenterDelegate {
-//    func didCloseImagePicker(with imageData: Data) {
-//        self.addImage(image: imageData)
-//    }
-//}
