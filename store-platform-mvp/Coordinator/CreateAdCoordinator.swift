@@ -1,14 +1,14 @@
 import UIKit
 
+// MARK: - CreateAdCoordinator
 class CreateAdCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    weak var delegate: CreateAdPresenterProtocol?
-    weak var pickerDelegate: ImagePickerPresenterDelegate?
+    weak var delegate: ImagePickerDelegate?
     
-    var finishFlow: (() -> ())?
+    var finishFlow: (() -> (Void))?
     
     deinit {
-        debugPrint("create ad coordinator deinit")
+        debugPrint("[Log] CreateAd Coordinator deinit")
     }
     
     required init(_ navigationController: UINavigationController) {
@@ -16,12 +16,8 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
     }
         
     func start() {
-        guard let module = CreateAdAssembler.buildCreateAdModule(coordinator: self) as? CreateAdViewController else {
-            return
-        }
+        let module = CreateAdAssembler.buildCreateAdModule(coordinator: self)
         
-        self.pickerDelegate = module.presenter
-        self.navigationController.delegate = self
         self.navigationController.pushViewController(module, animated: true)
     }
     
@@ -40,31 +36,39 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
     }
     
     func addNewSizeItem(_ item: Size) {
-        delegate?.createSize(size: item, completion: { [weak self] result in
-            switch result {
-            case .success(_):
-                self?.closeCreateSize()
-            case .failure(let error):
-                debugPrint(error)
-            }
-        })
+//        delegate?.createSize(size: item, completion: { [weak self] result in
+//            switch result {
+//            case .success(_):
+//                self?.closeCreateSize()
+//            case .failure(let error):
+//                debugPrint(error)
+//            }
+//        })
     }
     
     func editSizeItem(_ item: Size) {
-        delegate?.editSize(size: item, completion: { [weak self] result in
-            switch result {
-            case .success(_):
-                self?.closeCreateSize()
-            case .failure(let error):
-                debugPrint(error)
-            }
-        })
+//        delegate?.editSize(size: item, completion: { [weak self] result in
+//            switch result {
+//            case .success(_):
+//                self?.closeCreateSize()
+//            case .failure(let error):
+//                debugPrint(error)
+//            }
+//        })
     }
     
     func showImagePicker() {
         let imagePickerCoordinator = ImagePickerCoordinator(navigationController)
-        imagePickerCoordinator.delegate = self.pickerDelegate
-        self.addDependency(imagePickerCoordinator)
+        
+        imagePickerCoordinator.finishFlow = { [weak self, weak imagePickerCoordinator] image in
+            guard let imagePickerCoordinator = imagePickerCoordinator else { return }
+            self?.removeDependency(imagePickerCoordinator)
+            
+            guard let image = image else { return }
+            self?.delegate?.didImageAdded(image: image)
+        }
+
+        addDependency(imagePickerCoordinator)
         imagePickerCoordinator.start()
     }
     
@@ -77,24 +81,5 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
     func finish() {
         self.navigationController.popViewController(animated: true)
         self.finishFlow?()
-    }
-}
-
-extension CreateAdCoordinator: UINavigationControllerDelegate {
-    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-        guard let fromViewController = navigationController.transitionCoordinator?.viewController(forKey: .from) else {
-             return
-         }
-
-         // Check whether our view controller array already contains that view controller. If it does it means we’re pushing a different view controller on top rather than popping it, so exit.
-         if navigationController.viewControllers.contains(fromViewController) {
-             return
-         }
-
-         // We’re still here – it means we’re popping the view controller, so we can check whether it’s a buy view controller
-         if let buyViewController = fromViewController as? CreateAdViewController {
-             // We're popping a buy view controller; end its coordinator
-             finish()
-         }
     }
 }

@@ -3,7 +3,6 @@ import LBBottomSheet
 
 class SellerCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    weak var delegate: ImagePickerPresenterDelegate?
     
     func start() {
         checkSellerStatus { status in
@@ -81,11 +80,10 @@ extension SellerCoordinator: MessagesCoordinatorProtocol {
     
     func showImagePicker() {
         let imagePickerCoordinator = ImagePickerCoordinator(self.navigationController)
-        imagePickerCoordinator.delegate = self.delegate
-        imagePickerCoordinator.finish = { 
-            self.removeDependency(imagePickerCoordinator)
-            self.delegate = nil
-        }
+//        imagePickerCoordinator.finishFlow = { image in
+//            self.removeDependency(imagePickerCoordinator)
+//        }
+        
         addDependency(imagePickerCoordinator)
         imagePickerCoordinator.start()
     }
@@ -95,7 +93,6 @@ extension SellerCoordinator: MessagesCoordinatorProtocol {
             return
         }
         
-        self.delegate = module.presenter
         self.navigationController.pushViewController(module, animated: true)
     }
     

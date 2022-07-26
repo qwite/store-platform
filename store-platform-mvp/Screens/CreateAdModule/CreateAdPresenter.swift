@@ -136,9 +136,16 @@ class CreateAdPresenter: CreateAdPresenterProtocol {
     }
 }
 
-// MARK: - ImagePickerPresenterDelegate
-extension CreateAdPresenter: ImagePickerPresenterDelegate {
-    func didCloseImagePicker(with imageData: Data) {
-        self.addImage(image: imageData)
+// MARK: - ImagePickerDelegate
+extension CreateAdPresenter: ImagePickerDelegate {
+    func didImageAdded(image: Data) {
+        self.addImage(image: image)
     }
 }
+
+//// MARK: - ImagePickerPresenterDelegate
+//extension CreateAdPresenter: ImagePickerPresenterDelegate {
+//    func didCloseImagePicker(with imageData: Data) {
+//        self.addImage(image: imageData)
+//    }
+//}

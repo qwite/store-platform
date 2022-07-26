@@ -140,9 +140,8 @@ extension CreateAdViewController: CreateAdViewProtocol {
     // TODO: Bad solution -> fix
     func updateSizeSection(item: Size) {
         var newSnapshot = dataSource?.snapshot()
-        let old = newSnapshot?.itemIdentifiers.first(where: {($0 as? Size)?.size == item.size})
-        guard let old = old else {
-            fatalError("Item not founded")
+        guard let old = newSnapshot?.itemIdentifiers.first(where: {($0 as? Size)?.size == item.size}) else {
+            return
         }
         
         newSnapshot?.insertItems([item], beforeItem: old)
@@ -197,12 +196,14 @@ extension CreateAdViewController: SizeCellDelegate {
         presenter.openSizeView()
     }
 }
+
 // MARK: - Photo Cell Delegate
 extension CreateAdViewController: PhotoCellDelegate {
     func didTappedAddPhotoButton() {
         presenter.showImagePicker()
     }
 }
+
 // MARK: - Collection View Delegate
 extension CreateAdViewController: UICollectionViewDelegate {
     // TODO: Make unselected item

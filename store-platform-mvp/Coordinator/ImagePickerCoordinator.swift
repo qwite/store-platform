@@ -1,20 +1,15 @@
 import UIKit
 
-protocol ImagePickerCoordinatorDelegate: AnyObject {
-    func didSelectImage(imageData: Data)
-}
-
 class ImagePickerCoordinator: Coordinator {
     var navigationController: UINavigationController
-    var finish: (() -> ())?
     
-    weak var delegate: ImagePickerPresenterDelegate?
-    
+    var finishFlow: ((Data?) -> (Void))?
+        
     func start() {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            self.navigationController.present(sheetAlert(), animated: true, completion: nil)
+            self.navigationController.present(sheetAlert(), animated: true )
         } else {
-            showPicker(with: .photoLibrary)
+            showPicker()
         }
     }
     
@@ -22,22 +17,15 @@ class ImagePickerCoordinator: Coordinator {
         self.navigationController = navigationController
     }
     
-    func showPicker(with source: UIImagePickerController.SourceType) {
-        guard let delegate = delegate else {
-            return
-        }
+    func showPicker(with source: UIImagePickerController.SourceType = .photoLibrary) {
+        let module = ImagePickerAssembler.buildImagePickerModule(coordinator: self, source: source)
         
-        let module = ImagePickerAssembler.buildImagePickerModule(coordinator: self, delegate: delegate)
-        
-        module.sourceType = source
-        module.allowsEditing = false
         self.navigationController.present(module, animated: true)
     }
     
-    func closePicker() {
-        self.navigationController.dismiss(animated: true, completion: nil)
-        self.delegate = nil
-        finish?()
+    func closePicker(with image: Data) {
+        self.navigationController.dismiss(animated: true)
+        self.finishFlow?(image)
     }
     
     func sheetAlert() -> UIAlertController {
@@ -45,10 +33,12 @@ class ImagePickerCoordinator: Coordinator {
         let cameraAction = UIAlertAction(title: "Сделать снимок", style: .default) { _ in
             self.showPicker(with: .camera)
         }
+        
         alert.addAction(cameraAction)
         let libraryAction = UIAlertAction(title: "Выбрать из галереи", style: .default) { _ in
             self.showPicker(with: .photoLibrary)
         }
+        
         alert.addAction(libraryAction)
         let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
         alert.addAction(cancelAction)
