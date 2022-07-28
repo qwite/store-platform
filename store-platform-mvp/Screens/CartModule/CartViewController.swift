@@ -26,7 +26,7 @@ class CartViewController: UIViewController {
     
     weak var delegate: TotalCartViewDelegate?
    
-    //MARK: Lifecycle
+    // MARK: Lifecycle
     override func loadView() {
         view = cartView
     }
@@ -39,6 +39,10 @@ class CartViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
+    }
+    
+    deinit {
+        presenter.finish()
     }
 }
 

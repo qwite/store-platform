@@ -2,9 +2,10 @@ import Foundation
 
 // MARK: - CartPresenterProtocol
 protocol CartPresenterProtocol {
-    init(view: CartViewProtocol, service: CartServiceProtocol, userService: UserServiceProtocol)
+    init(view: CartViewProtocol, service: CartServiceProtocol, userService: UserServiceProtocol, coordinator: CartCoordinator)
     func viewDidAppear()
     func viewDidLoad()
+    func finish()
     
     func setTotalPrice(items: [Cart])
     func removeItem(item: Cart)
@@ -16,23 +17,16 @@ protocol CartPresenterProtocol {
 // MARK: - CartPresenterProtocol Implementation
 class CartPresenter: CartPresenterProtocol {
     weak var view: CartViewProtocol?
+    weak var coordinator: CartCoordinator?
+    
     var service: CartServiceProtocol?
     var userService: UserServiceProtocol?
-    
-    // TODO: make more safety
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .medium
-        formatter.timeZone = .current
-        formatter.locale = Locale(identifier: "en_GB")
-        return formatter
-    }()
-    
-    required init(view: CartViewProtocol, service: CartServiceProtocol, userService: UserServiceProtocol) {
+        
+    required init(view: CartViewProtocol, service: CartServiceProtocol, userService: UserServiceProtocol, coordinator: CartCoordinator) {
         self.view = view
         self.service = service
         self.userService = userService
+        self.coordinator = coordinator
     }
     
     func viewDidAppear() {
@@ -45,6 +39,10 @@ class CartPresenter: CartPresenterProtocol {
         view?.configureCollectionView()
         view?.configureDataSource()
         view?.configureViews()
+    }
+    
+    func finish() {
+        coordinator?.finishFlow?()
     }
     
     func getCartItems() {
