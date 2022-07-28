@@ -28,4 +28,14 @@ extension Date {
         
         return nil 
     }()
+    
+    static func dateWithTime(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        let time = formatter.string(from: date)
+        formatter.dateFormat = "d MMM"
+        formatter.locale = .current
+        let date = formatter.string(from: date)
+        return "\(date), \(time)"
+    }
 }
