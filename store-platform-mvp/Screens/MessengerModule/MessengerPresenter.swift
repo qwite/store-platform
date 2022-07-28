@@ -2,7 +2,7 @@ import Foundation
 import MessageKit
 
 // MARK: - MessengerPresenterProtocol
-protocol MessengerPresenterProtocol: ImagePickerPresenterDelegate {
+protocol MessengerPresenterProtocol {
     init(view: MessengerViewProtocol, service: UserServiceProtocol, conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol)
     func viewDidAppear()
     func viewDidLoad()
@@ -12,14 +12,12 @@ protocol MessengerPresenterProtocol: ImagePickerPresenterDelegate {
     //    func createConversation(with text: String)
     func listenMessages()
     func sendMessage(with text: String)
-    func didShowImagePicker()
+    func showImagePicker()
     func sendAttachment(image: Data)
     func didShowImageDetailed(imageUrl: URL)
     
     var conversationId: String? { get set }
-    var messages: [Message]! { get set }
-    
-    func convertFromDate(date: Date) -> String
+    var messages: [Message]! { get set }    
 }
 
 // MARK: - MessengerPresenterProtocol Implementation
@@ -33,18 +31,6 @@ class MessengerPresenter: MessengerPresenterProtocol {
     var conversationId: String?
     var brandId: String?
     var brandName: String?
-    
-    // TODO: make dateformatter using for injection
-    private let dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .medium
-        dateFormatter.timeZone = .current
-        dateFormatter.locale = Locale(identifier: "en_GB")
-        return dateFormatter
-    }()
-    
     
     required init(view: MessengerViewProtocol, service: UserServiceProtocol, conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol) {
         self.view = view
@@ -86,7 +72,7 @@ class MessengerPresenter: MessengerPresenterProtocol {
     
     func getRecipientId() {}
     
-    func didShowImagePicker() {
+    func showImagePicker() {
         coordinator?.showImagePicker()
     }
     
@@ -94,7 +80,7 @@ class MessengerPresenter: MessengerPresenterProtocol {
         StorageService.sharedInstance.getImageFromUrl(imageUrl: imageUrl.absoluteString) { [weak self] result in
             switch result {
             case .success(let data):
-                self?.coordinator?.showImageDetail(image: data)
+                self?.coordinator?.showDetailedImage(data: data)
             case .failure(_):
                 fatalError("error with downloading data")
             }
@@ -154,7 +140,6 @@ class MessengerPresenter: MessengerPresenterProtocol {
     func sendMessage(with text: String) {
         let message = Message(sender: getSelfSender(), sentDate: Date(), kind: .text(text))
         
-        
         guard let conversationId = self.conversationId else {
             createConversation(with: text); return
         }
@@ -197,21 +182,10 @@ class MessengerPresenter: MessengerPresenterProtocol {
     }
 }
 
-// MARK: - Dateformatter helpers
-extension MessengerPresenter {
-    public func convertFromDate(date: Date) -> String {
-        dateFormatter.dateFormat = "HH:mm"
-        let time = dateFormatter.string(from: date)
-        dateFormatter.dateFormat = "d MMM"
-        dateFormatter.locale = .current
-        let date = dateFormatter.string(from: date)
-        return "\(date), \(time)"
-    }
-}
-
-// MARK: - ImagePickerPresenterDelegate
-extension MessengerPresenter: ImagePickerPresenterDelegate {
-    func didCloseImagePicker(with imageData: Data) {
-        self.sendAttachment(image: imageData)
+// TODO: Add loading progressbar
+// MARK: - ImagePickerDelegate
+extension MessengerPresenter: ImagePickerDelegate {
+    func didImageAdded(image: Data) {
+        self.sendAttachment(image: image)
     }
 }

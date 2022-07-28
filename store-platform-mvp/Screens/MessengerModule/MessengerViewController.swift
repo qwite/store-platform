@@ -108,7 +108,7 @@ extension MessengerViewController: MessagesDisplayDelegate {
     }
     
     @objc private func attachmentButtonAction() {
-        presenter.didShowImagePicker()
+        presenter.showImagePicker()
     }
     
     func currentSender() -> SenderType {
@@ -161,7 +161,7 @@ extension MessengerViewController: MessagesDataSource {
     }
     
     func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        let dateString = presenter.convertFromDate(date: message.sentDate)
+        let dateString = Date.dateWithTime(date: message.sentDate)
         let dateStringFont: UIFont = .systemFont(ofSize: 10, weight: .light)
         let attributedString = NSAttributedString(string: dateString, attributes: [NSAttributedString.Key.font: dateStringFont])
         return attributedString

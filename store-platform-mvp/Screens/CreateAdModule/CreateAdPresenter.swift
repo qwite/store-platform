@@ -132,7 +132,7 @@ class CreateAdPresenter: CreateAdPresenterProtocol {
     }
     
     func showImage(data: Data) {
-        coordinator?.openDetailedImage(data: data)
+        coordinator?.showDetailedImage(data: data)
     }
 }
 

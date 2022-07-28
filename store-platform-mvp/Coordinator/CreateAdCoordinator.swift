@@ -3,7 +3,7 @@ import UIKit
 // MARK: - CreateAdCoordinator
 class CreateAdCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    weak var delegate: ImagePickerDelegate?
+    weak var imageDelegate: ImagePickerDelegate?
     
     var finishFlow: (() -> (Void))?
     
@@ -57,6 +57,14 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
 //        })
     }
     
+    func finish() {
+        self.navigationController.popViewController(animated: true)
+        self.finishFlow?()
+    }
+}
+
+// MARK: - ImageCoordinatorProtocol Implementation
+extension CreateAdCoordinator: ImageCoordinatorProtocol {
     func showImagePicker() {
         let imagePickerCoordinator = ImagePickerCoordinator(navigationController)
         
@@ -65,21 +73,16 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
             self?.removeDependency(imagePickerCoordinator)
             
             guard let image = image else { return }
-            self?.delegate?.didImageAdded(image: image)
+            self?.imageDelegate?.didImageAdded(image: image)
         }
 
         addDependency(imagePickerCoordinator)
         imagePickerCoordinator.start()
     }
     
-    func openDetailedImage(data: Data) {
+    func showDetailedImage(data: Data) {
         let module = DetailedImageAssembler.buildDetailedImageModule(image: data)
         
         self.navigationController.pushViewController(module, animated: true)
-    }
-    
-    func finish() {
-        self.navigationController.popViewController(animated: true)
-        self.finishFlow?()
     }
 }
