@@ -38,4 +38,21 @@ extension Date {
         let date = formatter.string(from: date)
         return "\(date), \(time)"
     }
+    
+    static func parseDateString(date: String) -> String? {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .medium
+        formatter.timeZone = .current
+        formatter.locale = Locale(identifier: "en_GB")
+        
+        guard let fetchedDate = formatter.date(from: date) else {
+            return nil
+        }
+        
+        formatter.dateFormat = "d MMM"
+        formatter.locale = .current
+        let finalString = formatter.string(from: fetchedDate)
+        return finalString
+    }
 }
