@@ -3,6 +3,7 @@ import LBBottomSheet
 
 class SellerCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
+    weak var imageDelegate: ImagePickerDelegate?
     
     func start() {
         checkSellerStatus { status in
@@ -36,11 +37,11 @@ class SellerCoordinator: BaseCoordinator, Coordinator {
         self.navigationController.pushViewController(module, animated: true)
     }
     
-    public func showMessenger(with id: String, brandId: String) {
-        let module = MessengerAssembler.buildMessengerModule(conversationId: id, brandId: brandId, coordinator: self)
-        
-        self.navigationController.pushViewController(module, animated: true)
-    }
+//    public func showMessenger(with id: String, brandId: String) {
+//        let module = MessengerAssembler.buildMessengerModule(conversationId: id, brandId: brandId, coordinator: self)
+//
+//        self.navigationController.pushViewController(module, animated: true)
+//    }
     
     public func showCreateAdScreen() {
         let createAdCoordinator = CreateAdCoordinator(navigationController)
@@ -68,40 +69,18 @@ class SellerCoordinator: BaseCoordinator, Coordinator {
     public func hideOrderStatus() {
         self.navigationController.dismissBottomSheet()
     }
-}
-
-// MARK: - MessagesCoordinatorProtocol
-extension SellerCoordinator: MessagesCoordinatorProtocol {
-    func showImageDetail(image: Data) {
-        let module = DetailedImageAssembler.buildDetailedImageModule(image: image)
-        
-        self.navigationController.pushViewController(module, animated: true)
-    }
     
-    func showImagePicker() {
-        let imagePickerCoordinator = ImagePickerCoordinator(self.navigationController)
-//        imagePickerCoordinator.finishFlow = { image in
-//            self.removeDependency(imagePickerCoordinator)
-//        }
-        
-        addDependency(imagePickerCoordinator)
-        imagePickerCoordinator.start()
-    }
-    
-    func showMessenger(conversationId: String?, brandId: String?) {
-        guard let module = MessengerAssembler.buildMessengerModule(conversationId: conversationId, brandId: brandId, coordinator: self) as? MessengerViewController else {
-            return
+    public func showListMessages() {
+        let messengerCoordinator = MessengerCoordinator(self.navigationController, role: .brand)
+        addDependency(messengerCoordinator)
+        messengerCoordinator.finishFlow = { [weak self, weak messengerCoordinator] in
+            guard let messengerCoordinator = messengerCoordinator else { return }
+            
+            self?.removeDependency(messengerCoordinator)
         }
         
-        self.navigationController.pushViewController(module, animated: true)
+        messengerCoordinator.showListMessages()
     }
-    
-    func showListMessages() {
-        let module = MessagesListAssembler.buildMessagesListModule(role: .brand, coordinator: self)
-        
-        self.navigationController.pushViewController(module, animated: true)
-    }
-    
 }
 
 extension SellerCoordinator {

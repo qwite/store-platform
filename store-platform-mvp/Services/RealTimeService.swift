@@ -9,14 +9,6 @@ class RealTimeService {
     private init() {}
     
     private let database = Database.database().reference()
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .medium
-        formatter.timeZone = .current
-        formatter.locale = Locale(identifier: "en_GB")
-        return formatter
-    }()
 }
 
 extension RealTimeService {
@@ -65,32 +57,12 @@ extension RealTimeService {
             
             let conversationId = UUID().uuidString
             let messageDate = firstMessage.sentDate
-            let messageDateString = self?.dateFormatter.string(from: messageDate)
             
-            var message = ""
-            
-            switch firstMessage.kind {
-            case .text(let messageText):
-                message = messageText
-            case .attributedText(_):
-                break
-            case .photo(_):
-                break
-            case .video(_):
-                break
-            case .location(_):
-                break
-            case .emoji(_):
-                break
-            case .audio(_):
-                break
-            case .contact(_):
-                break
-            case .linkPreview(_):
-                break
-            case .custom(_):
-                break
+            guard let message = firstMessage.kind.messageContent else {
+                completion(.failure(RealTimeServiceError.messageModelError)); return
             }
+            
+            let messageDateString = Date.getFullDate(from: messageDate)
             
             let newConversationData: [String: Any] = [
                 "id": conversationId,
@@ -122,7 +94,6 @@ extension RealTimeService {
             userNode["conversations"] = [
                 newConversationData
             ]
-            
             
             userRef.setValue(userNode) { [weak self] error, _ in
                 guard error == nil else {
@@ -185,7 +156,6 @@ extension RealTimeService {
                     fatalError()
                 }
                 
-                
                 let conversation = Conversation(id: id, recipientName: brandName, lastMessage: lastMessage, date: dateString)
                 return conversation
             }
@@ -205,7 +175,7 @@ extension RealTimeService {
                       let content = dictionary["content"] as? String,
                       let dateString = dictionary["date"] as? String,
                       let name = dictionary["name"] as? String,
-                      let date = self.dateFormatter.date(from: dateString),
+                      let date = Date.getFullDate(from: dateString),
                       let isRead = dictionary["is_read"] as? Bool,
                       let senderId = dictionary["sender_id"] as? String,
                       let senderRole = dictionary["sender_role"] as? String,
@@ -245,7 +215,7 @@ extension RealTimeService {
         }
     }
     
-    public func sendMessage(to conversationId: String, newMessage: Message, role: ChatRole, completion: @escaping (Error?) -> ()) {
+    public func sendMessage(to conversationId: String, newMessage: Message, role: MessengerRole, completion: @escaping (Error?) -> ()) {
         database.child("conversations").child("\(conversationId)/messages").observeSingleEvent(of: .value) { [weak self] snapshot in
             guard let strongSelf = self else {
                 return
@@ -256,35 +226,11 @@ extension RealTimeService {
             }
             
             let messageDate = newMessage.sentDate
-            let messageDateString = strongSelf.dateFormatter.string(from: messageDate)
+            let messageDateString = Date.getFullDate(from: messageDate)
             
-            var message = ""
-            
-            switch newMessage.kind {
-            case .text(let messageText):
-                message = messageText
-            case .attributedText(_):
-                break
-            case .photo(let mediaItem):
-                if let urlString = mediaItem.url?.absoluteString {
-                    message = urlString
-                }
-                
-                break
-            case .video(_):
-                break
-            case .location(_):
-                break
-            case .emoji(_):
-                break
-            case .audio(_):
-                break
-            case .contact(_):
-                break
-            case .linkPreview(_):
-                break
-            case .custom(_):
-                break
+            guard let message = newMessage.kind.messageContent,
+                  let type = newMessage.kind.messageKind else {
+                completion(RealTimeServiceError.messageModelError); return
             }
             
             let newMessageData: [String: Any] = [
@@ -295,14 +241,14 @@ extension RealTimeService {
                 "name": newMessage.sender.displayName,
                 "sender_id": newMessage.sender.senderId,
                 "sender_role": role.rawValue,
-                "type": newMessage.kind.messageKindString
+                "type": type
             ]
             
             currentMessages.append(newMessageData)
             
             strongSelf.database.child("conversations").child("\(conversationId)/messages").setValue(currentMessages) { error, _ in
                 guard error == nil else {
-                    return completion(error!)
+                    completion(error!); return
                 }
                 
                 let latestMessageData: [String: Any] = ["date": messageDateString,
@@ -317,43 +263,24 @@ extension RealTimeService {
                     completion(nil)
                 }
             }
-            
         }
     }
     
     // MARK: - Private methods
     
     private func finishCreatingConversation(userId: String, conversationId: String, firstMessage: Message, completion: @escaping (Error?) -> ()) {
-        var message = ""
         let messageDate = firstMessage.sentDate
-        let messageDateString = self.dateFormatter.string(from: messageDate)
         
-        switch firstMessage.kind {
-        case .text(let messageText):
-            message = messageText
-        case .attributedText(_):
-            break
-        case .photo(_):
-            break
-        case .video(_):
-            break
-        case .location(_):
-            break
-        case .emoji(_):
-            break
-        case .audio(_):
-            break
-        case .contact(_):
-            break
-        case .linkPreview(_):
-            break
-        case .custom(_):
-            break
+        guard let message = firstMessage.kind.messageContent,
+              let type = firstMessage.kind.messageKind else {
+            completion(RealTimeServiceError.messageModelError); return
         }
+ 
+        let messageDateString = Date.getFullDate(from: messageDate)
         
         let messageData: [String: Any] = [
             "id": firstMessage.messageId,
-            "type": firstMessage.kind.messageKindString,
+            "type": type,
             "content": message,
             "date": messageDateString,
             "sender_id": userId,
@@ -450,6 +377,7 @@ extension RealTimeService {
                     guard error == nil else {
                         return completion(error)
                     }
+                    
                     completion(nil)
                 }
             }
@@ -460,16 +388,9 @@ extension RealTimeService {
 // MARK: - RealTimeService Errors
 extension RealTimeService {
     enum RealTimeServiceError: Error {
+        case messageModelError
         case failedToFetchConversations
         case failedToFetchMesssages
         case failedToSendMessage
-    }
-}
-
-// MARK: - ChatRole
-extension RealTimeService {
-    enum ChatRole: String {
-        case user = "user"
-        case brand = "brand"
     }
 }

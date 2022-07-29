@@ -67,12 +67,12 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
         return views
     }
     
+    // Asking a question to brand.
     func createConversation() {
         FirestoreService.sharedInstance.getBrandIdByName(brandName: item.brandName) { [weak self] result in
             switch result {
             case .success(let brandId):
-//                self?.coordinator?.showMessenger(conversationId: nil, brandId: brandId)
-                break
+                self?.coordinator?.showMessenger(brandId: brandId)
             case .failure(let error):
                 fatalError("\(error)")
             }

@@ -6,7 +6,7 @@ class ProfileCoordinator: BaseCoordinator, Coordinator {
     
     weak var delegate: ProfilePresenterDelegate?
     weak var tabDelegate: TabCoordinatorDelegate?
-    weak var imagePickerDelegate: ImagePickerPresenterDelegate?
+    weak var imageDelegate: ImagePickerDelegate?
     
     var childCoordinator = [Coordinator]()
     
@@ -70,8 +70,24 @@ class ProfileCoordinator: BaseCoordinator, Coordinator {
     func hideDetailedOrder(brandId: String?) {
         
         self.navigationController.dismissBottomSheet {
-            self.showMessenger(conversationId: nil, brandId: brandId)
+//            self.showMessenger(conversationId: nil, brandId: brandId)
         }
+    }
+    
+    public func backToRoot() {
+        self.navigationController.popToRootViewController(animated: true)
+    }
+    
+    public func showListMessages() {
+        let messengerCoordinator = MessengerCoordinator(navigationController, role: .user)
+        messengerCoordinator.finishFlow = { [weak self, weak messengerCoordinator] in
+            guard let messengerCoordinator = messengerCoordinator else { return }
+            
+            self?.removeDependency(messengerCoordinator)
+        }
+        
+        addDependency(messengerCoordinator)
+        messengerCoordinator.showListMessages()
     }
     
     func updateTabPages() {
@@ -79,39 +95,3 @@ class ProfileCoordinator: BaseCoordinator, Coordinator {
     }
 }
 
-// MARK: - MessagesCoordinatorProtocol
-extension ProfileCoordinator: MessagesCoordinatorProtocol {
-    func showImageDetail(image: Data) {
-        let module = DetailedImageAssembler.buildDetailedImageModule(image: image)
-        
-        self.navigationController.pushViewController(module, animated: true)
-    }
-    
-    func showImagePicker() {
-        let imagePickerCoordinator = ImagePickerCoordinator(self.navigationController)
-        imagePickerCoordinator.delegate = self.imagePickerDelegate
-        
-        imagePickerCoordinator.finish = {
-            self.removeDependency(imagePickerCoordinator)
-            self.imagePickerDelegate = nil
-        }
-        addDependency(imagePickerCoordinator)
-        imagePickerCoordinator.start()
-    }
-    
-    func showListMessages() {
-        let module = MessagesListAssembler.buildMessagesListModule(role: .user, coordinator: self)
-
-        self.navigationController.pushViewController(module, animated: true)
-    }
-    
-    func showMessenger(conversationId: String?, brandId: String?) {
-        guard let module = MessengerAssembler.buildMessengerModule(conversationId: conversationId, brandId: brandId, coordinator: self) as? MessengerViewController else {
-            return
-        }
-        
-        self.imagePickerDelegate = module.presenter
-        
-        self.navigationController.pushViewController(module, animated: true)
-    }
-}
