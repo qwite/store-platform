@@ -86,21 +86,10 @@ extension OrderCell {
         }
     }
     
-    // FIXME: make a dateformatter static manager
     private func configureDateLabel(date: String) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .medium
-        dateFormatter.timeZone = .current
-        dateFormatter.locale = Locale(identifier: "en_GB")
-        
-        guard let fetchedDate = dateFormatter.date(from: date) else {
-            return
-        }
-        
-        dateFormatter.dateFormat = "d MMM"
-        dateFormatter.locale = .current
-        dateOrderLabel.text = "Заказ от \(dateFormatter.string(from: fetchedDate))"
+        guard let parsedString = Date.parseDateString(date: date) else { return }
+       
+        dateOrderLabel.text = "Заказ от \(parsedString)"
     }
     
     @objc private func copyOrderNumberText(sender: UITapGestureRecognizer) {

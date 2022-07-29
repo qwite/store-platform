@@ -5,10 +5,11 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
     var completionHandler: ((Cart) -> ())?
     var parent: FeedViewController?
-    weak var imagePickerDelegate: ImagePickerPresenterDelegate?
 
     var sortingPresenter: SortingFeedPresenterProtocol?
     var sortingNavigation: UINavigationController?
+    
+    weak var imageDelegate: ImagePickerDelegate?
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -16,10 +17,10 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     
     deinit {}
     
-    var finish: (() -> ())?
+    var finishFlow: (() -> ())?
     
     func start() {
-        self.showFeed()
+        showFeed()
     }
     
     func showFeed(with items: [Item]? = nil) {
@@ -84,8 +85,22 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
         self.navigationController.pushViewController(module, animated: true)
     }
     
+    public func showMessenger(brandId: String) {
+        let messengerCoordinator = MessengerCoordinator(navigationController, role: .user)
+        messengerCoordinator.finishFlow = { [weak self, weak messengerCoordinator] in
+            guard let messengerCoordinator = messengerCoordinator else { return }
+            
+            self?.removeDependency(messengerCoordinator)
+        }
+        
+        addDependency(messengerCoordinator)
+        
+        messengerCoordinator.showMessenger(conversationId: nil, brandId: brandId)
+    }
+    
 }
 
+// MARK: - SizePickerCoordinatorProtocol
 extension FeedCoordinator: SizePickerCoordinatorProtocol {
     func showSizePicker(for item: Item) {
         let module = SizePickerAssembler.buildSizePickerModule(coordinator: self, with: item)
@@ -99,37 +114,6 @@ extension FeedCoordinator: SizePickerCoordinatorProtocol {
             self.completionHandler?(item)
             self.navigationController.popViewController(animated: true)
         }
-    }
-}
-
-extension FeedCoordinator: MessagesCoordinatorProtocol {
-    func showListMessages() {
-        
-    }
-    
-    func showMessenger(conversationId: String?, brandId: String?) {
-        guard let module = MessengerAssembler.buildMessengerModule(conversationId: nil, brandId: brandId, coordinator: self) as? MessengerViewController else {
-            return
-        }
-        
-        self.imagePickerDelegate = module.presenter
-        self.navigationController.pushViewController(module, animated: true)
-    }
-    
-    func showImagePicker() {
-        let imagePickerCoordinator = ImagePickerCoordinator(self.navigationController)
-        imagePickerCoordinator.delegate = self.imagePickerDelegate
-        
-        imagePickerCoordinator.finish = {
-            self.removeDependency(imagePickerCoordinator)
-            self.imagePickerDelegate = nil
-        }
-        addDependency(imagePickerCoordinator)
-        imagePickerCoordinator.start()
-    }
-    
-    func showImageDetail(image: Data) {
-        
     }
 }
 

@@ -3,7 +3,7 @@ import FirebaseFirestoreSwift
 import MessageKit
 
 struct Sender: SenderType {
-   public var photoUrl: String
+   public var photoUrl: String? = nil
    public var senderId: String
    public var displayName: String
 }
@@ -23,7 +23,7 @@ struct Media: MediaItem {
 }
 
 extension MessageKind {
-    var messageKindString: String {
+    var messageKind: String? {
         switch self {
         case .text(_):
             return "text"
@@ -46,5 +46,33 @@ extension MessageKind {
         case .custom(_):
             return "custom"
         }
+    }
+    
+    var messageContent: String? {
+        switch self {
+        case .text(let messageText):
+            return messageText
+        case .attributedText(_):
+            return "attributed_text"
+        case .photo(let mediaItem):
+            if let urlString = mediaItem.url?.absoluteString {
+                return urlString
+            }
+        case .video(_):
+            return "video"
+        case .location(_):
+            return "location"
+        case .emoji(_):
+            return "emoji"
+        case .audio(_):
+            return "audio"
+        case .contact(_):
+            return "contact"
+        case .linkPreview(_):
+            return "link_preview"
+        case .custom(_):
+            return "custom"
+        }
+        return nil
     }
 }

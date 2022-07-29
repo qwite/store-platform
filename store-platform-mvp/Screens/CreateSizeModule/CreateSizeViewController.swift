@@ -54,11 +54,12 @@ extension CreateSizeViewController: CreateSizeViewProtocol {
     
     // TODO: Add Error handling
     @objc func didCloseScreen() {
-        let sizeIndex = createSizeView.sizeSegmentedControl.selectedSegmentIndex
         guard let priceTextFieldValue = createSizeView.priceTextField.text,
               let amountTextFieldValue = createSizeView.amountTextField.text else {
             return
         }
+        
+        let sizeIndex = createSizeView.sizeSegmentedControl.selectedSegmentIndex
         
         let price = Int(priceTextFieldValue)
         let amount = Int(amountTextFieldValue)

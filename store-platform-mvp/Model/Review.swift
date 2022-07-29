@@ -1,6 +1,7 @@
 import Foundation
 import FirebaseFirestoreSwift
 
+// MARK: - Review
 struct Review: Codable {
     @DocumentID var id = UUID().uuidString
     let text: String

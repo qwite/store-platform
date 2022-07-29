@@ -32,17 +32,6 @@ class GuestCoordinator: Coordinator {
             self?.delegate?.updatePages()
             self?.finish?()
         }
-        
-//        self.navigationController.popViewController(animated: false)
-    }
-    
-    func hideLoginModal() {
-        self.navigationController.dismiss(animated: true) {
-            self.delegate?.updatePages()
-        }
-        
-        self.finish?()
-        self.navigationController.popViewController(animated: false)
     }
     
     func hideRegisterModal() {

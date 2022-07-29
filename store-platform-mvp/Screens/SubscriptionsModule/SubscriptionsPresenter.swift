@@ -33,8 +33,9 @@ class SubscriptionsPresenter: SubscriptionsPresenterProtocol {
             case .success(let subscriptions):
                 print(subscriptions)
                 self?.view?.insertSubscriptions(items: subscriptions)
-            case .failure(let error):
-                print(error)
+            case .failure(_):
+                self?.view?.showErrorAlert()
+                self?.coordinator?.backToRoot()
             }
         }
     }

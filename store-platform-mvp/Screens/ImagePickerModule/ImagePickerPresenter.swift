@@ -1,14 +1,16 @@
 import Foundation
 
-// MARK: - ImagePickerPresenterDelegate
-protocol ImagePickerPresenterDelegate: AnyObject {
-    func didCloseImagePicker(with imageData: Data)
+// MARK: - ImagePickerDelegate
+protocol ImagePickerDelegate: AnyObject {
+    func didImageAdded(image: Data)
 }
 
 // MARK: - ImagePickerPresenterProtocol
 protocol ImagePickerPresenterProtocol {
     init(coordinator: ImagePickerCoordinator, view: ImagePickerViewProtocol)
     func viewDidLoad()
+    func finish()
+    
     func didClosePicker(with imageData: Data)
 }
 
@@ -16,17 +18,21 @@ protocol ImagePickerPresenterProtocol {
 class ImagePickerPresenter: ImagePickerPresenterProtocol {
     weak var coordinator: ImagePickerCoordinator?
     weak var view: ImagePickerViewProtocol?
-    weak var delegate: ImagePickerPresenterDelegate?
     
     required init(coordinator: ImagePickerCoordinator, view: ImagePickerViewProtocol) {
         self.coordinator = coordinator
         self.view = view
     }
     
-    public func viewDidLoad() {}
+    public func viewDidLoad() {
+        view?.configure()
+    }
     
     public func didClosePicker(with imageData: Data) {
-        delegate?.didCloseImagePicker(with: imageData)
-        coordinator?.closePicker()
+        coordinator?.closePicker(with: imageData)
+    }
+    
+    public func finish() {
+        coordinator?.finishFlow?(nil)
     }
 }

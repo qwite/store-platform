@@ -17,23 +17,25 @@ protocol CreateAdViewProtocol: AnyObject {
     func showErrorAlert(_ description: String?)
 }
 
+// MARK: - CreateAdViewController
 class CreateAdViewController: UIViewController {
     var createAdView = CreateAdView()
     var collectionView: UICollectionView! = nil
-
+    
     weak var textFieldsDelegate: TextFieldsViewDelegate?
     var presenter: CreateAdPresenter!
     
     var dataSource: UICollectionViewDiffableDataSource<CreateAdView.Section, AnyHashable>?
     typealias DataSource = UICollectionViewDiffableDataSource<CreateAdView.Section, AnyHashable>
     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
     }
 }
 
+// MARK: - CreateAdViewProtocol Implementation
 extension CreateAdViewController: CreateAdViewProtocol {
     func configureCollectionView() {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createAdView.generateLayout())
@@ -54,6 +56,7 @@ extension CreateAdViewController: CreateAdViewProtocol {
         collectionView.bounces = false
         collectionView.delegate = self
         collectionView.backgroundColor = .white
+        
         self.collectionView = collectionView
         
         view.addSubview(collectionView)
@@ -81,8 +84,8 @@ extension CreateAdViewController: CreateAdViewProtocol {
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SizeCell.reuseId, for: indexPath) as? SizeCell else { fatalError() }
                 cell.delegate = self
                 if indexPath.row == 0 { cell.makePlaceholder() } else {
-                let size = itemIdentifier as? Size
-                cell.configure(size: size?.size, price: size?.price, amount: size?.amount)
+                    let size = itemIdentifier as? Size
+                    cell.configure(size: size?.size, price: size?.price, amount: size?.amount)
                 }
                 
                 return cell
@@ -125,7 +128,7 @@ extension CreateAdViewController: CreateAdViewProtocol {
         let colors = ["Черный", "Белый", "Красный", "Синий", "Зеленый", "Желтый", "Оранжевый", "Фиолетовый", "Бежевый", "Хаки", "Разноцветный"]
         snapshot.appendSections([.color])
         snapshot.appendItems(colors)
- 
+        
         snapshot.appendSections([.sizeCreating])
         snapshot.appendItems([AnyHashable(3)]) // Placeholder for adding sizes
         return snapshot
@@ -140,9 +143,8 @@ extension CreateAdViewController: CreateAdViewProtocol {
     // TODO: Bad solution -> fix
     func updateSizeSection(item: Size) {
         var newSnapshot = dataSource?.snapshot()
-        let old = newSnapshot?.itemIdentifiers.first(where: {($0 as? Size)?.size == item.size})
-        guard let old = old else {
-            fatalError("Item not founded")
+        guard let old = newSnapshot?.itemIdentifiers.first(where: {($0 as? Size)?.size == item.size}) else {
+            return
         }
         
         newSnapshot?.insertItems([item], beforeItem: old)
@@ -197,12 +199,14 @@ extension CreateAdViewController: SizeCellDelegate {
         presenter.openSizeView()
     }
 }
+
 // MARK: - Photo Cell Delegate
 extension CreateAdViewController: PhotoCellDelegate {
     func didTappedAddPhotoButton() {
         presenter.showImagePicker()
     }
 }
+
 // MARK: - Collection View Delegate
 extension CreateAdViewController: UICollectionViewDelegate {
     // TODO: Make unselected item
@@ -229,7 +233,7 @@ extension CreateAdViewController: UICollectionViewDelegate {
             guard let color = color as? String,
                   let cell = collectionView.cellForItem(at: indexPath) as? ExtraSettingsCell else {
                 fatalError("Unwrap error")
-
+                
             }
             
             cell.selectEllipse()
@@ -240,6 +244,6 @@ extension CreateAdViewController: UICollectionViewDelegate {
                 fatalError("Unwrap error")
             }
             didSelectItem(item: size)
-         }
+        }
     }
 }

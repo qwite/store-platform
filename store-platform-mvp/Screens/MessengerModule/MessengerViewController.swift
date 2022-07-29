@@ -5,6 +5,7 @@ import Kingfisher
 
 // MARK: - MessengerViewProtocol
 protocol MessengerViewProtocol: AnyObject {
+    func configure()
     func loadFirstMessages()
     func stopLoadingMessages()
 }
@@ -22,31 +23,37 @@ class MessengerViewController: MessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
-        
+    }
+    
+    deinit {
+        presenter.finish()
+    }
+}
+
+// MARK: - MessengerViewProtocol Implementation
+extension MessengerViewController: MessengerViewProtocol {
+    public func configure() {
         view.backgroundColor = .white
         title = "Мессенджер"
         navigationItem.largeTitleDisplayMode = .never
         
         configureMessenger()
     }
-}
-
-// MARK: - MessengerViewProtocol Implementation
-extension MessengerViewController: MessengerViewProtocol {
-    func loadFirstMessages() {
+    
+    public func loadFirstMessages() {
         messagesCollectionView.refreshControl?.beginRefreshing()
     }
     
-    func stopLoadingMessages() {
+    public func stopLoadingMessages() {
         messagesCollectionView.reloadData()
         self.messagesCollectionView.refreshControl?.endRefreshing()
         self.messagesCollectionView.scrollToLastItem(at: .bottom, animated: true)
     }
 }
 
-// MARK: - MessagesDisplayDelegate
+// MARK: - MessagesDisplayDelegate 
 extension MessengerViewController: MessagesDisplayDelegate {
-    func configureMessenger() {
+    private func configureMessenger() {
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -58,7 +65,7 @@ extension MessengerViewController: MessagesDisplayDelegate {
         configureRefreshControl()
     }
     
-    func configureRefreshControl() {
+    private func configureRefreshControl() {
         let attributedFont = Constants.Fonts.itemDescriptionFont
         let refreshAttributedTitle: NSAttributedString = .init(string: "Обновление данных", attributes: [NSAttributedString.Key.font: attributedFont])
         messagesCollectionView.refreshControl = UIRefreshControl()
@@ -70,7 +77,7 @@ extension MessengerViewController: MessagesDisplayDelegate {
         refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
     }
     
-    func configureAvatars() {
+    private func configureAvatars() {
         messagesCollectionView.messagesCollectionViewFlowLayout.setMessageIncomingAvatarSize(.zero)
         messagesCollectionView.messagesCollectionViewFlowLayout.setMessageOutgoingAvatarSize(.zero)
         
@@ -88,7 +95,7 @@ extension MessengerViewController: MessagesDisplayDelegate {
         self.messagesCollectionView.refreshControl?.endRefreshing()
     }
     
-    func configureInputButtons() {
+    private func configureInputButtons() {
         messageInputBar.sendButton.configure { button in
             let buttonFont: UIFont = .systemFont(ofSize: 14, weight: .bold)
             let attributedString = NSAttributedString(string: "Отправить", attributes: [NSAttributedString.Key.font: buttonFont,
@@ -108,14 +115,14 @@ extension MessengerViewController: MessagesDisplayDelegate {
     }
     
     @objc private func attachmentButtonAction() {
-        presenter.didShowImagePicker()
+        presenter.showImagePicker()
     }
     
-    func currentSender() -> SenderType {
+    public func currentSender() -> SenderType {
         return presenter.getSelfSender()
     }
 
-    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
+    public func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
         guard let messages = presenter.messages else {
             return Message(sender: presenter.getSelfSender(), sentDate: Date(), kind: .text(""), messageId: "error")
         }
@@ -123,7 +130,7 @@ extension MessengerViewController: MessagesDisplayDelegate {
         return messages[indexPath.section]
     }
 
-    func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
+    public func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
         guard let messages = presenter.messages else {
             return 0
         }
@@ -161,7 +168,7 @@ extension MessengerViewController: MessagesDataSource {
     }
     
     func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        let dateString = presenter.convertFromDate(date: message.sentDate)
+        let dateString = Date.dateWithTime(date: message.sentDate)
         let dateStringFont: UIFont = .systemFont(ofSize: 10, weight: .light)
         let attributedString = NSAttributedString(string: dateString, attributes: [NSAttributedString.Key.font: dateStringFont])
         return attributedString
@@ -182,11 +189,11 @@ extension MessengerViewController: MessagesDataSource {
         }
     }
     
+    // MARK: Styling
     func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
         return .custom { messageContainerView in
             messageContainerView.style = .bubbleOutline(.black)
             messageContainerView.backgroundColor = .white
-            
         }
     }
     
@@ -208,22 +215,25 @@ extension MessengerViewController: MessageCellDelegate {
         }
         
         let message = self.messageForItem(at: indexPath, in: messagesCollectionView)
-        switch message.kind {
-        case .photo(let media):
-            if let url = media.url {
-                presenter.didShowImageDetailed(imageUrl: url)
-            }
-        default:
-            break
+        let messageKind = message.kind
+        
+        guard let absoluteUrlString = messageKind.messageContent,
+              let absoluteUrl = URL(string: absoluteUrlString) else {
+            return
         }
         
+        
+        presenter.didShowImageDetailed(imageUrl: absoluteUrl)
     }
 }
 // MARK: - InputBarAccessoryViewDelegate
 extension MessengerViewController: InputBarAccessoryViewDelegate {
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         presenter.sendMessage(with: text)
-        
+        clearInputText(inputBar)
+    }
+    
+    private func clearInputText(_ inputBar: InputBarAccessoryView) {
         inputBar.inputTextView.text = ""
     }
 }

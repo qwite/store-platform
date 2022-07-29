@@ -7,7 +7,7 @@ class CreateAdAssembler {
         let service = BrandService()
         let builder = ItemBuilder()
         let presenter = CreateAdPresenter(view: view, itemBuilder: builder, coordinator: coordinator, service: service)
-        coordinator.delegate = presenter
+        coordinator.imageDelegate = presenter
         view.presenter = presenter
         return view
     }

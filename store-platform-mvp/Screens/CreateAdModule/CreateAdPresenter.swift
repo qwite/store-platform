@@ -132,13 +132,13 @@ class CreateAdPresenter: CreateAdPresenterProtocol {
     }
     
     func showImage(data: Data) {
-        coordinator?.openDetailedImage(data: data)
+        coordinator?.showDetailedImage(data: data)
     }
 }
 
-// MARK: - ImagePickerPresenterDelegate
-extension CreateAdPresenter: ImagePickerPresenterDelegate {
-    func didCloseImagePicker(with imageData: Data) {
-        self.addImage(image: imageData)
+// MARK: - ImagePickerDelegate
+extension CreateAdPresenter: ImagePickerDelegate {
+    func didImageAdded(image: Data) {
+        self.addImage(image: image)
     }
 }

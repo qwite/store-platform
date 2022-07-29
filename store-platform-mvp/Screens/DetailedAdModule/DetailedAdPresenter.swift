@@ -10,6 +10,7 @@ protocol DetailedAdPresenterProtocol {
          userService: UserServiceProtocol)
     
     func viewDidLoad()
+    func finish()
     
     func increaseViews()
     func showSizePicker()
@@ -48,6 +49,10 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
         getReviews()
     }
     
+    func finish() {
+        coordinator?.finishFlow?()
+    }
+    
     func increaseViews() {
         guard let currentDay = getCurrentDay() else { return }
         service?.increaseItemViews(item: item, views: currentDay, completion: { error in
@@ -62,11 +67,12 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
         return views
     }
     
+    // Asking a question to brand.
     func createConversation() {
         FirestoreService.sharedInstance.getBrandIdByName(brandName: item.brandName) { [weak self] result in
             switch result {
             case .success(let brandId):
-                self?.coordinator?.showMessenger(conversationId: nil, brandId: brandId)
+                self?.coordinator?.showMessenger(brandId: brandId)
             case .failure(let error):
                 fatalError("\(error)")
             }

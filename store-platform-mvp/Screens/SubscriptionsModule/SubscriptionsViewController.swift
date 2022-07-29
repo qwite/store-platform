@@ -1,4 +1,5 @@
 import UIKit
+import SPAlert
 
 // MARK: - SubscriptionsViewProtocol
 protocol SubscriptionsViewProtocol: AnyObject {
@@ -7,6 +8,7 @@ protocol SubscriptionsViewProtocol: AnyObject {
     func configureLayout() -> UICollectionViewLayout
     func configureViews()
     func insertSubscriptions(items: [String])
+    func showErrorAlert()
 }
 
 // MARK: - SubscriptionsViewController
@@ -75,6 +77,10 @@ extension SubscriptionsViewController: SubscriptionsViewProtocol {
         snapshot.appendSections([.subscriptions])
         snapshot.appendItems(items)
         dataSource?.apply(snapshot)
+    }
+    
+    func showErrorAlert() {
+        SPAlert.present(message: Constants.Errors.subscriptionsNotExist, haptic: .error)
     }
 
 }

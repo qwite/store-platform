@@ -6,6 +6,7 @@ class FavoritesCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
     
     var completionHandler: ((Cart) -> ())?
+    
     var childCoordinator =  [Coordinator]()
     
     func start() {
@@ -18,9 +19,14 @@ class FavoritesCoordinator: BaseCoordinator, Coordinator {
         self.navigationController = navigationController
     }
     
-    // TODO: remove from arc
     func showDetailedAd(with item: Item) {
         let feedCoordinator = FeedCoordinator(self.navigationController)
+        feedCoordinator.finishFlow = { [weak self, weak feedCoordinator] in
+            guard let feedCoordinator = feedCoordinator else { return }
+            
+            self?.removeDependency(feedCoordinator)
+        }
+        
         self.addDependency(feedCoordinator)
         feedCoordinator.showDetailedAd(with: item)
     }

@@ -30,6 +30,7 @@ class DetailedAdViewController: UIViewController {
     }
     
     deinit {
+        presenter.finish()
         debugPrint("detailed vc deinit")
     }
 }

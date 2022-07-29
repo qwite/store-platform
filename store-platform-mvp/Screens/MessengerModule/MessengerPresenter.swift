@@ -2,24 +2,31 @@ import Foundation
 import MessageKit
 
 // MARK: - MessengerPresenterProtocol
-protocol MessengerPresenterProtocol: ImagePickerPresenterDelegate {
-    init(view: MessengerViewProtocol, service: UserServiceProtocol, conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol)
+protocol MessengerPresenterProtocol {
+    init(view: MessengerViewProtocol,
+         service: UserServiceProtocol,
+         conversationId: String?,
+         recipientBrandId: String?,
+         isBrand: Bool,
+         coordinator: MessagesCoordinatorProtocol)
+    
     func viewDidAppear()
     func viewDidLoad()
+    func finish()
     
     func getSelfSender() -> SenderType
+    func getUserSender() -> SenderType
+    func getBrandSender() -> SenderType
     
     //    func createConversation(with text: String)
     func listenMessages()
     func sendMessage(with text: String)
-    func didShowImagePicker()
+    func showImagePicker()
     func sendAttachment(image: Data)
     func didShowImageDetailed(imageUrl: URL)
     
     var conversationId: String? { get set }
-    var messages: [Message]! { get set }
-    
-    func convertFromDate(date: Date) -> String
+    var messages: [Message]! { get set }    
 }
 
 // MARK: - MessengerPresenterProtocol Implementation
@@ -31,62 +38,65 @@ class MessengerPresenter: MessengerPresenterProtocol {
     var messages: [Message]! = nil
     
     var conversationId: String?
-    var brandId: String?
+    var recipientBrandId: String?
+    var isBrand: Bool
     var brandName: String?
     
-    // TODO: make dateformatter using for injection
-    private let dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
+    required init(view: MessengerViewProtocol,
+                  service: UserServiceProtocol,
+                  conversationId: String?,
+                  recipientBrandId: String?,
+                  isBrand: Bool = false,
+                  coordinator: MessagesCoordinatorProtocol) {
         
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .medium
-        dateFormatter.timeZone = .current
-        dateFormatter.locale = Locale(identifier: "en_GB")
-        return dateFormatter
-    }()
-    
-    
-    required init(view: MessengerViewProtocol, service: UserServiceProtocol, conversationId: String?, brandId: String?, coordinator: MessagesCoordinatorProtocol) {
         self.view = view
         self.service = service
         self.conversationId = conversationId
         self.coordinator = coordinator
-        
-        if let brandId = brandId {
-            print("\(brandId) setted")
-            setBrandOptions(brandId: brandId)
-        }
+        self.recipientBrandId = recipientBrandId
+        self.isBrand = isBrand
     }
     
-    func setBrandOptions(brandId: String) {
-        self.brandId = brandId
+    func viewDidLoad() {
+        view?.configure()
     }
-    
-    func viewDidLoad() {}
     
     func viewDidAppear() {
         listenMessages()
     }
     
+    func finish() {
+        coordinator?.finishFlow?()
+    }
+    
     func getSelfSender() -> SenderType {
+        self.isBrand ? getBrandSender() : getUserSender()
+    }
+    
+    func getUserSender() -> SenderType {
         guard let userId = SettingsService.sharedInstance.userId,
               let fullName = SettingsService.sharedInstance.userFullName,
               let firstName = fullName["firstName"] else {
-            fatalError()
+            fatalError("Unwrapping user error")
         }
         
-        if let brandId = brandId, let brandName = SettingsService.sharedInstance.brandName {
-            let brandSender = Sender(photoUrl: "", senderId: brandId, displayName: brandName)
-            return brandSender
-        } else {
-            let userSender = Sender(photoUrl: "", senderId: userId, displayName: firstName)
-            return userSender
+        let userSender = Sender(senderId: userId, displayName: firstName)
+        return userSender
+    }
+    
+    func getBrandSender() -> SenderType {
+        guard let brandId = recipientBrandId,
+              let brandName = SettingsService.sharedInstance.brandName else {
+            fatalError("Unwrapping brand error")
         }
+        
+        let brandSender = Sender(senderId: brandId, displayName: brandName)
+        return brandSender
     }
     
     func getRecipientId() {}
     
-    func didShowImagePicker() {
+    func showImagePicker() {
         coordinator?.showImagePicker()
     }
     
@@ -94,7 +104,7 @@ class MessengerPresenter: MessengerPresenterProtocol {
         StorageService.sharedInstance.getImageFromUrl(imageUrl: imageUrl.absoluteString) { [weak self] result in
             switch result {
             case .success(let data):
-                self?.coordinator?.showImageDetail(image: data)
+                self?.coordinator?.showDetailedImage(data: data)
             case .failure(_):
                 fatalError("error with downloading data")
             }
@@ -102,14 +112,10 @@ class MessengerPresenter: MessengerPresenterProtocol {
     }
     
     // create conversation with brand
-    func createConversation(with text: String) {
-        guard let brandId = self.brandId else {
-            fatalError("unwrapping error")
+    func createConversation(message: Message) {
+        guard let brandId = self.recipientBrandId else {
+            debugPrint("Unwrapping recipient brandId Error"); return
         }
-        
-        let sender = getSelfSender()
-        
-        let message = Message(sender: sender, sentDate: Date(), kind: .text(text))
         
         FirestoreService.sharedInstance.getBrandName(brandId: brandId) { [weak self] result in
             switch result {
@@ -117,8 +123,8 @@ class MessengerPresenter: MessengerPresenterProtocol {
                 RealTimeService.sharedInstance.createNewConversation(with: brandId, brandName: brandName, firstMessage: message) { result in
                     switch result {
                     case .success(let conversationId):
+                        debugPrint("[Log] Conversation created")
                         self?.conversationId = conversationId
-                        debugPrint("message sended")
                         self?.listenMessages()
                     case .failure(let error):
                         fatalError("\(error)")
@@ -130,6 +136,7 @@ class MessengerPresenter: MessengerPresenterProtocol {
         }
     }
     
+    // Observing messages
     func listenMessages() {
         self.view?.loadFirstMessages()
         
@@ -150,13 +157,12 @@ class MessengerPresenter: MessengerPresenterProtocol {
         }
     }
     
-    
     func sendMessage(with text: String) {
-        let message = Message(sender: getSelfSender(), sentDate: Date(), kind: .text(text))
-        
+        let sender = getSelfSender()
+        let message = Message(sender: sender, sentDate: Date(), kind: .text(text))
         
         guard let conversationId = self.conversationId else {
-            createConversation(with: text); return
+            createConversation(message: message); return
         }
         
         RealTimeService.sharedInstance.sendMessage(to: conversationId, newMessage: message, role: .user) { error in
@@ -164,7 +170,7 @@ class MessengerPresenter: MessengerPresenterProtocol {
                 fatalError("\(error!)")
             }
             
-            print("message sent with text: \(text)")
+            print("[Log] Message sent with text: \(text)")
         }
     }
     
@@ -174,21 +180,25 @@ class MessengerPresenter: MessengerPresenterProtocol {
             case .success(let imageUrl):
                 guard let url = URL(string: imageUrl),
                       let placeholder = UIImage(systemName: "plus"),
-                      let selfSender = self?.getSelfSender(),
-                      let conversationId = self?.conversationId else {
+                      let sender = self?.getSelfSender() else {
                     fatalError()
                 }
                 
                 let media = Media(url: url, image: nil, placeholderImage: placeholder, size: .zero)
-                let message = Message(sender: selfSender, sentDate: Date(), kind: .photo(media))
+                let message = Message(sender: sender, sentDate: Date(), kind: .photo(media))
                 
+                guard let conversationId = self?.conversationId else {
+                    self?.createConversation(message: message); return
+                }
+
                 RealTimeService.sharedInstance.sendMessage(to: conversationId, newMessage: message, role: .brand) { error in
                     guard error == nil else {
                         fatalError()
                     }
                     
-                    print("attachment sended")
+                    print("[Log] Attachment sended")
                 }
+                
                 print(imageUrl)
             case .failure(let error):
                 fatalError("\(error)")
@@ -197,21 +207,10 @@ class MessengerPresenter: MessengerPresenterProtocol {
     }
 }
 
-// MARK: - Dateformatter helpers
-extension MessengerPresenter {
-    public func convertFromDate(date: Date) -> String {
-        dateFormatter.dateFormat = "HH:mm"
-        let time = dateFormatter.string(from: date)
-        dateFormatter.dateFormat = "d MMM"
-        dateFormatter.locale = .current
-        let date = dateFormatter.string(from: date)
-        return "\(date), \(time)"
-    }
-}
-
-// MARK: - ImagePickerPresenterDelegate
-extension MessengerPresenter: ImagePickerPresenterDelegate {
-    func didCloseImagePicker(with imageData: Data) {
-        self.sendAttachment(image: imageData)
+// TODO: Add loading progressbar
+// MARK: - ImagePickerDelegate
+extension MessengerPresenter: ImagePickerDelegate {
+    func didImageAdded(image: Data) {
+        self.sendAttachment(image: image)
     }
 }
