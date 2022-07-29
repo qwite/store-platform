@@ -36,6 +36,7 @@ class UserOrdersPresenter: UserOrdersPresenterProtocol {
                 self?.view?.insertItems(items: orders)
             case .failure(_):
                 self?.view?.showErrorAlert()
+                self?.coordinator?.backToRoot()
             }
         })
     }

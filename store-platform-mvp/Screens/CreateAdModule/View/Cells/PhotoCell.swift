@@ -1,23 +1,18 @@
 import UIKit
 
+// MARK: - PhotoCellDelegate
 protocol PhotoCellDelegate: AnyObject {
     func didTappedAddPhotoButton()
 }
 
+// MARK: - PhotoCell
 class PhotoCell: UICollectionViewCell {
+    
+    // MARK: Properties
     static let reuseId = "Photo"
     weak var delegate: PhotoCellDelegate?
     
     lazy var imageView = UIImageView(image: nil, contentMode: .scaleAspectFit, clipToBounds: false)
-    
-    // MARK: - Lifecycle
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
 extension PhotoCell {
@@ -47,7 +42,7 @@ extension PhotoCell {
         }
     }
     
-    @objc func addButtonPressed() {
+    @objc private func addButtonPressed() {
         delegate?.didTappedAddPhotoButton()
     }
 }

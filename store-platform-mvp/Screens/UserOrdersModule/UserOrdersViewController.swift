@@ -77,7 +77,7 @@ extension UserOrdersViewController: UserOrdersViewProtocol {
     }
     
     func showErrorAlert() {
-        SPAlert.present(message: "У вас еще нет заказов", haptic: .error)
+        SPAlert.present(message: Constants.Errors.ordersNotExist, haptic: .error)
     }
 }
 

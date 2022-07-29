@@ -2,7 +2,6 @@ import UIKit
 
 class OnboardingCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
-    weak var delegate: ImagePickerPresenterDelegate?
     var completionHandler: (() -> ())?
     
     func start() {
@@ -20,13 +19,11 @@ class OnboardingCoordinator: BaseCoordinator, Coordinator {
             return
         }
         
-        self.delegate = module.presenter
         self.navigationController.pushViewController(module, animated: true)
     }
     
     func showImagePicker() {
         let imagePickerCoordinator = ImagePickerCoordinator(self.navigationController)
-        imagePickerCoordinator.delegate = self.delegate
         self.addDependency(imagePickerCoordinator)
         imagePickerCoordinator.start()
     }

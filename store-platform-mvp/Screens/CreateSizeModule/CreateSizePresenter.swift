@@ -24,6 +24,7 @@ class CreateSizePresenter: CreateSizeViewPresenterProtocol {
     func viewDidLoad() {
         view?.configure()
         view?.setSegmentedControlSource(items: Size.AvailableSizes.allCases.map({$0.rawValue}))
+        
         checkModel()
     }
     

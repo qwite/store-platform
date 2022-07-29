@@ -20,5 +20,8 @@ enum Constants {
         static let registerError = "Произошла ошибка при регистрации"
         static let logoutError = "Произошла ошибка при выходе из аккаунта"
         static let unknownError = "Неизвестная ошибка"
+        
+        static let subscriptionsNotExist = "У вас еще нет подписок"
+        static let ordersNotExist = "У вас еще нет заказов"
     }
 }
