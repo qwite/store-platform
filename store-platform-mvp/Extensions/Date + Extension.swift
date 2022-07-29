@@ -22,11 +22,11 @@ extension Date {
         formatter.locale = Locale(identifier: "en_GB")
         formatter.dateFormat = "d"
         
-        if let day = Int(formatter.string(from: Date())) {
-            return day
+        guard let day = Int(formatter.string(from: Date())) else {
+            return nil
         }
         
-        return nil 
+        return day
     }()
     
     static func dateWithTime(date: Date) -> String {
@@ -36,6 +36,7 @@ extension Date {
         formatter.dateFormat = "d MMM"
         formatter.locale = .current
         let date = formatter.string(from: date)
+        
         return "\(date), \(time)"
     }
     
@@ -53,6 +54,32 @@ extension Date {
         formatter.dateFormat = "d MMM"
         formatter.locale = .current
         let finalString = formatter.string(from: fetchedDate)
+        
         return finalString
+    }
+    
+    static func getFullDate(from date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .medium
+        formatter.timeZone = .current
+        formatter.locale = Locale(identifier: "en_GB")
+        
+        let dateString = formatter.string(from: date)
+        return dateString
+    }
+    
+    static func getFullDate(from string: String) -> Date? {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .medium
+        formatter.timeZone = .current
+        formatter.locale = Locale(identifier: "en_GB")
+        
+        guard let date = formatter.date(from: string) else {
+            return nil
+        }
+        
+        return date
     }
 }
