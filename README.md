@@ -40,6 +40,7 @@ Application based on `MVP` (Model View Presenter) Architecture with using `Coord
 
 - [ ] Localize strings w/ support English language
 - [ ] Add media to README
+- [ ] Add unit tests
 ## Author
 
 - Lashmanov Artem [@qwite](https://github.com/qwite)
