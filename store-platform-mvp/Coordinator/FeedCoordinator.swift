@@ -20,7 +20,7 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     var finishFlow: (() -> ())?
     
     func start() {
-        self.showFeed()
+        showFeed()
     }
     
     func showFeed(with items: [Item]? = nil) {
@@ -85,6 +85,19 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
         self.navigationController.pushViewController(module, animated: true)
     }
     
+    public func showMessenger(brandId: String) {
+        let messengerCoordinator = MessengerCoordinator(navigationController, role: .user)
+        messengerCoordinator.finishFlow = { [weak self, weak messengerCoordinator] in
+            guard let messengerCoordinator = messengerCoordinator else { return }
+            
+            self?.removeDependency(messengerCoordinator)
+        }
+        
+        addDependency(messengerCoordinator)
+        
+        messengerCoordinator.showMessenger(conversationId: nil, brandId: brandId)
+    }
+    
 }
 
 // MARK: - SizePickerCoordinatorProtocol
@@ -103,30 +116,4 @@ extension FeedCoordinator: SizePickerCoordinatorProtocol {
         }
     }
 }
-
-// MARK: - MessagesCoordinatorProtocol
-//extension FeedCoordinator: MessagesCoordinatorProtocol {
-//    func showDetailedImage(data: Data) {
-//        
-//    }
-//    
-//    func showImagePicker() {
-//        let imagePickerCoordinator = ImagePickerCoordinator(self.navigationController)
-//        
-//        addDependency(imagePickerCoordinator)
-//        imagePickerCoordinator.start()
-//    }
-//    
-//    func showListMessages() {
-//        
-//    }
-//    
-//    func showMessenger(conversationId: String?, brandId: String?) {
-//        guard let module = MessengerAssembler.buildMessengerModule(conversationId: nil, brandId: brandId, coordinator: self) as? MessengerViewController else {
-//            return
-//        }
-//        
-//        self.navigationController.pushViewController(module, animated: true)
-//    }
-//}
 
