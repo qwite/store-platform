@@ -56,6 +56,15 @@ extension DateFormatter {
     static func getDayWithMonth(from date: Date = Date()) -> String {
         return DateFormatter.dayWithMonth.string(from: date)
     }
+    
+    static func getDayWithMonth(from date: String) -> String? {
+        guard let fullDate = DateFormatter.getFullDate(from: date) else {
+            return nil
+        }
+        
+        let dayWithMonth = DateFormatter.getDayWithMonth(from: fullDate)
+        return dayWithMonth
+    }
      
     static func getDay(from date: Date = Date()) -> Int? {
         let stringDay = DateFormatter.dayMedium.string(from: date)
@@ -68,6 +77,17 @@ extension DateFormatter {
     
     static func getTime(from date: Date = Date()) -> String {
         return DateFormatter.time.string(from: date)
+    }
+    
+    static func getTime(from date: String) -> String? {
+        // Getting full date from string
+        guard let fullDate = DateFormatter.getFullDate(from: date) else {
+            return nil
+        }
+        
+        // Convert it to string time
+        let time = DateFormatter.getTime(from: fullDate)
+        return time
     }
     
     static func getFullDate(from date: Date = Date()) -> String {
