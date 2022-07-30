@@ -13,7 +13,7 @@ class RealTimeService {
 
 extension RealTimeService {
     public func insertUser(with user: UserData, completion: @escaping ((Error?) -> ())) {
-        database.child(user.id!).setValue([
+        database.child(user.id).setValue([
             "first_name": user.firstName,
             "last_name": user.lastName]) { error, _ in
                 guard error == nil else {

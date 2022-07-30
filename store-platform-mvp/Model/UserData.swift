@@ -1,22 +1,22 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-// MARK: - UserDataProtocol
-protocol UserDataProtocol {
-    var id: String? { get set }
-    var firstName: String? { get set }
-    var lastName: String? { get set }
-    var email: String? { get set }
-    var details: UserDetails? { get set }
-}
 
 // MARK: - UserData
-struct UserData: UserDataProtocol, Codable {
-    var id: String?
-    var firstName: String?
-    var lastName: String?
-    var email: String?
-    var details: UserDetails?
+struct UserData: Codable {
+    let id: String
+    let firstName: String
+    let lastName: String
+    let email: String
+    let details: UserDetails?
+    
+    init(id: String, firstName: String, lastName: String, email: String, details: UserDetails? = nil) {
+        self.id = id
+        self.firstName = firstName
+        self.lastName = lastName
+        self.email = email
+        self.details = details
+    }
     
     enum CodingKeys: String, CodingKey {
         case id
