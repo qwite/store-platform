@@ -1,7 +1,7 @@
 import Foundation
 
 // MARK: - FillBrandDataPresenterProtocol
-protocol FillBrandDataPresenterProtocol: ImagePickerPresenterDelegate {
+protocol FillBrandDataPresenterProtocol {
     init(view: FillBrandDataViewProtocol, coordinator: OnboardingCoordinator, service: BrandServiceProtocol, builder: BrandBuilderProtocol)
     func viewDidLoad()
     
@@ -24,7 +24,6 @@ class FillBrandDataPresenter: FillBrandDataPresenterProtocol {
         self.coordinator = coordinator
         self.service = service
         self.builder = builder
-//        coordinator.delegate = self
     }
     
     func viewDidLoad() {
@@ -78,10 +77,10 @@ class FillBrandDataPresenter: FillBrandDataPresenterProtocol {
     }
 }
 
-// MARK: - ImagePickerPresenterDelegate
-extension FillBrandDataPresenter: ImagePickerPresenterDelegate {
-    func didCloseImagePicker(with imageData: Data) {
-        self.addLogo(image: imageData)
+// MARK: - ImagePickerDelegate
+extension FillBrandDataPresenter: ImagePickerDelegate {
+    func didImageAdded(image: Data) {
+        self.addLogo(image: image)
     }
 }
 

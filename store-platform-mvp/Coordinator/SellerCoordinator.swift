@@ -6,12 +6,12 @@ class SellerCoordinator: BaseCoordinator, Coordinator {
     weak var imageDelegate: ImagePickerDelegate?
     
     func start() {
-        checkSellerStatus { status in
+        checkSellerStatus { [weak self] status in
             switch status {
             case true:
-                self.runSellerFlow()
+                self?.runSellerFlow()
             case false:
-                self.runOnboardingFlow()
+                self?.runOnboardingFlow()
             }
         }
     }
@@ -22,9 +22,11 @@ class SellerCoordinator: BaseCoordinator, Coordinator {
     
     private func runOnboardingFlow() {
         let onboardingCoordinator = OnboardingCoordinator(navigationController)
-        onboardingCoordinator.completionHandler = {
-            self.removeDependency(onboardingCoordinator)
-            self.runSellerFlow()
+        onboardingCoordinator.finishFlow = { [weak self, weak onboardingCoordinator] in
+            guard let onboardingCoordinator = onboardingCoordinator else { return }
+            
+            self?.removeDependency(onboardingCoordinator)
+            self?.runSellerFlow()
         }
         
         addDependency(onboardingCoordinator)
@@ -37,20 +39,18 @@ class SellerCoordinator: BaseCoordinator, Coordinator {
         self.navigationController.pushViewController(module, animated: true)
     }
     
-//    public func showMessenger(with id: String, brandId: String) {
-//        let module = MessengerAssembler.buildMessengerModule(conversationId: id, brandId: brandId, coordinator: self)
-//
-//        self.navigationController.pushViewController(module, animated: true)
-//    }
-    
+    // FIXME: Allocation bug
     public func showCreateAdScreen() {
         let createAdCoordinator = CreateAdCoordinator(navigationController)
-        addDependency(createAdCoordinator)
-        createAdCoordinator.start()
 
-        createAdCoordinator.finishFlow = { [weak self] in
+        createAdCoordinator.finishFlow = { [weak self, weak createAdCoordinator] in
+            guard let createAdCoordinator = createAdCoordinator else { return }
+            
             self?.removeDependency(createAdCoordinator)
         }
+        
+        addDependency(createAdCoordinator)
+        createAdCoordinator.start()
     }
     
     public func showSellerOrders() {
