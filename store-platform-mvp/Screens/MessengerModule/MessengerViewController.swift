@@ -168,9 +168,11 @@ extension MessengerViewController: MessagesDataSource {
     }
     
     func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        let dateString = Date.dateWithTime(date: message.sentDate)
+        let time = DateFormatter.getTime(from: message.sentDate)
+        let date = DateFormatter.getDayWithMonth(from: message.sentDate)
+        let dateWithTime = "\(date), \(time)"
         let dateStringFont: UIFont = .systemFont(ofSize: 10, weight: .light)
-        let attributedString = NSAttributedString(string: dateString, attributes: [NSAttributedString.Key.font: dateStringFont])
+        let attributedString = NSAttributedString(string: dateWithTime, attributes: [NSAttributedString.Key.font: dateStringFont])
         return attributedString
     }
     

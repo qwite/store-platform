@@ -87,9 +87,13 @@ extension OrderCell {
     }
     
     private func configureDateLabel(date: String) {
-        guard let parsedString = Date.parseDateString(date: date) else { return }
+        guard let dateFormatted = DateFormatter.getFullDate(from: date) else {
+            return
+        }
+        
+        let dateWithMonth = DateFormatter.getDayWithMonth(from: dateFormatted)
        
-        dateOrderLabel.text = "Заказ от \(parsedString)"
+        dateOrderLabel.text = "Заказ от \(dateWithMonth)"
     }
     
     @objc private func copyOrderNumberText(sender: UITapGestureRecognizer) {

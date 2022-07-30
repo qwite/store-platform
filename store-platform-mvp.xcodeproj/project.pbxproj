@@ -31,7 +31,6 @@
 		1F227DA02836682D00F736F1 /* ImagePickerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F227D9F2836682D00F736F1 /* ImagePickerCoordinator.swift */; };
 		1F227DA72836822100F736F1 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F227DA62836822100F736F1 /* ImagePickerController.swift */; };
 		1F227DA92836824200F736F1 /* ImagePickerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F227DA82836824200F736F1 /* ImagePickerPresenter.swift */; };
-		1F2333752880938C005ED749 /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2333742880938C005ED749 /* Date + Extension.swift */; };
 		1F29DE152842A57C00811F48 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F29DE142842A57C00811F48 /* BaseCoordinator.swift */; };
 		1F29DE182842D4D900811F48 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F29DE172842D4D900811F48 /* FavoritesView.swift */; };
 		1F29DE1B2842D54600811F48 /* FavoriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F29DE1A2842D54600811F48 /* FavoriteCell.swift */; };
@@ -61,6 +60,7 @@
 		1F4781D2285DD5EB00047317 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D1285DD5EB00047317 /* Order.swift */; };
 		1F4781D5285DDFDC00047317 /* UserOrdersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D4285DDFDC00047317 /* UserOrdersViewController.swift */; };
 		1F4781D7285DDFE200047317 /* UserOrdersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D6285DDFE200047317 /* UserOrdersPresenter.swift */; };
+		1F54FDEB289521F5009A2D07 /* DateFormatter + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F54FDEA289521F5009A2D07 /* DateFormatter + Extension.swift */; };
 		1F5D7FCE282E47BA00255E71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FCD282E47BA00255E71 /* AppDelegate.swift */; };
 		1F5D7FD0282E47BA00255E71 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FCF282E47BA00255E71 /* SceneDelegate.swift */; };
 		1F5D7FD7282E47BB00255E71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F5D7FD6282E47BB00255E71 /* Assets.xcassets */; };
@@ -257,7 +257,6 @@
 		1F227D9F2836682D00F736F1 /* ImagePickerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerCoordinator.swift; sourceTree = "<group>"; };
 		1F227DA62836822100F736F1 /* ImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerController.swift; sourceTree = "<group>"; };
 		1F227DA82836824200F736F1 /* ImagePickerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerPresenter.swift; sourceTree = "<group>"; };
-		1F2333742880938C005ED749 /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
 		1F29DE142842A57C00811F48 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
 		1F29DE172842D4D900811F48 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 		1F29DE1A2842D54600811F48 /* FavoriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCell.swift; sourceTree = "<group>"; };
@@ -287,6 +286,7 @@
 		1F4781D1285DD5EB00047317 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		1F4781D4285DDFDC00047317 /* UserOrdersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOrdersViewController.swift; sourceTree = "<group>"; };
 		1F4781D6285DDFE200047317 /* UserOrdersPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOrdersPresenter.swift; sourceTree = "<group>"; };
+		1F54FDEA289521F5009A2D07 /* DateFormatter + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter + Extension.swift"; sourceTree = "<group>"; };
 		1F5D7FCA282E47BA00255E71 /* store-platform-mvp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "store-platform-mvp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F5D7FCD282E47BA00255E71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F5D7FCF282E47BA00255E71 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -573,7 +573,7 @@
 				1F96F59E282E7B8900C0F460 /* UITextField + Extension.swift */,
 				1F816C1A2837D95100F48CA0 /* UIImage + Extension.swift */,
 				1FDAC4EB285B839300CD5453 /* RadioButton.swift */,
-				1F2333742880938C005ED749 /* Date + Extension.swift */,
+				1F54FDEA289521F5009A2D07 /* DateFormatter + Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1656,6 +1656,7 @@
 				1F3F382B2847673800228983 /* SizePickerPresenter.swift in Sources */,
 				1FEB1567284E1A0F00DCCBC7 /* SellerViewController.swift in Sources */,
 				1F96F5A0282E7B8900C0F460 /* UIStackView + Extension.swift in Sources */,
+				1F54FDEB289521F5009A2D07 /* DateFormatter + Extension.swift in Sources */,
 				1FFFFB3D2835996D00E967E7 /* Item.swift in Sources */,
 				1F8FF0C6284BB15100171B83 /* FillBrandDataPresenter.swift in Sources */,
 				1FC0D5B4287EFFD200FAB933 /* FavoritesAssembler.swift in Sources */,
@@ -1683,7 +1684,6 @@
 				1FF6840A283A524B00E92481 /* GuestViewController.swift in Sources */,
 				1F1E4DA62838473200C9AC05 /* UserData.swift in Sources */,
 				1F96F5AD282E904C00C0F460 /* SizeCell.swift in Sources */,
-				1F2333752880938C005ED749 /* Date + Extension.swift in Sources */,
 				1FBE20DC285E0AB100E03AF0 /* DetailedProfileView.swift in Sources */,
 				1F96F5A4282E7B8900C0F460 /* UITextField + Extension.swift in Sources */,
 				1F5D7FD0282E47BA00255E71 /* SceneDelegate.swift in Sources */,

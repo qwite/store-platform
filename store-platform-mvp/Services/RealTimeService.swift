@@ -62,7 +62,7 @@ extension RealTimeService {
                 completion(.failure(RealTimeServiceError.messageModelError)); return
             }
             
-            let messageDateString = Date.getFullDate(from: messageDate)
+            let messageDateString = DateFormatter.getFullDate(from: messageDate)
             
             let newConversationData: [String: Any] = [
                 "id": conversationId,
@@ -175,7 +175,7 @@ extension RealTimeService {
                       let content = dictionary["content"] as? String,
                       let dateString = dictionary["date"] as? String,
                       let name = dictionary["name"] as? String,
-                      let date = Date.getFullDate(from: dateString),
+                      let date = DateFormatter.getFullDate(from: dateString),
                       let isRead = dictionary["is_read"] as? Bool,
                       let senderId = dictionary["sender_id"] as? String,
                       let senderRole = dictionary["sender_role"] as? String,
@@ -226,7 +226,7 @@ extension RealTimeService {
             }
             
             let messageDate = newMessage.sentDate
-            let messageDateString = Date.getFullDate(from: messageDate)
+            let messageDateString = DateFormatter.getFullDate(from: messageDate)
             
             guard let message = newMessage.kind.messageContent,
                   let type = newMessage.kind.messageKind else {
@@ -276,7 +276,7 @@ extension RealTimeService {
             completion(RealTimeServiceError.messageModelError); return
         }
  
-        let messageDateString = Date.getFullDate(from: messageDate)
+        let messageDateString = DateFormatter.getFullDate(from: messageDate)
         
         let messageData: [String: Any] = [
             "id": firstMessage.messageId,
