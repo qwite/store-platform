@@ -47,9 +47,9 @@ class ProfilePresenter: ProfilePresenterProtocol {
         guard let userId = SettingsService.sharedInstance.userId else { return }
         service?.fetchUserData(by: userId) { result in
             switch result {
-            case .success(let userData):
-                guard let firstName = userData.firstName,
-                      let lastName = userData.lastName else { return }
+            case .success(let userData):                
+                let firstName = userData.firstName
+                let lastName = userData.lastName
                 
                 let dict: [String: String] = ["firstName": firstName, "lastName": lastName]
                 self.view?.configure(with: dict)

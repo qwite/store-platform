@@ -52,12 +52,10 @@ class LoginPresenter: LoginPresenterProtocol {
     }
     
     
-    func saveUser(_ user: UserData) {
-        guard let firstName = user.firstName,
-              let lastName = user.lastName,
-              let userId = user.id else {
-            fatalError("\(AuthServiceError.emptyFieldsError)")
-        }
+    func saveUser(_ user: UserData) {        
+        let firstName = user.firstName
+        let lastName = user.lastName
+        let userId = user.id
         
         let userFullName = ["firstName": firstName, "lastName": lastName]
         
