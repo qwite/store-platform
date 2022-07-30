@@ -16,30 +16,21 @@ extension MessageListCell {
         self.recipientNameLabel.text = messageListItem.recipientName.capitalized
         self.lastMessageLabel.text = messageListItem.lastMessage
         
-        configureTime(date: messageListItem.date)
+        configureSentTime(date: messageListItem.date)
         configureViews()
     }
 }
 
 // MARK: - Private methods
 extension MessageListCell {
-    // FIXME: make a dateformatter static manager
-    private func configureTime(date: String) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .medium
-        dateFormatter.timeZone = .current
-        dateFormatter.locale = Locale(identifier: "en_GB")
-        
-        guard let fetchedDate = dateFormatter.date(from: date) else {
+    private func configureSentTime(date: String) {
+        guard let time = DateFormatter.getTime(from: date),
+              let date = DateFormatter.getDayWithMonth(from: date) else {
             return
         }
         
-        dateFormatter.dateFormat = "HH:mm"
-        timeLabel.text = dateFormatter.string(from: fetchedDate)
-        dateFormatter.dateFormat = "d MMM"
-        dateFormatter.locale = .current
-        dateLabel.text = "\(dateFormatter.string(from: fetchedDate)),"
+        timeLabel.text = "\(time)"
+        dateLabel.text = "\(date),"
     }
     
     private func configureViews() {

@@ -7,6 +7,7 @@ class FillBrandDataAssembler {
         let builder = BrandBuilderImpl()
         let view = FillBrandDataViewController()
         let presenter = FillBrandDataPresenter(view: view, coordinator: coordinator, service: service, builder: builder)
+        coordinator.imageDelegate = presenter
         view.presenter = presenter
         return view
     }

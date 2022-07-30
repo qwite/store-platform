@@ -58,8 +58,8 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
     }
     
     func finish() {
-        self.navigationController.popViewController(animated: true)
-        self.finishFlow?()
+//        self.navigationController.popViewController(animated: true)
+        finishFlow?()
     }
 }
 

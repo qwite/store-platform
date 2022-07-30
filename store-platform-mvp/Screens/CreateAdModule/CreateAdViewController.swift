@@ -6,6 +6,7 @@ import SwiftUI
 protocol CreateAdViewProtocol: AnyObject {
     func configureCollectionView()
     func configureDataSource()
+    func insertPlaceholders()
     func insertSizeSection(item: Size)
     func updateSizeSection(item: Size)
     func didSelectItem(item: Size)
@@ -32,6 +33,10 @@ class CreateAdViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
+    }
+    
+    deinit {
+        presenter.finish()
     }
 }
 
@@ -64,12 +69,14 @@ extension CreateAdViewController: CreateAdViewProtocol {
     }
     
     func configureDataSource() {
-        dataSource = DataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+        dataSource = DataSource(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
             let section = CreateAdView.Section.allCases[indexPath.section]
             switch section {
             case .photos:
+                guard let self = self else { fatalError() }
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.reuseId, for: indexPath) as? PhotoCell else { fatalError() }
                 cell.delegate = self
+                
                 if indexPath.row == 0 { cell.addPlaceholder() } else {
                     guard let itemIdentifier = itemIdentifier as? UIImage else { fatalError() }
                     cell.configureViews(with: itemIdentifier)
@@ -79,9 +86,12 @@ extension CreateAdViewController: CreateAdViewProtocol {
             case .category, .color:
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExtraSettingsCell.reuseId, for: indexPath) as? ExtraSettingsCell else { fatalError() }
                 cell.configure(category: itemIdentifier.description)
+                
                 return cell
             case .sizeCreating:
+                guard let self = self else { fatalError() }
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SizeCell.reuseId, for: indexPath) as? SizeCell else { fatalError() }
+                
                 cell.delegate = self
                 if indexPath.row == 0 { cell.makePlaceholder() } else {
                     let size = itemIdentifier as? Size
@@ -92,7 +102,9 @@ extension CreateAdViewController: CreateAdViewProtocol {
             }
         })
         
-        dataSource?.supplementaryViewProvider = { (collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+        dataSource?.supplementaryViewProvider = { [weak self] (collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+            guard let self = self else { fatalError() }
+            
             switch kind {
             case "section-header-element-kind":
                 guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderView.reuseId, for: indexPath) as? HeaderView else { fatalError() }
@@ -111,11 +123,9 @@ extension CreateAdViewController: CreateAdViewProtocol {
             }
         }
         
-        let snapshot = snapshotForCurrentState()
-        dataSource?.apply(snapshot)
     }
     
-    func snapshotForCurrentState() -> NSDiffableDataSourceSnapshot<CreateAdView.Section, AnyHashable> {
+    func insertPlaceholders() {
         var snapshot = NSDiffableDataSourceSnapshot<CreateAdView.Section, AnyHashable>()
         let placeholder = AnyHashable(1)
         snapshot.appendSections([.photos])
@@ -131,9 +141,10 @@ extension CreateAdViewController: CreateAdViewProtocol {
         
         snapshot.appendSections([.sizeCreating])
         snapshot.appendItems([AnyHashable(3)]) // Placeholder for adding sizes
-        return snapshot
+        
+        dataSource?.apply(snapshot)
     }
-    
+        
     func insertSizeSection(item: Size) {
         var newSnapshot = dataSource?.snapshot()
         newSnapshot?.appendItems([item], toSection: .sizeCreating)

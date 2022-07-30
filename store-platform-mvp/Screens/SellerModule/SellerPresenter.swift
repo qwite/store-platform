@@ -99,7 +99,7 @@ class SellerPresenter: SellerPresenterProtocol {
             return
         }
         
-        let currentMonth = Date.currentMonth
+        let currentMonth = DateFormatter.getMonth()
         
         service?.fetchMonthlyViews(by: userId, month: currentMonth, completion: { [weak self] result in
             switch result {
@@ -196,7 +196,8 @@ class SellerPresenter: SellerPresenterProtocol {
     
     func convertToItemViews(items: [Item], completion: @escaping ([Views]) -> ()){
         var itemViews: [Views] = []
-        let currentMonth = Date.currentMonth
+        let currentMonth = DateFormatter.getMonth()
+        
         for item in items {
             guard let itemId = item.id else { return }
             service?.fetchMonthlyViewsItem(by: itemId, month: currentMonth, completion: { result in
@@ -220,7 +221,7 @@ class SellerPresenter: SellerPresenterProtocol {
     
     func convertToSalesPrice(data: [Int]) -> [SalesPrice] {
         var salesPrice: [SalesPrice] = []
-        let currentMonth = Date.currentMonth
+        let currentMonth = DateFormatter.getMonth()
         data.forEach { value in
             let item = SalesPrice(month: currentMonth, price: value)
             salesPrice.append(item)

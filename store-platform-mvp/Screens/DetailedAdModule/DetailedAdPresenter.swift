@@ -61,9 +61,10 @@ class DetailedAdPresenter: DetailedAdPresenterProtocol {
     }
     
     func getCurrentDay() -> MonthlyViews? {
-        guard let day = Date.currentDay else { return nil }
+        guard let currentDay = DateFormatter.getDay() else { return nil }
+        let currentMonth = DateFormatter.getMonth()
         
-        let views = MonthlyViews(month: Date.currentMonth, day: day)
+        let views = MonthlyViews(month: currentMonth, day: currentDay)
         return views
     }
     

@@ -1,13 +1,13 @@
 import UIKit
 
 // MARK: - Size Cell Delegate Protocol
-protocol SizeCellDelegate {
+protocol SizeCellDelegate: AnyObject {
     func didTappedAddSizeButton()
 }
 
 class SizeCell: UICollectionViewCell {
     static let reuseId: String = "ItemManagment"
-    var delegate: SizeCellDelegate?
+    weak var delegate: SizeCellDelegate?
     
     lazy var sizeLabel = UILabel(text: nil,
                                  font: UIFont.systemFont(ofSize: 24, weight: .bold),

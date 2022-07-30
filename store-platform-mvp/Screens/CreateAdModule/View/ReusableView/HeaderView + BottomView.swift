@@ -1,7 +1,7 @@
 import UIKit
 
 // MARK: - BottomViewDelegate
-protocol BottomViewDelegate {
+protocol BottomViewDelegate: AnyObject {
     func didTappedAddProductButton()
 }
 
@@ -35,7 +35,7 @@ private extension HeaderView {
 //MARK: - BottomView class
 class BottomViewWithButton: UICollectionReusableView {
     static let reuseId: String = "Bottom"
-    var delegate: BottomViewDelegate?
+    weak var delegate: BottomViewDelegate?
     lazy var button = UIButton(text: "Добавить товар", preset: .bottom)
     
     

@@ -4,6 +4,7 @@ import Foundation
 protocol CreateAdPresenterProtocol: AnyObject {
     init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator, service: BrandServiceProtocol)
     func viewDidLoad()
+    func finish()
     
     func createSize(size: Size, completion: @escaping((Result<Size, Error>) -> Void))
     func editSize(size: Size, completion: @escaping ((Result<Size, Error>) -> Void))
@@ -34,6 +35,11 @@ class CreateAdPresenter: CreateAdPresenterProtocol {
     func viewDidLoad() {
         view?.configureCollectionView()
         view?.configureDataSource()
+        view?.insertPlaceholders()
+    }
+    
+    func finish() {
+        coordinator?.finish()
     }
     
     func createSize(size: Size, completion: @escaping ((Result<Size, Error>) -> Void)) {
@@ -119,7 +125,7 @@ class CreateAdPresenter: CreateAdPresenterProtocol {
                             guard error == nil else { self?.view?.showErrorAlert("\(error!)"); return }
                             
                             self?.view?.showSuccessAlert()
-                            self?.coordinator?.finish()
+                            self?.finish()
                         })
                     case .failure(let error):
                         self?.view?.showErrorAlert("\(error)")
