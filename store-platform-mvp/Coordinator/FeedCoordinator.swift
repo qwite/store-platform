@@ -17,7 +17,7 @@ class FeedCoordinator: BaseCoordinator, Coordinator {
     
     deinit {}
     
-    var finishFlow: (() -> ())?
+    var finishFlow: (() -> (Void))?
     
     func start() {
         showFeed()
