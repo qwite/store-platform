@@ -32,6 +32,7 @@ Application based on `MVP` (Model View Presenter) Architecture with using `Coord
 * MultiSlider
 * Cosmos
 * MessageKit
+* LBBottomSheet (SPM)
 ## Requirements
 
 * iOS 13+
