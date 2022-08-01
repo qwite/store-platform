@@ -15,6 +15,7 @@ enum Constants {
     }
     
     enum Errors {
+        static let loadingDataError = "Не удалось загрузить данные"
         static let emptyFieldsError = "Некорректно заполнены поля"
         static let loginError = "Произошла ошибка при авторизации"
         static let registerError = "Произошла ошибка при регистрации"
@@ -23,5 +24,8 @@ enum Constants {
         
         static let subscriptionsNotExist = "У вас еще нет подписок"
         static let ordersNotExist = "У вас еще нет заказов"
+        
+        static let sizeAddingError = "Не удалось добавить размер"
+        static let sizeEditingError = "Не удалось изменить размер"
     }
 }
