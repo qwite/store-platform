@@ -4,6 +4,7 @@ import UIKit
 class CreateAdCoordinator: BaseCoordinator, Coordinator {
     var navigationController: UINavigationController
     weak var imageDelegate: ImagePickerDelegate?
+    weak var createAdPresenterDelegate: CreateAdPresenterDelegate?
     
     var finishFlow: (() -> (Void))?
     
@@ -21,44 +22,29 @@ class CreateAdCoordinator: BaseCoordinator, Coordinator {
         self.navigationController.pushViewController(module, animated: true)
     }
     
-    func openCreateSize(with item: Size? = nil) {
+    func showCreateSize(with item: Size? = nil) {
         let module = CreateSizeAssembler.buildCreateSizeModule(coordinator: self, model: item)
         
-        self.navigationController.present(module, animated: true)
+        self.navigationController.presentAsBottomSheet(module)
     }
     
-    func openEditSize(item: Size) {
-        openCreateSize(with: item)
+    func showEditSize(item: Size) {
+        showCreateSize(with: item)
     }
     
     func closeCreateSize() {
-        self.navigationController.dismiss(animated: true, completion: nil)
+        self.navigationController.dismissBottomSheet()
     }
     
     func addNewSizeItem(_ item: Size) {
-//        delegate?.createSize(size: item, completion: { [weak self] result in
-//            switch result {
-//            case .success(_):
-//                self?.closeCreateSize()
-//            case .failure(let error):
-//                debugPrint(error)
-//            }
-//        })
+        createAdPresenterDelegate?.addSize(size: item)
     }
     
     func editSizeItem(_ item: Size) {
-//        delegate?.editSize(size: item, completion: { [weak self] result in
-//            switch result {
-//            case .success(_):
-//                self?.closeCreateSize()
-//            case .failure(let error):
-//                debugPrint(error)
-//            }
-//        })
+        createAdPresenterDelegate?.editSize(size: item)
     }
     
     func finish() {
-//        self.navigationController.popViewController(animated: true)
         finishFlow?()
     }
 }

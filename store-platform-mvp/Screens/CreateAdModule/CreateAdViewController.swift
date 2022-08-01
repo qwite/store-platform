@@ -15,7 +15,7 @@ protocol CreateAdViewProtocol: AnyObject {
     func insertImage(_ data: Data)
     func didSelectImage(with data: Data)
     func showSuccessAlert()
-    func showErrorAlert(_ description: String?)
+    func showErrorAlert(_ description: String)
 }
 
 // MARK: - CreateAdViewController
@@ -90,12 +90,14 @@ extension CreateAdViewController: CreateAdViewProtocol {
                 return cell
             case .sizeCreating:
                 guard let self = self else { fatalError() }
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SizeCell.reuseId, for: indexPath) as? SizeCell else { fatalError() }
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SizeCell.reuseId, for: indexPath) as? SizeCell else {
+                    fatalError() }
                 
                 cell.delegate = self
+                
                 if indexPath.row == 0 { cell.makePlaceholder() } else {
-                    let size = itemIdentifier as? Size
-                    cell.configure(size: size?.size, price: size?.price, amount: size?.amount)
+                    guard let size = itemIdentifier as? Size else { fatalError() }
+                    cell.configure(size: size)
                 }
                 
                 return cell
@@ -190,8 +192,8 @@ extension CreateAdViewController: CreateAdViewProtocol {
         SPAlert.present(title: "Успех", message: "Позиция успешно добавлена!", preset: .done)
     }
     
-    func showErrorAlert(_ description: String?) {
-        SPAlert.present(title: "Ошибка", message: "Произошла ошибка при добавлении: \(description)", preset: .error)
+    func showErrorAlert(_ description: String) {
+        SPAlert.present(title: "Ошибка", message: "\(description)", preset: .error)
     }
 }
 // MARK: - Bottom View Delegate
