@@ -11,6 +11,7 @@ protocol SizePickerViewProtocol: AnyObject {
 // MARK: - SizePickerViewController
 class SizePickerViewController: UIViewController {
     @objc var preferredHeightInBottomSheet: CGFloat { return 340 }
+    
     var presenter: SizePickerPresenterProtocol!
     var sizePickView = SizePickView()
     
@@ -85,13 +86,13 @@ extension SizePickerViewController: UIPickerViewDataSource {
         let priceLabel = UILabel()
         
         if row == 0 || (row > 0 && size[row].price != size[row - 1].price) {
-            priceLabel.text = "\(size[row].price!) ₽"
+            priceLabel.text = "\(size[row].price) ₽"
         } else {
             priceLabel.text = ""
         }
         
         let sizeLabel = UILabel()
-        sizeLabel.text = "\(size[row].size!)"
+        sizeLabel.text = "\(size[row].size)"
         
         if size[row].amount == 1 {
             let lastItemHintLabel = UILabel()

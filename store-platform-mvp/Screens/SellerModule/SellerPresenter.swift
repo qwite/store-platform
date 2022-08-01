@@ -121,7 +121,7 @@ class SellerPresenter: SellerPresenterProtocol {
             switch result {
             case .success(let items):
                 let names = items.map({ $0.clothingName })
-                let prices = items.compactMap( {$0.sizes!.first!.price} )
+                let prices = items.compactMap( {$0.sizes.first!.price} )
                 let totalPrice = prices.reduce(0, +)
                 
                 guard let sales = self?.convertToSales(data: names),

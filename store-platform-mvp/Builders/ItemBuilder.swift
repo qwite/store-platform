@@ -53,31 +53,35 @@ class ItemBuilder: ItemBuilderProtocol {
         self.color = color
     }
     
-    // TODO: fix
     func addSize(_ size: Size) -> Size? {
-        return addSize(size: size.size!, price: size.price!, amount: size.amount!)
+        return addSize(size: size.size, price: size.price, amount: size.amount)
     }
     
-    // TODO: Fix
     func addSize(size: String, price: Int, amount: Int) -> Size? {
-        let contains = sizes.contains(where: {$0.size == size})
-        if contains {
+        guard !sizes.contains(where: { $0.size == size }) else {
             return nil
-        } else {
-            let item = Size(size: size, price: price, amount: amount)
-            sizes.append(item)
-            return item
         }
+        
+        guard let encodedSizeIndex = Size.AvailableSizes.allCases.firstIndex(where: { $0.rawValue == size }) else {
+            return nil
+        }
+    
+        let encodedSize = Size.AvailableSizes.allCases[encodedSizeIndex]
+        let item = Size(size: encodedSize, price: price, amount: amount)
+        
+        sizes.append(item)
+        return item
     }
     
     // TODO: Fix
     func editSize(item: Size) -> Size? {
-        if let index = sizes.firstIndex(where: { $0.size == item.size }) {
-            sizes.remove(at: index)
-            sizes.insert(item, at: index)
-            return item
+        guard let index = sizes.firstIndex(where: { $0.size == item.size }) else {
+            return nil
         }
-        return nil
+        
+        sizes.remove(at: index)
+        sizes.insert(item, at: index)
+        return item
     }
 }
 
@@ -102,8 +106,10 @@ extension ItemBuilder {
         
         return item
     }
-    
-    // MARK: Errors enum
+}
+
+// MARK: - ItemBuilderError
+extension ItemBuilder {
     enum ItemBuilderError: Error {
         case sizeExistError
         case indexNotFoundError

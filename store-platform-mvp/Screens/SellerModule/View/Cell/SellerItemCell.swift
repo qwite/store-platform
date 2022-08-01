@@ -12,10 +12,11 @@ class SellerItemCell: UICollectionViewCell {
 
 extension SellerItemCell {
     func configure(itemViews: Views) {
-        guard let sizes = itemViews.item.sizes,
-              let firstPhotoUrl = itemViews.item.photos?.first else {
+        guard let firstPhotoUrl = itemViews.item.photos?.first else {
             fatalError("sizes not exist")
         }
+        
+        let sizes = itemViews.item.sizes
         
         if clothingNameLabel.text == nil {
             configureViews()
@@ -74,7 +75,7 @@ extension SellerItemCell {
     
     // MARK: Private methods
     private func prepareSizes(sizes: [Size]) -> String {
-        let availableSizes = sizes.map({ $0.size! })
+        let availableSizes = sizes.map({ $0.size })
         let sizes: String = availableSizes.joined(separator: ", ")
         
         return sizes

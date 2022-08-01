@@ -43,7 +43,7 @@ class SizeCell: UICollectionViewCell {
         return button
     }()
     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureButtons()
@@ -55,16 +55,14 @@ class SizeCell: UICollectionViewCell {
 }
 
 extension SizeCell {
-    func configure(size: String?, price: Int?, amount: Int?) {
-        guard let size = size,
-              let price = price,
-              let amount = amount else {
-            return
-        }
-
+    func configure(size: Size) {
+        let price = size.price
+        let amount = size.amount
+        let size = size.size
+        
         layer.cornerRadius = 13
         layer.borderWidth = 1.0
-        sizeLabel.text = "\(size)"
+        sizeLabel.text = "\(size.uppercased())"
         priceLabel.text = "\(price) ₽"
         amountLabel.text = "\(amount) шт."
         

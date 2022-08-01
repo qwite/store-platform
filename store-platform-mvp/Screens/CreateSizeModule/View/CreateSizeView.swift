@@ -4,8 +4,6 @@ import UIKit
 class CreateSizeView: UIView {
     
     // MARK: Properties
-    var segmentedControlSource: [Any] = []
-    
     lazy var sizeHeaderLabel = UILabel(text: "Размер",
                                   font: UIFont.systemFont(ofSize: 18, weight: .bold),
                                   textColor: .black)
@@ -47,6 +45,7 @@ extension CreateSizeView {
 // MARK: - Private methods
 extension CreateSizeView {
     private func configureViews() {
+        backgroundColor = .white
         
         let sizeStack = UIStackView(arrangedSubviews: [sizeHeaderLabel, sizeSegmentedControl])
         sizeStack.axis = .vertical

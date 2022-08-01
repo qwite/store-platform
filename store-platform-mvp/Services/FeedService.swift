@@ -54,8 +54,8 @@ class FeedService: FeedServiceProtocol {
             
             // Sorting items
             let resultSortedItems: [Item] = resultItems.sorted { firstItem, secondItem in
-                guard let firstPrice = firstItem.sizes?.first?.price,
-                      let secondPrice = secondItem.sizes?.first?.price else {
+                guard let firstPrice = firstItem.sizes.first?.price,
+                      let secondPrice = secondItem.sizes.first?.price else {
                     return false
                 }
                 
