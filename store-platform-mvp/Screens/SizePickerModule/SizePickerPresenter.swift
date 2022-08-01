@@ -32,29 +32,21 @@ class SizePickerPresenter: SizePickerPresenterProtocol {
     }
     
     func getSizeRowsCount() -> Int {
-        guard let sizes = item.sizes else {
-            return 0
-        }
-        
-        return sizes.count
+        return item.sizes.count
     }
     
     func getAvailableSizes() -> [Size] {
-        guard let sizes = item.sizes else {
-            fatalError()
-        }
-        
-        return sizes
+        return item.sizes
     }
     
     func selectSize(by index: Int) {
-        guard let sizes = item.sizes,
-              let itemId = item.id,
-              let selectedSize = sizes[index].size,
-              let selectedPrice = sizes[index].price else {
+        guard let itemId = item.id else {
             return
         }
-                
+        
+        let selectedSize = item.sizes[index].size
+        let selectedPrice = item.sizes[index].price
+        
         let cartItem = Cart(itemId: itemId, selectedSize: selectedSize, selectedPrice: selectedPrice)
         coordinator?.hideSizePicker(with: cartItem)
     }

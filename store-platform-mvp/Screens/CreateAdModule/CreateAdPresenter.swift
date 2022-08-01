@@ -1,13 +1,17 @@
 import Foundation
 
+// MARK: - CreateAdPresenterDelegate
+protocol CreateAdPresenterDelegate: AnyObject {
+    func addSize(size: Size)
+    func editSize(size: Size)
+}
+
 // MARK: - CreateAdPresenterProtocol
-protocol CreateAdPresenterProtocol: AnyObject {
+protocol CreateAdPresenterProtocol {
     init(view: CreateAdViewProtocol, itemBuilder: ItemBuilderProtocol, coordinator: CreateAdCoordinator, service: BrandServiceProtocol)
     func viewDidLoad()
     func finish()
     
-    func createSize(size: Size, completion: @escaping((Result<Size, Error>) -> Void))
-    func editSize(size: Size, completion: @escaping ((Result<Size, Error>) -> Void))
     func editSizeView(_ item: Size)
     func setCategory(_ category: String)
     func setClothingName(_ name: String)
@@ -41,31 +45,13 @@ class CreateAdPresenter: CreateAdPresenterProtocol {
     func finish() {
         coordinator?.finish()
     }
-    
-    func createSize(size: Size, completion: @escaping ((Result<Size, Error>) -> Void)) {
-        guard let result = itemBuilder?.addSize(size) else {
-            return completion(.failure(ItemBuilder.ItemBuilderError.sizeExistError))
-        }
         
-        view?.insertSizeSection(item: result)
-        completion(.success(result))
-    }
-    
-    func editSize(size: Size, completion: @escaping ((Result<Size, Error>) -> Void)) {
-        guard let result = itemBuilder?.editSize(item: size) else {
-            return completion(.failure(ItemBuilder.ItemBuilderError.indexNotFoundError))
-        }
-        
-        view?.updateSizeSection(item: result)
-        completion(.success(result))
-    }
-    
     @objc func openSizeView() {
-        coordinator?.openCreateSize()
+        coordinator?.showCreateSize()
     }
     
     func editSizeView(_ item: Size) {
-        coordinator?.openEditSize(item: item)
+        coordinator?.showEditSize(item: item)
     }
     
     func setCategory(_ category: String) {
@@ -146,5 +132,26 @@ class CreateAdPresenter: CreateAdPresenterProtocol {
 extension CreateAdPresenter: ImagePickerDelegate {
     func didImageAdded(image: Data) {
         self.addImage(image: image)
+    }
+}
+
+// MARK: - CreateAdPresenterDelegate Implementation
+extension CreateAdPresenter: CreateAdPresenterDelegate {
+    func addSize(size: Size) {
+        guard let result = itemBuilder?.addSize(size) else {
+            view?.showErrorAlert(Constants.Errors.sizeAddingError); return
+        }
+        
+        view?.insertSizeSection(item: result)
+        coordinator?.closeCreateSize()
+    }
+    
+    func editSize(size: Size) {
+        guard let result = itemBuilder?.editSize(item: size) else {
+            view?.showErrorAlert(Constants.Errors.sizeEditingError); return
+        }
+        
+        view?.updateSizeSection(item: result)
+        coordinator?.closeCreateSize()
     }
 }

@@ -110,7 +110,7 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
             filteredItems = filteredItems.filter({ item in
                 let priceFrom = Int(selectedPrice[0])
                 let priceUpTo = Int(selectedPrice[1])
-                guard let firstSizePrice = item.sizes?.first?.price else { return false }
+                guard let firstSizePrice = item.sizes.first?.price else { return false }
                 
                 return (firstSizePrice >= priceFrom) && (firstSizePrice <= priceUpTo)
             })
@@ -128,9 +128,8 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
         // selected sizes has array of string sizes ["XS", "S", .. etc]
         if let selectedSizes = selectedSizes {
             filteredItems = filteredItems.filter({ item in
-                guard let sizes = item.sizes else { fatalError() }
                 var result: Bool?
-                for size in sizes {
+                for size in item.sizes {
                     // selectedSizes = ["XS", "M", "L"]
                     // sizes = ["M"]
                     if selectedSizes.contains(where: { $0 == size.size}) {

@@ -27,7 +27,7 @@ extension FavoriteCell {
         self.brandNameLabel.text = item.brandName.capitalized
         self.clothingNameLabel.text = item.clothingName
         // TODO: fix price
-        let price = item.sizes!.first?.price
+        let price = item.sizes.first?.price
         self.priceLabel.text = "\(price!) ₽"
         if let photos = item.photos, let firstPhoto = photos.first {
             configureScrollView(photos: [firstPhoto], size: CGSize(width: frame.width, height: 170))

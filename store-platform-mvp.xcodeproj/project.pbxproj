@@ -48,6 +48,7 @@
 		1F2D8F732886E04A005B7B23 /* DetailedOrderAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F722886E04A005B7B23 /* DetailedOrderAssembler.swift */; };
 		1F2D8F752886E31E005B7B23 /* UserOrdersAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F742886E31E005B7B23 /* UserOrdersAssembler.swift */; };
 		1F2D8F772886E412005B7B23 /* AvailableParametersAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F762886E412005B7B23 /* AvailableParametersAssembler.swift */; };
+		1F2ED61528955821008EEACC /* UserDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2ED61428955821008EEACC /* UserDataTests.swift */; };
 		1F3F38292847673100228983 /* SizePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F38282847673100228983 /* SizePickerViewController.swift */; };
 		1F3F382B2847673800228983 /* SizePickerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F382A2847673800228983 /* SizePickerPresenter.swift */; };
 		1F3F382E2847683F00228983 /* SizePickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3F382D2847683F00228983 /* SizePickView.swift */; };
@@ -60,11 +61,11 @@
 		1F4781D2285DD5EB00047317 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D1285DD5EB00047317 /* Order.swift */; };
 		1F4781D5285DDFDC00047317 /* UserOrdersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D4285DDFDC00047317 /* UserOrdersViewController.swift */; };
 		1F4781D7285DDFE200047317 /* UserOrdersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D6285DDFE200047317 /* UserOrdersPresenter.swift */; };
+		1F5463EB2898049E004E9872 /* SizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5463EA2898049E004E9872 /* SizeTests.swift */; };
 		1F54FDEB289521F5009A2D07 /* DateFormatter + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F54FDEA289521F5009A2D07 /* DateFormatter + Extension.swift */; };
 		1F5D7FCE282E47BA00255E71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FCD282E47BA00255E71 /* AppDelegate.swift */; };
 		1F5D7FD0282E47BA00255E71 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FCF282E47BA00255E71 /* SceneDelegate.swift */; };
 		1F5D7FD7282E47BB00255E71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F5D7FD6282E47BB00255E71 /* Assets.xcassets */; };
-		1F5D7FE5282E47BB00255E71 /* store_platform_mvpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FE4282E47BB00255E71 /* store_platform_mvpTests.swift */; };
 		1F5D7FEF282E47BB00255E71 /* store_platform_mvpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FEE282E47BB00255E71 /* store_platform_mvpUITests.swift */; };
 		1F5D7FF1282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FF0282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift */; };
 		1F5D8008282E5F9200255E71 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D8007282E5F9200255E71 /* FeedViewController.swift */; };
@@ -274,6 +275,7 @@
 		1F2D8F722886E04A005B7B23 /* DetailedOrderAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedOrderAssembler.swift; sourceTree = "<group>"; };
 		1F2D8F742886E31E005B7B23 /* UserOrdersAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOrdersAssembler.swift; sourceTree = "<group>"; };
 		1F2D8F762886E412005B7B23 /* AvailableParametersAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableParametersAssembler.swift; sourceTree = "<group>"; };
+		1F2ED61428955821008EEACC /* UserDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataTests.swift; sourceTree = "<group>"; };
 		1F3F38282847673100228983 /* SizePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePickerViewController.swift; sourceTree = "<group>"; };
 		1F3F382A2847673800228983 /* SizePickerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePickerPresenter.swift; sourceTree = "<group>"; };
 		1F3F382D2847683F00228983 /* SizePickView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizePickView.swift; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 		1F4781D1285DD5EB00047317 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		1F4781D4285DDFDC00047317 /* UserOrdersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOrdersViewController.swift; sourceTree = "<group>"; };
 		1F4781D6285DDFE200047317 /* UserOrdersPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOrdersPresenter.swift; sourceTree = "<group>"; };
+		1F5463EA2898049E004E9872 /* SizeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeTests.swift; sourceTree = "<group>"; };
 		1F54FDEA289521F5009A2D07 /* DateFormatter + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter + Extension.swift"; sourceTree = "<group>"; };
 		1F5D7FCA282E47BA00255E71 /* store-platform-mvp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "store-platform-mvp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F5D7FCD282E47BA00255E71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -293,7 +296,6 @@
 		1F5D7FD6282E47BB00255E71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1F5D7FDB282E47BB00255E71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1F5D7FE0282E47BB00255E71 /* store-platform-mvpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "store-platform-mvpTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1F5D7FE4282E47BB00255E71 /* store_platform_mvpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = store_platform_mvpTests.swift; sourceTree = "<group>"; };
 		1F5D7FEA282E47BB00255E71 /* store-platform-mvpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "store-platform-mvpUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F5D7FEE282E47BB00255E71 /* store_platform_mvpUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = store_platform_mvpUITests.swift; sourceTree = "<group>"; };
 		1F5D7FF0282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = store_platform_mvpUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -519,20 +521,20 @@
 			isa = PBXGroup;
 			children = (
 				1F89DD892836EF8A006C7F25 /* ReusableView */,
-				1F03A5AD282E7A0E00A6A299 /* Cells */,
+				1F03A5AD282E7A0E00A6A299 /* Cell */,
 				1F03A5AB282E760700A6A299 /* CreateAdView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
 		};
-		1F03A5AD282E7A0E00A6A299 /* Cells */ = {
+		1F03A5AD282E7A0E00A6A299 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
 				1F03A5AE282E7A3200A6A299 /* PhotoCell.swift */,
 				1F96F5AA282E8E0600C0F460 /* ExtraSettingsCell.swift */,
 				1F96F5AC282E904C00C0F460 /* SizeCell.swift */,
 			);
-			path = Cells;
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		1F054479286004940075451E /* SettingsModule */ = {
@@ -633,6 +635,15 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		1F2ED61628955827008EEACC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1F2ED61428955821008EEACC /* UserDataTests.swift */,
+				1F5463EA2898049E004E9872 /* SizeTests.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		1F3F38272847671E00228983 /* SizePickerModule */ = {
 			isa = PBXGroup;
 			children = (
@@ -703,7 +714,7 @@
 		1F5D7FE3282E47BB00255E71 /* store-platform-mvpTests */ = {
 			isa = PBXGroup;
 			children = (
-				1F5D7FE4282E47BB00255E71 /* store_platform_mvpTests.swift */,
+				1F2ED61628955827008EEACC /* Model */,
 			);
 			path = "store-platform-mvpTests";
 			sourceTree = "<group>";
@@ -1768,7 +1779,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1F5D7FE5282E47BB00255E71 /* store_platform_mvpTests.swift in Sources */,
+				1F5463EB2898049E004E9872 /* SizeTests.swift in Sources */,
+				1F2ED61528955821008EEACC /* UserDataTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

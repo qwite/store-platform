@@ -47,7 +47,7 @@ extension AdCell {
         self.clothingNameLabel.text = item.clothingName
         
         // Show first price from available sizes
-        if let firstPrice = item.sizes?.first?.price {
+        if let firstPrice = item.sizes.first?.price {
             self.priceLabel.text = "\(firstPrice) ₽"
         }
 

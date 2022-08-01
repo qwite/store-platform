@@ -9,7 +9,7 @@ struct Item: Hashable, Codable {
     var description: String
     let category: String
     let color: String
-    let sizes: [Size]?
+    let sizes: [Size]
     
     enum CodingKeys: String, CodingKey {
         case id

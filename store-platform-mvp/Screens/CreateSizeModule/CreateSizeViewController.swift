@@ -1,4 +1,5 @@
 import UIKit
+import SPAlert
 
 // MARK: - CreateSizeViewProtocol
 protocol CreateSizeViewProtocol: AnyObject {
@@ -7,24 +8,26 @@ protocol CreateSizeViewProtocol: AnyObject {
     func setSegmentedControlSource(items: [String])
     func didCloseScreen()
     func loadSavedValues(item: Size)
+    func validateFields() -> Size?
+    func showError(message: String)
 }
 
 // MARK: - CreateSizeViewController
 class CreateSizeViewController: UIViewController {
+    @objc private var preferredHeightInBottomSheet: CGFloat { return 340 }
+
     let createSizeView = CreateSizeView()
     var presenter: CreateSizePresenter!
     
     // MARK: Lifecycle
     override func loadView() {
         view = createSizeView
-        view.backgroundColor = .white
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.viewDidLoad()
     }
-
 }
 
 // MARK: - CreateSizeViewProtocol Implementation
@@ -39,35 +42,52 @@ extension CreateSizeViewController: CreateSizeViewProtocol {
     }
     
     func loadSavedValues(item: Size) {
-        guard let size = item.size,
-              let amount = item.amount,
-              let price = item.price else {
-            fatalError("Unwraping Size error")
+        guard let selectedIndex = Size.AvailableSizes.allCases.firstIndex(where: { $0.rawValue == item.size }) else {
+            showError(message: Constants.Errors.loadingDataError); return
         }
         
-        let selectedIndex = Size.AvailableSizes.allCases.firstIndex {$0.rawValue == size}!
         createSizeView.sizeSegmentedControl.selectedSegmentIndex = selectedIndex
         createSizeView.sizeSegmentedControl.isEnabled = false
-        createSizeView.amountTextField.text = "\(amount)"
-        createSizeView.priceTextField.text = "\(price)"
+        createSizeView.amountTextField.text = "\(item.amount)"
+        createSizeView.priceTextField.text = "\(item.price)"
     }
     
-    // TODO: Add Error handling
     @objc func didCloseScreen() {
+        guard let size = validateFields() else {
+            showError(message: Constants.Errors.emptyFieldsError); return
+        }
+        
+        guard presenter.editMode != nil else {
+            return presenter.addSizeItem(size: size)
+        }
+        
+        presenter.editSizeItem(size: size)
+    }
+    
+    func validateFields() -> Size? {
         guard let priceTextFieldValue = createSizeView.priceTextField.text,
               let amountTextFieldValue = createSizeView.amountTextField.text else {
-            return
+            return nil
         }
         
         let sizeIndex = createSizeView.sizeSegmentedControl.selectedSegmentIndex
-        
-        let price = Int(priceTextFieldValue)
-        let amount = Int(amountTextFieldValue)
-        
-        guard let editMode = presenter.editMode else {
-            return presenter.addSizeItem(sizeIndex: sizeIndex, price: price, amount: amount)
+        guard sizeIndex > 0 else {
+            return nil
         }
-        presenter.editSizeItem(sizeIndex: sizeIndex, price: price, amount: amount)
+        
+        guard let price = Int(priceTextFieldValue),
+              let amount = Int(amountTextFieldValue) else {
+            return nil
+        }
+        
+        let selectedSize = Size.AvailableSizes.allCases[sizeIndex]
+        let size = Size(size: selectedSize, price: price, amount: amount)
+        
+        return size
+    }
+    
+    func showError(message: String) {
+        SPAlert.present(message: message, haptic: .error)
     }
     
     func setSegmentedControlSource(items: [String]) {

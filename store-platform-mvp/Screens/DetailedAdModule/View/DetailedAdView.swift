@@ -42,10 +42,11 @@ class DetailedAdView: UIView {
 extension DetailedAdView {
     func configure(with item: Item) {
         guard let photos = item.photos,
-              let sizes = item.sizes,
-              let firstPrice = sizes.first?.price else {
+              let firstSize = item.sizes.first else {
             fatalError("error with item")
         }
+        
+        let firstPrice = firstSize.price
         
         brandLabel.text = item.brandName.capitalized
         itemLabel.text = item.clothingName
