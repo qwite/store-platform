@@ -54,7 +54,6 @@ class FeedPresenter: FeedPresenterProtocol {
         view?.configureButtons()
         view?.configureNavigationRightButtons()
         
-        paginate()
         fetchItems()
     }
     
@@ -65,17 +64,6 @@ class FeedPresenter: FeedPresenterProtocol {
         
         self.view?.insertItems(items: items)
         self.view?.removeSearchBar(category: firstItem.category)
-    }
-    
-    func paginate() {
-        service?.paginateItems(completion: { result in
-            switch result {
-            case .success(let items):
-                print(items)
-            case .failure(let error):
-                print(error)
-            }
-        })
     }
     
     func postNotificationAddFavoriteItem(_ item: Item) {
