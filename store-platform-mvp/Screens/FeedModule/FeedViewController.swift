@@ -97,6 +97,8 @@ extension FeedViewController: FeedViewProtocol {
         view.addSubview(collectionView)
         view.addSubview(feedView.sortButton)
         
+        feedView.sortButton.isHidden = true
+        
         searchController.searchBar.placeholder = "Поиск"
         searchController.searchBar.delegate = self
         self.navigationItem.searchController = searchController
@@ -198,7 +200,7 @@ extension FeedViewController: UISearchResultsUpdating {
     }
 }
 
-// MARK: UINavigationBar Button
+// MARK: - UINavigationBar Button
 extension FeedViewController {
     func configureNavigationRightButtons() {
         // TODO: fix
@@ -232,6 +234,21 @@ extension FeedViewController {
     @objc func showSubscriptionsItemAction() {
         presenter.getItems()
         configureNavigationRightButtons()
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+extension FeedViewController: UIScrollViewDelegate {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        guard let _ = scrollView as? UICollectionView else {
+            return
+        }
+        
+        if targetContentOffset.pointee.y > 0 {
+            feedView.sortButton.isHidden = false
+        } else {
+            feedView.sortButton.isHidden = true
+        }
     }
 }
 

@@ -41,6 +41,8 @@ class DetailedAdView: UIView {
 // MARK: - Public methods
 extension DetailedAdView {
     func configure(with item: Item) {
+        addCartButton.isHidden = true
+        
         guard let photos = item.photos,
               let firstSize = item.sizes.first else {
             fatalError("error with item")
