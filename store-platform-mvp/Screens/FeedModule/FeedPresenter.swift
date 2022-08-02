@@ -169,13 +169,9 @@ class FeedPresenter: FeedPresenterProtocol {
     }
 }
 
-// MARK: - SortingFeedPresenterDelegate
-extension FeedPresenter: SortingFeedPresenterDelegate {
-    func insertSortedItems(items: [Item]) {
-        self.view?.updateDataSource(with: items)
-    }
-    
-    func insertPopularItems(items: [Item]) {
+// MARK: - SortingFeedPresenterDelegate Implementation
+extension FeedPresenter: SortingFeedPresenterDelegate {    
+    func updateItems(items: [Item]) {
         self.view?.updateDataSource(with: items)
     }
     

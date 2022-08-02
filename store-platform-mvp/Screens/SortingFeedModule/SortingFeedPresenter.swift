@@ -2,8 +2,7 @@ import Foundation
 
 // MARK: - SortingFeedPresenterDelegate
 protocol SortingFeedPresenterDelegate: AnyObject {
-    func insertPopularItems(items: [Item])
-    func insertSortedItems(items: [Item])
+    func updateItems(items: [Item])
     func resetSettings()
 }
 
@@ -157,7 +156,7 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
                     let sortedItems = itemsViews.sorted(by: { $0.views > $1.views })
                     let resultItems = sortedItems.map({ $0.item })
                     guard let filteredItems = self?.applyFilters(items: resultItems) else { return }
-                    self?.delegate?.insertPopularItems(items: filteredItems)
+                    self?.delegate?.updateItems(items: filteredItems)
                     self?.closeSortingWindow()
                 })
                 
@@ -172,7 +171,7 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
             switch result {
             case .success(let items):
                 guard let filteredItems = self?.applyFilters(items: items) else { return }
-                self?.delegate?.insertSortedItems(items: filteredItems)
+                self?.delegate?.updateItems(items: filteredItems)
                 self?.closeSortingWindow()
             case .failure(let error):
                 fatalError("\(error)")
@@ -200,7 +199,7 @@ class SortingFeedPresenter: SortingFeedPresenterProtocol {
     }
 }
 
-// MARK: - AvailableParameterPresenterDelegate
+// MARK: - AvailableParameterPresenterDelegate Implementation
 extension SortingFeedPresenter: AvailableParameterPresenterDelegate {
     func insertSelectedParameters(_ selectedItems: [Parameter]) {
         guard let firstItem = selectedItems.first else { print("items not found "); return }
