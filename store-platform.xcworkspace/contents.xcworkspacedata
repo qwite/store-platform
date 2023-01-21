@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:source/store-platform-mvp.xcodeproj">
+      location = "group:source/store-platform.xcodeproj">
    </FileRef>
 </Workspace>

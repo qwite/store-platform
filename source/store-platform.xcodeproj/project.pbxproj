@@ -290,13 +290,13 @@
 		1F4781D6285DDFE200047317 /* UserOrdersPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOrdersPresenter.swift; sourceTree = "<group>"; };
 		1F5463EA2898049E004E9872 /* SizeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeTests.swift; sourceTree = "<group>"; };
 		1F54FDEA289521F5009A2D07 /* DateFormatter + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter + Extension.swift"; sourceTree = "<group>"; };
-		1F5D7FCA282E47BA00255E71 /* store-platform-mvp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "store-platform-mvp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F5D7FCA282E47BA00255E71 /* store-platform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "store-platform.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F5D7FCD282E47BA00255E71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F5D7FCF282E47BA00255E71 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1F5D7FD6282E47BB00255E71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1F5D7FDB282E47BB00255E71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1F5D7FE0282E47BB00255E71 /* store-platform-mvpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "store-platform-mvpTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1F5D7FEA282E47BB00255E71 /* store-platform-mvpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "store-platform-mvpUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F5D7FE0282E47BB00255E71 /* store-platformTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "store-platformTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F5D7FEA282E47BB00255E71 /* store-platformUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "store-platformUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F5D7FEE282E47BB00255E71 /* store_platform_mvpUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = store_platform_mvpUITests.swift; sourceTree = "<group>"; };
 		1F5D7FF0282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = store_platform_mvpUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		1F5D8007282E5F9200255E71 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
@@ -644,6 +644,15 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		1F3B0004297C4018005D4B71 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				1F5D7FE3282E47BB00255E71 /* store-platform-Tests */,
+				1F5D7FED282E47BB00255E71 /* store-platform-UITests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		1F3F38272847671E00228983 /* SizePickerModule */ = {
 			isa = PBXGroup;
 			children = (
@@ -677,26 +686,25 @@
 		1F5D7FC1282E47BA00255E71 = {
 			isa = PBXGroup;
 			children = (
-				1F5D7FCC282E47BA00255E71 /* store-platform-mvp */,
-				1F5D7FE3282E47BB00255E71 /* store-platform-mvpTests */,
-				1F5D7FED282E47BB00255E71 /* store-platform-mvpUITests */,
-				1F5D7FCB282E47BA00255E71 /* Products */,
-				8A4935A39DD167FF3211AB95 /* Pods */,
+				1F5D7FCC282E47BA00255E71 /* Source */,
+				1F3B0004297C4018005D4B71 /* Tests */,
 				0F01BAB684CBC7B06DCE29B5 /* Frameworks */,
+				8A4935A39DD167FF3211AB95 /* Pods */,
+				1F5D7FCB282E47BA00255E71 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
 		1F5D7FCB282E47BA00255E71 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1F5D7FCA282E47BA00255E71 /* store-platform-mvp.app */,
-				1F5D7FE0282E47BB00255E71 /* store-platform-mvpTests.xctest */,
-				1F5D7FEA282E47BB00255E71 /* store-platform-mvpUITests.xctest */,
+				1F5D7FCA282E47BA00255E71 /* store-platform.app */,
+				1F5D7FE0282E47BB00255E71 /* store-platformTests.xctest */,
+				1F5D7FEA282E47BB00255E71 /* store-platformUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1F5D7FCC282E47BA00255E71 /* store-platform-mvp */ = {
+		1F5D7FCC282E47BA00255E71 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				1F797BB6286C43A9001945D0 /* Builders */,
@@ -708,24 +716,24 @@
 				1F128C0D282E6A4000B16BD8 /* Extensions */,
 				1F03A5A9282E75AB00A6A299 /* Supporting files */,
 			);
-			path = "store-platform-mvp";
+			path = Source;
 			sourceTree = "<group>";
 		};
-		1F5D7FE3282E47BB00255E71 /* store-platform-mvpTests */ = {
+		1F5D7FE3282E47BB00255E71 /* store-platform-Tests */ = {
 			isa = PBXGroup;
 			children = (
 				1F2ED61628955827008EEACC /* Model */,
 			);
-			path = "store-platform-mvpTests";
+			path = "store-platform-Tests";
 			sourceTree = "<group>";
 		};
-		1F5D7FED282E47BB00255E71 /* store-platform-mvpUITests */ = {
+		1F5D7FED282E47BB00255E71 /* store-platform-UITests */ = {
 			isa = PBXGroup;
 			children = (
 				1F5D7FEE282E47BB00255E71 /* store_platform_mvpUITests.swift */,
 				1F5D7FF0282E47BB00255E71 /* store_platform_mvpUITestsLaunchTests.swift */,
 			);
-			path = "store-platform-mvpUITests";
+			path = "store-platform-UITests";
 			sourceTree = "<group>";
 		};
 		1F5D7FFD282E47E100255E71 /* FeedModule */ = {
@@ -1348,9 +1356,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1F5D7FC9282E47BA00255E71 /* store-platform-mvp */ = {
+		1F5D7FC9282E47BA00255E71 /* store-platform */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1F5D7FF4282E47BB00255E71 /* Build configuration list for PBXNativeTarget "store-platform-mvp" */;
+			buildConfigurationList = 1F5D7FF4282E47BB00255E71 /* Build configuration list for PBXNativeTarget "store-platform" */;
 			buildPhases = (
 				8F9F788337FB2968C3CC37A0 /* [CP] Check Pods Manifest.lock */,
 				1F5D7FC6282E47BA00255E71 /* Sources */,
@@ -1363,17 +1371,17 @@
 			);
 			dependencies = (
 			);
-			name = "store-platform-mvp";
+			name = "store-platform";
 			packageProductDependencies = (
 				1FA9CF87285CD964001E671A /* LBBottomSheet */,
 			);
 			productName = "store-platform-mvp";
-			productReference = 1F5D7FCA282E47BA00255E71 /* store-platform-mvp.app */;
+			productReference = 1F5D7FCA282E47BA00255E71 /* store-platform.app */;
 			productType = "com.apple.product-type.application";
 		};
-		1F5D7FDF282E47BB00255E71 /* store-platform-mvpTests */ = {
+		1F5D7FDF282E47BB00255E71 /* store-platformTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1F5D7FF7282E47BB00255E71 /* Build configuration list for PBXNativeTarget "store-platform-mvpTests" */;
+			buildConfigurationList = 1F5D7FF7282E47BB00255E71 /* Build configuration list for PBXNativeTarget "store-platformTests" */;
 			buildPhases = (
 				9FF36A4259257D517ACC9A5F /* [CP] Check Pods Manifest.lock */,
 				1F5D7FDC282E47BB00255E71 /* Sources */,
@@ -1385,14 +1393,14 @@
 			dependencies = (
 				1F5D7FE2282E47BB00255E71 /* PBXTargetDependency */,
 			);
-			name = "store-platform-mvpTests";
+			name = "store-platformTests";
 			productName = "store-platform-mvpTests";
-			productReference = 1F5D7FE0282E47BB00255E71 /* store-platform-mvpTests.xctest */;
+			productReference = 1F5D7FE0282E47BB00255E71 /* store-platformTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		1F5D7FE9282E47BB00255E71 /* store-platform-mvpUITests */ = {
+		1F5D7FE9282E47BB00255E71 /* store-platformUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1F5D7FFA282E47BB00255E71 /* Build configuration list for PBXNativeTarget "store-platform-mvpUITests" */;
+			buildConfigurationList = 1F5D7FFA282E47BB00255E71 /* Build configuration list for PBXNativeTarget "store-platformUITests" */;
 			buildPhases = (
 				90D425A8C8611905719FDD6A /* [CP] Check Pods Manifest.lock */,
 				1F5D7FE6282E47BB00255E71 /* Sources */,
@@ -1405,9 +1413,9 @@
 			dependencies = (
 				1F5D7FEC282E47BB00255E71 /* PBXTargetDependency */,
 			);
-			name = "store-platform-mvpUITests";
+			name = "store-platformUITests";
 			productName = "store-platform-mvpUITests";
-			productReference = 1F5D7FEA282E47BB00255E71 /* store-platform-mvpUITests.xctest */;
+			productReference = 1F5D7FEA282E47BB00255E71 /* store-platformUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -1433,7 +1441,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1F5D7FC5282E47BA00255E71 /* Build configuration list for PBXProject "store-platform-mvp" */;
+			buildConfigurationList = 1F5D7FC5282E47BA00255E71 /* Build configuration list for PBXProject "store-platform" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -1449,9 +1457,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1F5D7FC9282E47BA00255E71 /* store-platform-mvp */,
-				1F5D7FDF282E47BB00255E71 /* store-platform-mvpTests */,
-				1F5D7FE9282E47BB00255E71 /* store-platform-mvpUITests */,
+				1F5D7FC9282E47BA00255E71 /* store-platform */,
+				1F5D7FDF282E47BB00255E71 /* store-platformTests */,
+				1F5D7FE9282E47BB00255E71 /* store-platformUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -1798,12 +1806,12 @@
 /* Begin PBXTargetDependency section */
 		1F5D7FE2282E47BB00255E71 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1F5D7FC9282E47BA00255E71 /* store-platform-mvp */;
+			target = 1F5D7FC9282E47BA00255E71 /* store-platform */;
 			targetProxy = 1F5D7FE1282E47BB00255E71 /* PBXContainerItemProxy */;
 		};
 		1F5D7FEC282E47BB00255E71 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1F5D7FC9282E47BA00255E71 /* store-platform-mvp */;
+			target = 1F5D7FC9282E47BA00255E71 /* store-platform */;
 			targetProxy = 1F5D7FEB282E47BB00255E71 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -2011,7 +2019,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.6;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/store-platform-mvp.app/store-platform-mvp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/store-platform.app/store-platform";
 			};
 			name = Debug;
 		};
@@ -2037,7 +2045,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.6;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/store-platform-mvp.app/store-platform-mvp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/store-platform.app/store-platform";
 			};
 			name = Release;
 		};
@@ -2092,7 +2100,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1F5D7FC5282E47BA00255E71 /* Build configuration list for PBXProject "store-platform-mvp" */ = {
+		1F5D7FC5282E47BA00255E71 /* Build configuration list for PBXProject "store-platform" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F5D7FF2282E47BB00255E71 /* Debug */,
@@ -2101,7 +2109,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1F5D7FF4282E47BB00255E71 /* Build configuration list for PBXNativeTarget "store-platform-mvp" */ = {
+		1F5D7FF4282E47BB00255E71 /* Build configuration list for PBXNativeTarget "store-platform" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F5D7FF5282E47BB00255E71 /* Debug */,
@@ -2110,7 +2118,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1F5D7FF7282E47BB00255E71 /* Build configuration list for PBXNativeTarget "store-platform-mvpTests" */ = {
+		1F5D7FF7282E47BB00255E71 /* Build configuration list for PBXNativeTarget "store-platformTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F5D7FF8282E47BB00255E71 /* Debug */,
@@ -2119,7 +2127,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1F5D7FFA282E47BB00255E71 /* Build configuration list for PBXNativeTarget "store-platform-mvpUITests" */ = {
+		1F5D7FFA282E47BB00255E71 /* Build configuration list for PBXNativeTarget "store-platformUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1F5D7FFB282E47BB00255E71 /* Debug */,

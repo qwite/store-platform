@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F5D7FC9282E47BA00255E71"
-               BuildableName = "store-platform-mvp.app"
-               BlueprintName = "store-platform-mvp"
-               ReferencedContainer = "container:store-platform-mvp.xcodeproj">
+               BuildableName = "store-platform.app"
+               BlueprintName = "store-platform"
+               ReferencedContainer = "container:store-platform.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F5D7FDF282E47BB00255E71"
-               BuildableName = "store-platform-mvpTests.xctest"
-               BlueprintName = "store-platform-mvpTests"
-               ReferencedContainer = "container:store-platform-mvp.xcodeproj">
+               BuildableName = "store-platformTests.xctest"
+               BlueprintName = "store-platformTests"
+               ReferencedContainer = "container:store-platform.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F5D7FE9282E47BB00255E71"
-               BuildableName = "store-platform-mvpUITests.xctest"
-               BlueprintName = "store-platform-mvpUITests"
-               ReferencedContainer = "container:store-platform-mvp.xcodeproj">
+               BuildableName = "store-platformUITests.xctest"
+               BlueprintName = "store-platformUITests"
+               ReferencedContainer = "container:store-platform.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -65,9 +65,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F5D7FC9282E47BA00255E71"
-            BuildableName = "store-platform-mvp.app"
-            BlueprintName = "store-platform-mvp"
-            ReferencedContainer = "container:store-platform-mvp.xcodeproj">
+            BuildableName = "store-platform.app"
+            BlueprintName = "store-platform"
+            ReferencedContainer = "container:store-platform.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1F5D7FC9282E47BA00255E71"
-            BuildableName = "store-platform-mvp.app"
-            BlueprintName = "store-platform-mvp"
-            ReferencedContainer = "container:store-platform-mvp.xcodeproj">
+            BuildableName = "store-platform.app"
+            BlueprintName = "store-platform"
+            ReferencedContainer = "container:store-platform.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
