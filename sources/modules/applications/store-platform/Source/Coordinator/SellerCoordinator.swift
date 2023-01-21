@@ -60,10 +60,7 @@ class SellerCoordinator: BaseCoordinator, Coordinator {
     }
     
     public func changeOrderStatus(order: Order) {
-        let module = ChangeOrderStatusAssembler.buildChangeOrderStatusModule(coordinator: self, order: order)
-        
-        let behavior: BottomSheetController.Behavior = .init(swipeMode: .top)
-        self.navigationController.presentAsBottomSheet(module, behavior: behavior)
+        // TODO("Create change order status screen")
     }
     
     public func hideOrderStatus() {

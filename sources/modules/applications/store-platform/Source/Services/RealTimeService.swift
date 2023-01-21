@@ -2,6 +2,7 @@ import Foundation
 import FirebaseDatabase
 import FirebaseFirestoreSwift
 import MessageKit
+import UIKit
 
 // MARK: - RealTimeService
 class RealTimeService {

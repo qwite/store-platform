@@ -117,10 +117,6 @@ extension MessengerViewController: MessagesDisplayDelegate {
     @objc private func attachmentButtonAction() {
         presenter.showImagePicker()
     }
-    
-    public func currentSender() -> SenderType {
-        return presenter.getSelfSender()
-    }
 
     public func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
         guard let messages = presenter.messages else {
@@ -151,6 +147,10 @@ extension MessengerViewController: MessagesLayoutDelegate {
 
 // MARK: - MessagesDataSource
 extension MessengerViewController: MessagesDataSource {
+    var currentSender: MessageKit.SenderType {
+        return presenter.getSelfSender()
+    }
+
     func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let name = message.sender.displayName
         let senderNameFont: UIFont = .systemFont(ofSize: 14, weight: .semibold)

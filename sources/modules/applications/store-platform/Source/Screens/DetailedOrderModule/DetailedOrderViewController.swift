@@ -53,7 +53,9 @@ extension DetailedOrderViewController: DetailedOrderViewProtocol {
     @objc private func addReviewButtonAction() {
         print("here")
         guard let reviewText = detailedOrderView.reviewTextField.text else { fatalError() }
-        let rating = detailedOrderView.cosmosView.rating
-        presenter.addReview(text: reviewText, rating: rating)
+        let rating = detailedOrderView.cosmosView
+
+//        TODO("Add comment.")
+//        presenter.addReview(text: reviewText, rating: rating)
     }
 }

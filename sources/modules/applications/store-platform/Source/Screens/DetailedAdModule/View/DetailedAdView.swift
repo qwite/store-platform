@@ -1,5 +1,4 @@
 import UIKit
-import Cosmos
 
 // MARK: - DetailedAdViewDelegate
 protocol DetailedAdViewDelegate: AnyObject {
@@ -164,19 +163,10 @@ extension DetailedAdView {
         descriptionHeaderLabel.text = "Описание"
     }
         
-    private func configureStars( rating: Double) -> CosmosView {
-        let cosmosView = CosmosView()
-        cosmosView.settings.fillMode = .full
-        cosmosView.settings.updateOnTouch = false
-        cosmosView.settings.starSize = 20.0
-        cosmosView.settings.starMargin = 5
-        cosmosView.settings.filledColor = .black
-        cosmosView.settings.filledBorderColor = .black
-        cosmosView.settings.emptyColor = .gray
-        cosmosView.settings.emptyBorderColor = .gray
-        cosmosView.rating = rating
-        
-        return cosmosView
+    private func configureStars( rating: Double) -> UIView {
+        // TODO("Create view with stars.")
+
+        fatalError("Create view with stars.")
     }
         
     private func configureButtons() {

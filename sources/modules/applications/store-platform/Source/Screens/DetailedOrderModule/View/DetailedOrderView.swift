@@ -1,5 +1,4 @@
 import UIKit
-import Cosmos
 
 // MARK: - DetailedOrderView
 class DetailedOrderView: UIView {
@@ -14,7 +13,7 @@ class DetailedOrderView: UIView {
     let priceLabel = UILabel(text: nil, font: nil, textColor: .black)
     
     let reviewDescriptionLabel = UILabel(text: nil, font: nil, textColor: .black)
-    let cosmosView = CosmosView()
+    let cosmosView = UIView()
     let reviewTextField = UITextField(placeholder: "Ваш отзыв", withUnderline: true, keyboardType: .default)
     let reviewsStack = UIStackView()
     let addReviewButton = UIButton(text: "Добавить отзыв", preset: .bottom)
@@ -38,15 +37,9 @@ extension DetailedOrderView {
 // MARK: - Private methods
 extension DetailedOrderView {
     private func configureStars() {
-        cosmosView.settings.fillMode = .full
-        cosmosView.settings.updateOnTouch = true
-        cosmosView.settings.starSize = 20.0
-        cosmosView.settings.starMargin = 5
-        cosmosView.settings.filledColor = .black
-        cosmosView.settings.filledBorderColor = .black
-        cosmosView.settings.emptyColor = .gray
-        cosmosView.settings.emptyBorderColor = .gray
-        cosmosView.rating = 0
+        // TODO("Create stars view.")
+
+        fatalError("Create stars view.")
     }
     
     private func showRatingFields() {

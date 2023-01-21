@@ -40,7 +40,6 @@
 		1F2D8F5D2886B657005B7B23 /* FillBrandDataAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F5C2886B657005B7B23 /* FillBrandDataAssembler.swift */; };
 		1F2D8F5F2886B8E0005B7B23 /* SellerOrdersAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F5E2886B8E0005B7B23 /* SellerOrdersAssembler.swift */; };
 		1F2D8F612886B9F0005B7B23 /* SettingsAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F602886B9F0005B7B23 /* SettingsAssembler.swift */; };
-		1F2D8F632886BC84005B7B23 /* ChangeOrderStatusAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F622886BC84005B7B23 /* ChangeOrderStatusAssembler.swift */; };
 		1F2D8F652886CBB8005B7B23 /* SellerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F642886CBB8005B7B23 /* SellerAssembler.swift */; };
 		1F2D8F672886CFC1005B7B23 /* CreateAdAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F662886CFC1005B7B23 /* CreateAdAssembler.swift */; };
 		1F2D8F692886D050005B7B23 /* MessagesListAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2D8F682886D050005B7B23 /* MessagesListAssembler.swift */; };
@@ -160,8 +159,6 @@
 		1FBE20E3285E39AE00E03AF0 /* SellerOrdersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBE20E2285E39AE00E03AF0 /* SellerOrdersPresenter.swift */; };
 		1FBE20E6285E3D2500E03AF0 /* SellerOrdersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBE20E5285E3D2500E03AF0 /* SellerOrdersView.swift */; };
 		1FBE20E9285E3E4E00E03AF0 /* SellerOrdersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBE20E8285E3E4E00E03AF0 /* SellerOrdersCell.swift */; };
-		1FBE20EE285E554100E03AF0 /* ChangeOrderStatusPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBE20ED285E554100E03AF0 /* ChangeOrderStatusPresenter.swift */; };
-		1FBE20F1285E55E000E03AF0 /* ChangeOrderStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBE20F0285E55E000E03AF0 /* ChangeOrderStatusView.swift */; };
 		1FC0D5B2287EF8E800FAB933 /* FavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC0D5B1287EF8E800FAB933 /* FavoritesService.swift */; };
 		1FC0D5B4287EFFD200FAB933 /* FavoritesAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC0D5B3287EFFD200FAB933 /* FavoritesAssembler.swift */; };
 		1FC0D5B6287F00C000FAB933 /* CartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC0D5B5287F00C000FAB933 /* CartService.swift */; };
@@ -271,7 +268,6 @@
 		1F2D8F5C2886B657005B7B23 /* FillBrandDataAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillBrandDataAssembler.swift; sourceTree = "<group>"; };
 		1F2D8F5E2886B8E0005B7B23 /* SellerOrdersAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerOrdersAssembler.swift; sourceTree = "<group>"; };
 		1F2D8F602886B9F0005B7B23 /* SettingsAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAssembler.swift; sourceTree = "<group>"; };
-		1F2D8F622886BC84005B7B23 /* ChangeOrderStatusAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeOrderStatusAssembler.swift; sourceTree = "<group>"; };
 		1F2D8F642886CBB8005B7B23 /* SellerAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerAssembler.swift; sourceTree = "<group>"; };
 		1F2D8F662886CFC1005B7B23 /* CreateAdAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAdAssembler.swift; sourceTree = "<group>"; };
 		1F2D8F682886D050005B7B23 /* MessagesListAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesListAssembler.swift; sourceTree = "<group>"; };
@@ -384,8 +380,6 @@
 		1FBE20E2285E39AE00E03AF0 /* SellerOrdersPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerOrdersPresenter.swift; sourceTree = "<group>"; };
 		1FBE20E5285E3D2500E03AF0 /* SellerOrdersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerOrdersView.swift; sourceTree = "<group>"; };
 		1FBE20E8285E3E4E00E03AF0 /* SellerOrdersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerOrdersCell.swift; sourceTree = "<group>"; };
-		1FBE20ED285E554100E03AF0 /* ChangeOrderStatusPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeOrderStatusPresenter.swift; sourceTree = "<group>"; };
-		1FBE20F0285E55E000E03AF0 /* ChangeOrderStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeOrderStatusView.swift; sourceTree = "<group>"; };
 		1FC0D5B1287EF8E800FAB933 /* FavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesService.swift; sourceTree = "<group>"; };
 		1FC0D5B3287EFFD200FAB933 /* FavoritesAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesAssembler.swift; sourceTree = "<group>"; };
 		1FC0D5B5287F00C000FAB933 /* CartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartService.swift; sourceTree = "<group>"; };
@@ -900,7 +894,6 @@
 			children = (
 				1FEF1EE92864B0460069F2B5 /* SubscriptionsModule */,
 				1F054479286004940075451E /* SettingsModule */,
-				1FBE20EA285E54F700E03AF0 /* ChangeOrderStatusModule */,
 				1FBE20DF285E399000E03AF0 /* SellerOrdersModule */,
 				1FBE20D5285E09CA00E03AF0 /* DetailedProfileModule */,
 				1FBE20CD285DFDF900E03AF0 /* DetailedOrderModule */,
@@ -1125,24 +1118,6 @@
 				1FBE20E8285E3E4E00E03AF0 /* SellerOrdersCell.swift */,
 			);
 			path = Cell;
-			sourceTree = "<group>";
-		};
-		1FBE20EA285E54F700E03AF0 /* ChangeOrderStatusModule */ = {
-			isa = PBXGroup;
-			children = (
-				1FBE20EF285E55D700E03AF0 /* View */,
-				1FBE20ED285E554100E03AF0 /* ChangeOrderStatusPresenter.swift */,
-				1F2D8F622886BC84005B7B23 /* ChangeOrderStatusAssembler.swift */,
-			);
-			path = ChangeOrderStatusModule;
-			sourceTree = "<group>";
-		};
-		1FBE20EF285E55D700E03AF0 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				1FBE20F0285E55E000E03AF0 /* ChangeOrderStatusView.swift */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		1FCEC0862830EE30000D78AD /* Coordinator */ = {
@@ -1588,7 +1563,6 @@
 				1FBAB779285B391300B6B3ED /* SortingFeedViewController.swift in Sources */,
 				1F6986DB2838199A00D953D2 /* RegisterView.swift in Sources */,
 				1F2D8F6F2886DC74005B7B23 /* LoginAssembler.swift in Sources */,
-				1FBE20F1285E55E000E03AF0 /* ChangeOrderStatusView.swift in Sources */,
 				1F40200B28870BF100E11861 /* OnboardingAssembler.swift in Sources */,
 				1F8E612F284630D10040DAE0 /* CartCoordinator.swift in Sources */,
 				1FE68F552892929E001FE47C /* MessengerCoordinator.swift in Sources */,
@@ -1607,7 +1581,6 @@
 				1F40200F28870D7E00E11861 /* CreateSizeAssembler.swift in Sources */,
 				1FDA0ADE284AAE5F00D05D51 /* OnboardingViewController.swift in Sources */,
 				1F5D7FCE282E47BA00255E71 /* AppDelegate.swift in Sources */,
-				1FBE20EE285E554100E03AF0 /* ChangeOrderStatusPresenter.swift in Sources */,
 				1F69B6AB2842556D00C75668 /* ProfileViewController.swift in Sources */,
 				1F8CE1372843FD2100AA9398 /* DetailedAdViewController.swift in Sources */,
 				1FBE20E6285E3D2500E03AF0 /* SellerOrdersView.swift in Sources */,
@@ -1741,7 +1714,6 @@
 				1F8310082879846800E3D1CB /* SubscriptionsAssembler.swift in Sources */,
 				1F054480286005E30075451E /* SettingsView.swift in Sources */,
 				1F8310062879811500E3D1CB /* UserService.swift in Sources */,
-				1F2D8F632886BC84005B7B23 /* ChangeOrderStatusAssembler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1909,7 +1881,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 62UKZ6Y688;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "store-platform-mvp/Supporting files/Info.plist";
+				INFOPLIST_FILE = "Source/Supporting files/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -1938,7 +1910,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 62UKZ6Y688;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "store-platform-mvp/Supporting files/Info.plist";
+				INFOPLIST_FILE = "Source/Supporting files/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
