@@ -4,4 +4,7 @@
    <FileRef
       location = "group:modules/applications/store-platform/store-platform.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:modules/packages/core-firebase-service">
+   </FileRef>
 </Workspace>
