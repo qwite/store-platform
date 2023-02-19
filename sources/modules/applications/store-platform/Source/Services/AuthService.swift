@@ -2,6 +2,7 @@ import UIKit
 import FirebaseAuth
 
 // MARK: - AuthServiceError
+@available(*, deprecated, message: "Must be replaced on 'AuthorizationService'.")
 enum AuthServiceError: Error {
     case signInError
     case createAccountError
@@ -10,6 +11,7 @@ enum AuthServiceError: Error {
 }
 
 // MARK: - AuthServiceProtocol
+@available(*, deprecated, message: "Must be replaced on 'AuthorizationService'.")
 protocol AuthServiceProtocol {
     func login(email: String?, password: String?, completion: @escaping (Result<User, AuthServiceError>) -> ())
     func register(email: String?, password: String?, completion: @escaping (Result<User, AuthServiceError>) -> ())
@@ -17,6 +19,7 @@ protocol AuthServiceProtocol {
 }
 
 // MARK: - AuthServiceProtocol Implementation
+@available(*, deprecated, message: "Must be replaced on 'AuthorizationService'.")
 final class AuthService: AuthServiceProtocol {
     static let sharedInstance = AuthService()
     private init() {}
