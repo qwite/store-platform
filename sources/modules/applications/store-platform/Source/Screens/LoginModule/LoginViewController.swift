@@ -1,7 +1,7 @@
 import UIKit
 import SPAlert
 
-// MARK: - LoginView Protocol
+@MainActor
 protocol LoginViewProtocol: AnyObject {
     func configure()
     func configureLoginButton()
@@ -41,7 +41,8 @@ extension LoginViewController: LoginViewProtocol {
     @objc func didTappedLoginButton() {
         guard let email = loginView.emailTextField.text, !email.isEmpty,
               let password = loginView.passwordTextField.text, !password.isEmpty else {
-                  presenter.handleError(error: .emptyFieldsError); return
+//                  presenter.handleError(error: .emptyFieldsError); return
+                return
               }
         
         presenter.login(email: email, password: password)
