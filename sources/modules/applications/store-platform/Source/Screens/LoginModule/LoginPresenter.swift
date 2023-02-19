@@ -13,77 +13,70 @@ import CoreFirebaseService
 
 protocol LoginPresenterProtocol {
 
-// MARK: - Methods
+    // MARK: - Methods
 
-    init(view: LoginViewProtocol, coordinator: GuestCoordinator, service: UserServiceProtocol)
     func viewDidLoad()
     
     func login(email: String, password: String)
-    func getUserInfo(id: String)
-    func saveUser(_ user: UserData)
 }
 
-class LoginPresenter: LoginPresenterProtocol {
+class LoginPresenter {
 
 // MARK: - Construction
 
-    required init(view: LoginViewProtocol, coordinator: GuestCoordinator, service: UserServiceProtocol) {
+    init(
+        view: LoginViewProtocol,
+        coordinator: GuestCoordinator,
+        authorizationService: IAuthorizationService
+    ) {
+
         self.view = view
         self.coordinator = coordinator
-        self.service = service
+        self.authorizationService = authorizationService
     }
 
 // MARK: - Properties
 
     weak var view: LoginViewProtocol?
+
     weak var coordinator: GuestCoordinator?
-    var service: UserServiceProtocol?
-    var authorizationService: IAuthorizationService = AuthorizationService()
+
+    var authorizationService: IAuthorizationService
+}
+
+// ----------------------------------------------------------------------------
+// MARK: - @protocol LoginPresenterProtocol
+// ----------------------------------------------------------------------------
+
+extension LoginPresenter: LoginPresenterProtocol {
 
 // MARK: - Methods
 
     func viewDidLoad() {
-        Task {
-            await view?.configure()
-        }
+        // Do nothing
     }
 
     func login(email: String, password: String) {
         Task {
             do {
                 let user = try await authorizationService.login(email: email, password: password)
-                getUserInfo(id: user.uid)
+
+                saveUserData(user.uid)
+
+                finishFlow()
             } catch {
                 await view?.showErrorMessage(message: "Произошла ошибка при авторизации")
             }
         }
     }
-    
-    func getUserInfo(id: String) {
-        service?.fetchUserData(by: id, completion: { [weak self] result in
-            switch result {
-            case .success(let user):
-                self?.saveUser(user)
 
-                //                Task {
-                //                    await self?.view?.showSuccessMessage(message: Constants.Messages.successUserLogin)
-                //                }
-
-                self?.coordinator?.finishFlow()
-            case .failure(let error):
-                print(error)
-            }
-        })
+    private func finishFlow() {
+        Task { @MainActor in
+            self.coordinator?.finishFlow()
+        }
     }
-    
-    
-    func saveUser(_ user: UserData) {
-        let firstName = user.firstName
-        let lastName = user.lastName
-        let userId = user.id
-        
-        let userFullName = ["firstName": firstName, "lastName": lastName]
-        
-        SettingsService.sharedInstance.saveUserData(userId: userId, userFullName: userFullName)
+
+    private func saveUserData(_ uid: String) {
+        SettingsService.sharedInstance.saveUserData(userId: uid, userFullName: nil)
     }
 }

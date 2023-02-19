@@ -70,7 +70,9 @@ final class SettingsService {
 
 // MARK: - Helpers
 extension SettingsService {
-    public func saveUserData(userId: String, userFullName: [String: String]) {
+
+    @available(*, deprecated, message: "Must be refactored.")
+    public func saveUserData(userId: String, userFullName: [String: String]?) {
         self.isAuthorized = true
         self.userId = userId
         self.userFullName = userFullName

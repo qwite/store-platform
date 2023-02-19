@@ -1,5 +1,16 @@
-import UIKit
+// ----------------------------------------------------------------------------
+//
+//  LoginViewController.swift
+//
+//  @author     Artem Lashmanov <https://github.com/qwite>
+//  @copyright  Copyright (c) 2023
+//
+// ----------------------------------------------------------------------------
+
 import SPAlert
+import UIKit
+
+// ----------------------------------------------------------------------------
 
 @MainActor
 protocol LoginViewProtocol: AnyObject {
@@ -28,7 +39,7 @@ class LoginViewController: UIViewController {
 
         configureViews()
 
-        presenter.viewDidLoad()
+        self.presenter.viewDidLoad()
     }
 
     func configureViews() {
@@ -39,17 +50,18 @@ class LoginViewController: UIViewController {
 
     @objc func didTappedLoginButton() {
         guard let email = _loginView.emailTextField.text, !email.isEmpty,
-              let password = _loginView.passwordTextField.text, !password.isEmpty else {
-//                  presenter.handleError(error: .emptyFieldsError); return
-                return
-              }
+              let password = _loginView.passwordTextField.text, !password.isEmpty
+        else {
+            showErrorMessage(message: "Поля не заполнены")
+            return
+        }
 
-        presenter.login(email: email, password: password)
+        self.presenter.login(email: email, password: password)
     }
 
 // MARK: - Variables
 
-    var _loginView = LoginView()
+    private var _loginView = LoginView()
 }
 
 
