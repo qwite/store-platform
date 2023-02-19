@@ -1,4 +1,4 @@
-import Foundation
+import CoreFirebaseService
 
 // MARK: - RegisterPresenterProtocol
 protocol RegisterPresenterProtocol {
@@ -13,7 +13,10 @@ class RegisterPresenter: RegisterPresenterProtocol {
     weak var view: RegisterViewProtocol?
     weak var coordinator: GuestCoordinator?
     var service: UserServiceProtocol?
-    
+
+    @available(*, deprecated, message: "Remove initialization.")
+    var authorizationService: IAuthorizationService = AuthorizationService()
+
     required init(view: RegisterViewProtocol, coordinator: GuestCoordinator, service: UserServiceProtocol) {
         self.view = view
         self.coordinator = coordinator
@@ -25,12 +28,23 @@ class RegisterPresenter: RegisterPresenterProtocol {
     }
     
     func createUser(email: String, password: String, firstName: String, lastName: String) {
-        AuthService.sharedInstance.register(email: email, password: password) { result in
-            switch result {
-            case .success(let user):
+//        AuthService.sharedInstance.register(email: email, password: password) { result in
+//            switch result {
+//            case .success(let user):
+//                let customUser = UserData(id: user.uid, firstName: firstName, lastName: lastName, email: email)
+//                self.saveUserInfo(customUser: customUser)
+//            case .failure(let error):
+//                debugPrint(error)
+//            }
+//        }
+
+        Task {
+            do {
+                let user = try await authorizationService.login(email: email, password: password)
                 let customUser = UserData(id: user.uid, firstName: firstName, lastName: lastName, email: email)
                 self.saveUserInfo(customUser: customUser)
-            case .failure(let error):
+            }
+            catch {
                 debugPrint(error)
             }
         }
