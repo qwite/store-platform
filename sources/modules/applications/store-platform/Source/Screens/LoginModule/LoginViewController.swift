@@ -1,56 +1,78 @@
-import UIKit
-import SPAlert
+// ----------------------------------------------------------------------------
+//
+//  LoginViewController.swift
+//
+//  @author     Artem Lashmanov <https://github.com/qwite>
+//  @copyright  Copyright (c) 2023
+//
+// ----------------------------------------------------------------------------
 
-// MARK: - LoginView Protocol
+import SPAlert
+import UIKit
+
+// ----------------------------------------------------------------------------
+
+@MainActor
 protocol LoginViewProtocol: AnyObject {
-    func configure()
-    func configureLoginButton()
-    func didTappedLoginButton()
-    
-    func showSuccessMessage(message: String)
+
+// MARK: - Methods
+
     func showErrorMessage(message: String)
+
+    func showSuccessMessage(message: String)
 }
 
-// MARK: - LoginViewController
 class LoginViewController: UIViewController {
-    var loginView = LoginView()
+
+// MARK: - Properties
+
     var presenter: LoginPresenterProtocol!
-   
-    //MARK: Lifecycle
+
+// MARK: - Methods
+
     override func loadView() {
-        view = loginView
+        view = _loginView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter.viewDidLoad()
+
+        configureViews()
+
+        self.presenter.viewDidLoad()
     }
-    
-    deinit {
-        debugPrint("[Log] Login VC deinit")
+
+    func configureViews() {
+        _loginView.configure()
+
+        _loginView.loginButton.addTarget(self, action: #selector(didTappedLoginButton), for: .touchUpInside)
     }
+
+    @objc func didTappedLoginButton() {
+        guard let email = _loginView.emailTextField.text, !email.isEmpty,
+              let password = _loginView.passwordTextField.text, !password.isEmpty
+        else {
+            showErrorMessage(message: "Поля не заполнены")
+            return
+        }
+
+        self.presenter.login(email: email, password: password)
+    }
+
+// MARK: - Variables
+
+    private var _loginView = LoginView()
 }
 
-// MARK: - LoginView Implementation
+
+// ----------------------------------------------------------------------------
+// MARK: - @protocol LoginViewProtocol
+// ----------------------------------------------------------------------------
+
 extension LoginViewController: LoginViewProtocol {
-    func configure() {
-        loginView.configure()
-        configureLoginButton()
-    }
-    
-    @objc func didTappedLoginButton() {
-        guard let email = loginView.emailTextField.text, !email.isEmpty,
-              let password = loginView.passwordTextField.text, !password.isEmpty else {
-                  presenter.handleError(error: .emptyFieldsError); return
-              }
-        
-        presenter.login(email: email, password: password)
-    }
-    
-    func configureLoginButton() {
-        loginView.loginButton.addTarget(self, action: #selector(didTappedLoginButton), for: .touchUpInside)
-    }
-    
+
+// MARK: - Methods
+
     func showSuccessMessage(message: String) {
         SPAlert.present(message: message, haptic: .success)
     }

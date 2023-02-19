@@ -150,14 +150,16 @@ class UserService: UserServiceProtocol {
             completion(nil)
         }
     }
-    
+
+    @available(*, deprecated, message: "Must be refactored.")
     func logout(completion: @escaping (Error?) -> ()) {
-        AuthService.sharedInstance.logout { error in
-            guard error == nil else { completion(error); return }
-        }
-        
-        SettingsService.sharedInstance.resetUserData()
-        completion(nil)
+//        AuthService.sharedInstance.logout { error in
+//            guard error == nil else { completion(error); return }
+//        }
+//
+//        SettingsService.sharedInstance.resetUserData()
+//        completion(nil)
+        fatalError("Must be refactored.")
     }
     
     func fetchUserOrders(by userId: String, completion: @escaping (Result<[Order], Error>) -> ()) {

@@ -1,81 +1,82 @@
-import Foundation
+// ----------------------------------------------------------------------------
+//
+//  LoginPresenter.swift
+//
+//  @author     Artem Lashmanov <https://github.com/qwite>
+//  @copyright  Copyright (c) 2023
+//
+// ----------------------------------------------------------------------------
 
-// MARK: - LoginPresenter Protocol
+import CoreFirebaseService
+
+// ----------------------------------------------------------------------------
+
 protocol LoginPresenterProtocol {
-    init(view: LoginViewProtocol, coordinator: GuestCoordinator, service: UserServiceProtocol)
+
+    // MARK: - Methods
+
     func viewDidLoad()
     
     func login(email: String, password: String)
-    func getUserInfo(id: String)
-    func saveUser(_ user: UserData)
-    func handleError(error: AuthServiceError)
 }
 
-// MARK: - LoginPresenter Implementation
-class LoginPresenter: LoginPresenterProtocol {
-    weak var view: LoginViewProtocol?
-    weak var coordinator: GuestCoordinator?
-    var service: UserServiceProtocol?
-    
-    required init(view: LoginViewProtocol, coordinator: GuestCoordinator, service: UserServiceProtocol) {
+class LoginPresenter {
+
+// MARK: - Construction
+
+    init(
+        view: LoginViewProtocol,
+        coordinator: GuestCoordinator,
+        authorizationService: IAuthorizationService
+    ) {
+
         self.view = view
         self.coordinator = coordinator
-        self.service = service
+        self.authorizationService = authorizationService
     }
-    
+
+// MARK: - Properties
+
+    weak var view: LoginViewProtocol?
+
+    weak var coordinator: GuestCoordinator?
+
+    var authorizationService: IAuthorizationService
+}
+
+// ----------------------------------------------------------------------------
+// MARK: - @protocol LoginPresenterProtocol
+// ----------------------------------------------------------------------------
+
+extension LoginPresenter: LoginPresenterProtocol {
+
+// MARK: - Methods
+
     func viewDidLoad() {
-        view?.configure()
+        // Do nothing
     }
-    
+
     func login(email: String, password: String) {
-        AuthService.sharedInstance.login(email: email, password: password) { [weak self] result in
-            switch result {
-            case .success(let user):
-                self?.getUserInfo(id: user.uid)
-            case .failure(let error):
-                self?.handleError(error: error)
+        Task {
+            do {
+                let user = try await authorizationService.login(email: email, password: password)
+
+                saveUserData(user.uid)
+
+                finishFlow()
+            } catch {
+                await view?.showErrorMessage(message: "Произошла ошибка при авторизации")
             }
         }
     }
-    
-    func getUserInfo(id: String) {
-        service?.fetchUserData(by: id, completion: { [weak self] result in
-            switch result {
-            case .success(let user):
-                self?.saveUser(user)
-                self?.view?.showSuccessMessage(message: Constants.Messages.successUserLogin)
-                self?.coordinator?.finishFlow()
-            case .failure(let error):
-                print(error)
-            }
-        })
-    }
-    
-    
-    func saveUser(_ user: UserData) {        
-        let firstName = user.firstName
-        let lastName = user.lastName
-        let userId = user.id
-        
-        let userFullName = ["firstName": firstName, "lastName": lastName]
-        
-        SettingsService.sharedInstance.saveUserData(userId: userId, userFullName: userFullName)
-    }
-    
-    func handleError(error: AuthServiceError) {
-        var message: String = ""
-        
-        switch error {
-        case .signInError:
-            message = Constants.Errors.loginError
-        case .createAccountError:
-            message = Constants.Errors.registerError
-        case .emptyFieldsError:
-            message = Constants.Errors.emptyFieldsError
-        default:
-            message = Constants.Errors.unknownError
+
+    private func finishFlow() {
+        Task { @MainActor in
+            self.coordinator?.finishFlow()
         }
-        
-        view?.showErrorMessage(message: message)
+    }
+
+    private func saveUserData(_ uid: String) {
+        SettingsService.sharedInstance.saveUserData(userId: uid, userFullName: nil)
     }
 }

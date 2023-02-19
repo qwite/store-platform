@@ -16,7 +16,7 @@ class GuestCoordinator: Coordinator {
     }
     
     func openLogin() {
-        let module = LoginAssembler.buildLoginModule(coordinator: self)
+        let module = LoginAssembler.build(coordinator: self)
         
         self.navigationController.present(module, animated: true)
     }
