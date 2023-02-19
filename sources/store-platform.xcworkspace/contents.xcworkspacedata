@@ -7,4 +7,7 @@
    <FileRef
       location = "group:modules/packages/core-firebase-service">
    </FileRef>
+   <FileRef
+      location = "group:modules/packages/core-abstractions">
+   </FileRef>
 </Workspace>
