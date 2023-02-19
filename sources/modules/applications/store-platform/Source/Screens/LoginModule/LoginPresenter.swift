@@ -1,19 +1,37 @@
-import CoreFirebaseService
-import Foundation
+// ----------------------------------------------------------------------------
+//
+//  LoginPresenter.swift
+//
+//  @author     Artem Lashmanov <https://github.com/qwite>
+//  @copyright  Copyright (c) 2023
+//
+// ----------------------------------------------------------------------------
 
-// MARK: - LoginPresenter Protocol
+import CoreFirebaseService
+
+// ----------------------------------------------------------------------------
+
 protocol LoginPresenterProtocol {
+
+// MARK: - Methods
+
     init(view: LoginViewProtocol, coordinator: GuestCoordinator, service: UserServiceProtocol)
     func viewDidLoad()
     
     func login(email: String, password: String)
     func getUserInfo(id: String)
     func saveUser(_ user: UserData)
-//    func handleError(error: AuthServiceError)
 }
 
-// MARK: - LoginPresenter Implementation
 class LoginPresenter: LoginPresenterProtocol {
+
+// MARK: - Construction
+
+    required init(view: LoginViewProtocol, coordinator: GuestCoordinator, service: UserServiceProtocol) {
+        self.view = view
+        self.coordinator = coordinator
+        self.service = service
+    }
 
 // MARK: - Properties
 
@@ -22,12 +40,8 @@ class LoginPresenter: LoginPresenterProtocol {
     var service: UserServiceProtocol?
     var authorizationService: IAuthorizationService = AuthorizationService()
 
-    required init(view: LoginViewProtocol, coordinator: GuestCoordinator, service: UserServiceProtocol) {
-        self.view = view
-        self.coordinator = coordinator
-        self.service = service
-    }
-    
+// MARK: - Methods
+
     func viewDidLoad() {
         Task {
             await view?.configure()
@@ -44,17 +58,6 @@ class LoginPresenter: LoginPresenterProtocol {
             }
         }
     }
-
-//    func login(email: String, password: String) {
-//        AuthService.sharedInstance.login(email: email, password: password) { [weak self] result in
-//            switch result {
-//            case .success(let user):
-//                self?.getUserInfo(id: user.uid)
-//            case .failure(let error):
-//                self?.handleError(error: error)
-//            }
-//        }
-//    }
     
     func getUserInfo(id: String) {
         service?.fetchUserData(by: id, completion: { [weak self] result in
@@ -62,9 +65,9 @@ class LoginPresenter: LoginPresenterProtocol {
             case .success(let user):
                 self?.saveUser(user)
 
-//                Task {
-//                    await self?.view?.showSuccessMessage(message: Constants.Messages.successUserLogin)
-//                }
+                //                Task {
+                //                    await self?.view?.showSuccessMessage(message: Constants.Messages.successUserLogin)
+                //                }
 
                 self?.coordinator?.finishFlow()
             case .failure(let error):
@@ -74,7 +77,7 @@ class LoginPresenter: LoginPresenterProtocol {
     }
     
     
-    func saveUser(_ user: UserData) {        
+    func saveUser(_ user: UserData) {
         let firstName = user.firstName
         let lastName = user.lastName
         let userId = user.id
@@ -83,21 +86,4 @@ class LoginPresenter: LoginPresenterProtocol {
         
         SettingsService.sharedInstance.saveUserData(userId: userId, userFullName: userFullName)
     }
-    
-//    func handleError(error: AuthServiceError) {
-//        var message: String = ""
-//
-//        switch error {
-//        case .signInError:
-//            message = Constants.Errors.loginError
-//        case .createAccountError:
-//            message = Constants.Errors.registerError
-//        case .emptyFieldsError:
-//            message = Constants.Errors.emptyFieldsError
-//        default:
-//            message = Constants.Errors.unknownError
-//        }
-//
-//        view?.showErrorMessage(message: message)
-//    }
 }

@@ -3,55 +3,64 @@ import SPAlert
 
 @MainActor
 protocol LoginViewProtocol: AnyObject {
-    func configure()
-    func configureLoginButton()
-    func didTappedLoginButton()
-    
-    func showSuccessMessage(message: String)
+
+// MARK: - Methods
+
     func showErrorMessage(message: String)
+
+    func showSuccessMessage(message: String)
 }
 
-// MARK: - LoginViewController
 class LoginViewController: UIViewController {
-    var loginView = LoginView()
+
+// MARK: - Properties
+
     var presenter: LoginPresenterProtocol!
-   
-    //MARK: Lifecycle
+
+// MARK: - Methods
+
     override func loadView() {
-        view = loginView
+        view = _loginView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        configureViews()
+
         presenter.viewDidLoad()
     }
-    
-    deinit {
-        debugPrint("[Log] Login VC deinit")
-    }
-}
 
-// MARK: - LoginView Implementation
-extension LoginViewController: LoginViewProtocol {
-    func configure() {
-        loginView.configure()
-        configureLoginButton()
+    func configureViews() {
+        _loginView.configure()
+
+        _loginView.loginButton.addTarget(self, action: #selector(didTappedLoginButton), for: .touchUpInside)
     }
-    
+
     @objc func didTappedLoginButton() {
-        guard let email = loginView.emailTextField.text, !email.isEmpty,
-              let password = loginView.passwordTextField.text, !password.isEmpty else {
+        guard let email = _loginView.emailTextField.text, !email.isEmpty,
+              let password = _loginView.passwordTextField.text, !password.isEmpty else {
 //                  presenter.handleError(error: .emptyFieldsError); return
                 return
               }
-        
+
         presenter.login(email: email, password: password)
     }
-    
-    func configureLoginButton() {
-        loginView.loginButton.addTarget(self, action: #selector(didTappedLoginButton), for: .touchUpInside)
-    }
-    
+
+// MARK: - Variables
+
+    var _loginView = LoginView()
+}
+
+
+// ----------------------------------------------------------------------------
+// MARK: - @protocol LoginViewProtocol
+// ----------------------------------------------------------------------------
+
+extension LoginViewController: LoginViewProtocol {
+
+// MARK: - Methods
+
     func showSuccessMessage(message: String) {
         SPAlert.present(message: message, haptic: .success)
     }
