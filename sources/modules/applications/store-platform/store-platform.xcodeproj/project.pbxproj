@@ -63,6 +63,7 @@
 		1F4781D2285DD5EB00047317 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D1285DD5EB00047317 /* Order.swift */; };
 		1F4781D5285DDFDC00047317 /* UserOrdersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D4285DDFDC00047317 /* UserOrdersViewController.swift */; };
 		1F4781D7285DDFE200047317 /* UserOrdersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4781D6285DDFE200047317 /* UserOrdersPresenter.swift */; };
+		1F4A99FA29A2749B0030D3E3 /* CoreFirebaseService in Frameworks */ = {isa = PBXBuildFile; productRef = 1F4A99F929A2749B0030D3E3 /* CoreFirebaseService */; };
 		1F5463EB2898049E004E9872 /* SizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5463EA2898049E004E9872 /* SizeTests.swift */; };
 		1F54FDEB289521F5009A2D07 /* DateFormatter + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F54FDEA289521F5009A2D07 /* DateFormatter + Extension.swift */; };
 		1F5D7FCE282E47BA00255E71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5D7FCD282E47BA00255E71 /* AppDelegate.swift */; };
@@ -448,6 +449,7 @@
 				1FA9CF88285CD964001E671A /* LBBottomSheet in Frameworks */,
 				1F8DCFB4297C4AE900D579DD /* FirebaseDatabase in Frameworks */,
 				1F0D24AC297C42E300A37CC6 /* SnapKit in Frameworks */,
+				1F4A99FA29A2749B0030D3E3 /* CoreFirebaseService in Frameworks */,
 				1F0D24B6297C439100A37CC6 /* MultiSlider in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -628,6 +630,13 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		1F2A289929830E3100E67B0B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		1F2ED61628955827008EEACC /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -682,6 +691,7 @@
 				1F5D7FCC282E47BA00255E71 /* Source */,
 				1F3B0004297C4018005D4B71 /* Tests */,
 				1F5D7FCB282E47BA00255E71 /* Products */,
+				1F2A289929830E3100E67B0B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1344,6 +1354,7 @@
 				1F8DCFB7297C4AE900D579DD /* FirebaseFirestore */,
 				1F8DCFB9297C4AE900D579DD /* FirebaseFirestoreSwift */,
 				1F8DCFBB297C4AE900D579DD /* FirebaseStorage */,
+				1F4A99F929A2749B0030D3E3 /* CoreFirebaseService */,
 			);
 			productName = "store-platform-mvp";
 			productReference = 1F5D7FCA282E47BA00255E71 /* store-platform.app */;
@@ -2153,6 +2164,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1F0D24B4297C439100A37CC6 /* XCRemoteSwiftPackageReference "MultiSlider" */;
 			productName = MultiSlider;
+		};
+		1F4A99F929A2749B0030D3E3 /* CoreFirebaseService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CoreFirebaseService;
 		};
 		1F8DCFA7297C481500D579DD /* FLCharts */ = {
 			isa = XCSwiftPackageProductDependency;
